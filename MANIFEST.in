@@ -1,4 +1,6 @@
 recursive-include pdsa *
+include LICENSE.txt
+include README.rst
 global-exclude *.pyc
 global-exclude __pycache__/*
 global-exclude *.so
