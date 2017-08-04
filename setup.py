@@ -49,7 +49,7 @@ def setup_package():
     )
 
     setup(
-        name="pdsaa",
+        name="pdsa",
         packages=PACKAGES,
         package_data={'': ['*.pyx', '*.pxd', '*.cpp', '*.h']},
         description=about['__summary__'],
