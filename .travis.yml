@@ -1,0 +1,19 @@
+language: python
+
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
+  - pip install -e .
+  - pip install pytest-cov
+  - pip install coveralls
+
+script:
+  - python -m pytest pds --cov=pds
+
+after_success:
+  coveralls
