@@ -56,6 +56,8 @@ cdef class BloomFilter:
         """
         if length < 1:
             raise ValueError("Filter length can't be 0 or negative")
+        if num_of_hashes < 1:
+            raise ValueError("At least one ahsh function is required")
 
         # NOTE: Floor length to the closest power of 2
         self.length = 1 << (length - 1).bit_length()

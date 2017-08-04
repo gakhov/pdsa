@@ -1887,6 +1887,7 @@ static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cyt
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_Bloom_Filter_Bloom_filter_is_a[] = "\nBloom Filter.\n\nBloom filter is a space-efficient probabilistic data structure\nthat supports membership queries. It offers a compact probabilistic\nway to represent a set that can result in hard collisions (false positives),\nbut never false negatives.\n\nThe classical variant of the filter was proposed by Burton Howard Bloom in 1970.\n\nReferences\n----------\n[1] Burton H. Bloom\n    Space/Time Trade-offs in Hash Coding with Allowable Errors.\n    Communications of the ACM, Volume 13 / Number 7 / July, 1970\n    http://dmod.eu/deca/ft_gateway.cfm.pdf\n[2] A. Broder, M. Mitzenmacher\n    Network Applications of Bloom Filters: A Survey.\n    Internet Mathematics Vol. 1, No. 4: 485-509\n    https://www.eecs.harvard.edu/~michaelm/postscripts/im2005b.pdf\n[3] S. Tarkoma, C. E. Rothenberg, E. Lagerspetz\n    Theory and Practice of Bloom Filters for Distributed Systems.\n    http://www.dca.fee.unicamp.br/~chesteve/pubs/bloom-filter-ieee-survey-preprint.pdf\n";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
+static const char __pyx_k_At_least_one_ahsh_function_is_re[] = "At least one ahsh function is required";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
 static const char __pyx_k_Empty_shape_tuple_for_cython_arr[] = "Empty shape tuple for cython.array";
@@ -1901,6 +1902,7 @@ static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing ex
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
 static PyObject *__pyx_n_s_ASCII;
+static PyObject *__pyx_kp_s_At_least_one_ahsh_function_is_re;
 static PyObject *__pyx_n_s_B;
 static PyObject *__pyx_kp_s_BloomFilter_length_hashes;
 static PyObject *__pyx_kp_s_Buffer_view_does_not_expose_stri;
@@ -2064,9 +2066,9 @@ static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
-static PyObject *__pyx_slice__20;
 static PyObject *__pyx_slice__21;
 static PyObject *__pyx_slice__22;
+static PyObject *__pyx_slice__23;
 static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
@@ -2077,7 +2079,7 @@ static PyObject *__pyx_tuple__16;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
-static PyObject *__pyx_tuple__23;
+static PyObject *__pyx_tuple__20;
 static PyObject *__pyx_tuple__24;
 static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_tuple__26;
@@ -2086,7 +2088,8 @@ static PyObject *__pyx_tuple__28;
 static PyObject *__pyx_tuple__29;
 static PyObject *__pyx_tuple__30;
 static PyObject *__pyx_tuple__31;
-static PyObject *__pyx_codeobj__32;
+static PyObject *__pyx_tuple__32;
+static PyObject *__pyx_codeobj__33;
 
 /* "pdsa/membership/bloom.pyx":48
  *     """
@@ -2175,7 +2178,7 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  *         """
  *         if length < 1:             # <<<<<<<<<<<<<<
  *             raise ValueError("Filter length can't be 0 or negative")
- * 
+ *         if num_of_hashes < 1:
  */
   __pyx_t_1 = ((__pyx_v_length < 1) != 0);
   if (__pyx_t_1) {
@@ -2184,8 +2187,8 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  *         """
  *         if length < 1:
  *             raise ValueError("Filter length can't be 0 or negative")             # <<<<<<<<<<<<<<
- * 
- *         # NOTE: Floor length to the closest power of 2
+ *         if num_of_hashes < 1:
+ *             raise ValueError("At least one ahsh function is required")
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
@@ -2198,20 +2201,52 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  *         """
  *         if length < 1:             # <<<<<<<<<<<<<<
  *             raise ValueError("Filter length can't be 0 or negative")
+ *         if num_of_hashes < 1:
+ */
+  }
+
+  /* "pdsa/membership/bloom.pyx":59
+ *         if length < 1:
+ *             raise ValueError("Filter length can't be 0 or negative")
+ *         if num_of_hashes < 1:             # <<<<<<<<<<<<<<
+ *             raise ValueError("At least one ahsh function is required")
+ * 
+ */
+  __pyx_t_1 = ((__pyx_v_num_of_hashes < 1) != 0);
+  if (__pyx_t_1) {
+
+    /* "pdsa/membership/bloom.pyx":60
+ *             raise ValueError("Filter length can't be 0 or negative")
+ *         if num_of_hashes < 1:
+ *             raise ValueError("At least one ahsh function is required")             # <<<<<<<<<<<<<<
+ * 
+ *         # NOTE: Floor length to the closest power of 2
+ */
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __PYX_ERR(0, 60, __pyx_L1_error)
+
+    /* "pdsa/membership/bloom.pyx":59
+ *         if length < 1:
+ *             raise ValueError("Filter length can't be 0 or negative")
+ *         if num_of_hashes < 1:             # <<<<<<<<<<<<<<
+ *             raise ValueError("At least one ahsh function is required")
  * 
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":61
+  /* "pdsa/membership/bloom.pyx":63
  * 
  *         # NOTE: Floor length to the closest power of 2
  *         self.length = 1 << (length - 1).bit_length()             # <<<<<<<<<<<<<<
  * 
  *         self.num_of_hashes = num_of_hashes
  */
-  __pyx_t_3 = __Pyx_PyInt_FromSize_t((__pyx_v_length - 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_FromSize_t((__pyx_v_length - 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_bit_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_bit_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -2225,21 +2260,21 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Lshift(__pyx_int_1, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Lshift(__pyx_int_1, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_5 = __Pyx_PyInt_As_size_t(__pyx_t_4); if (unlikely((__pyx_t_5 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_size_t(__pyx_t_4); if (unlikely((__pyx_t_5 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_self->length = __pyx_t_5;
 
-  /* "pdsa/membership/bloom.pyx":63
+  /* "pdsa/membership/bloom.pyx":65
  *         self.length = 1 << (length - 1).bit_length()
  * 
  *         self.num_of_hashes = num_of_hashes             # <<<<<<<<<<<<<<
@@ -2248,24 +2283,24 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  */
   __pyx_v_self->num_of_hashes = __pyx_v_num_of_hashes;
 
-  /* "pdsa/membership/bloom.pyx":65
+  /* "pdsa/membership/bloom.pyx":67
  *         self.num_of_hashes = num_of_hashes
  * 
  *         self._seeds = array('B', range(self.num_of_hashes))             # <<<<<<<<<<<<<<
  * 
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
  */
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_4);
   __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_B);
   __Pyx_GIVEREF(__pyx_n_s_B);
@@ -2273,18 +2308,18 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_4);
   __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7cpython_5array_array), __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7cpython_5array_array), __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_uint8_t(__pyx_t_4);
-  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 65, __pyx_L1_error)
+  if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 67, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->_seeds, 0);
   __pyx_v_self->_seeds = __pyx_t_6;
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "pdsa/membership/bloom.pyx":67
+  /* "pdsa/membership/bloom.pyx":69
  *         self._seeds = array('B', range(self.num_of_hashes))
  * 
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))             # <<<<<<<<<<<<<<
@@ -2293,7 +2328,7 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  */
   __pyx_v_self->_table = ((int *)PyMem_Malloc((__pyx_v_self->length * (sizeof(int)))));
 
-  /* "pdsa/membership/bloom.pyx":68
+  /* "pdsa/membership/bloom.pyx":70
  * 
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
  *         if not self._table:             # <<<<<<<<<<<<<<
@@ -2303,20 +2338,20 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
   __pyx_t_1 = ((!(__pyx_v_self->_table != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "pdsa/membership/bloom.pyx":69
+    /* "pdsa/membership/bloom.pyx":71
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
  *         if not self._table:
  *             raise MemoryError("Can't allocate filter table")             # <<<<<<<<<<<<<<
  * 
  *         cdef size_t index
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 69, __pyx_L1_error)
+    __PYX_ERR(0, 71, __pyx_L1_error)
 
-    /* "pdsa/membership/bloom.pyx":68
+    /* "pdsa/membership/bloom.pyx":70
  * 
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
  *         if not self._table:             # <<<<<<<<<<<<<<
@@ -2325,7 +2360,7 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":72
+  /* "pdsa/membership/bloom.pyx":74
  * 
  *         cdef size_t index
  *         for index in xrange(self.length):             # <<<<<<<<<<<<<<
@@ -2336,7 +2371,7 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
   for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_5; __pyx_t_7+=1) {
     __pyx_v_index = __pyx_t_7;
 
-    /* "pdsa/membership/bloom.pyx":73
+    /* "pdsa/membership/bloom.pyx":75
  *         cdef size_t index
  *         for index in xrange(self.length):
  *             self._table[index] = 0             # <<<<<<<<<<<<<<
@@ -2369,7 +2404,7 @@ static int __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter___cinit__(struct __p
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":77
+/* "pdsa/membership/bloom.pyx":79
  * 
  *     @classmethod
  *     def create_from_capacity(cls, const size_t capacity, const float error):             # <<<<<<<<<<<<<<
@@ -2409,11 +2444,11 @@ static PyObject *__pyx_pw_4pdsa_10membership_5bloom_11BloomFilter_3create_from_c
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_error)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_from_capacity", 1, 2, 2, 1); __PYX_ERR(0, 77, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_from_capacity", 1, 2, 2, 1); __PYX_ERR(0, 79, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_from_capacity") < 0)) __PYX_ERR(0, 77, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_from_capacity") < 0)) __PYX_ERR(0, 79, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2421,12 +2456,12 @@ static PyObject *__pyx_pw_4pdsa_10membership_5bloom_11BloomFilter_3create_from_c
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_capacity = __Pyx_PyInt_As_size_t(values[0]); if (unlikely((__pyx_v_capacity == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L3_error)
-    __pyx_v_error = __pyx_PyFloat_AsFloat(values[1]); if (unlikely((__pyx_v_error == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L3_error)
+    __pyx_v_capacity = __Pyx_PyInt_As_size_t(values[0]); if (unlikely((__pyx_v_capacity == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L3_error)
+    __pyx_v_error = __pyx_PyFloat_AsFloat(values[1]); if (unlikely((__pyx_v_error == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create_from_capacity", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 77, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create_from_capacity", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 79, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pdsa.membership.bloom.BloomFilter.create_from_capacity", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2453,7 +2488,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("create_from_capacity", 0);
 
-  /* "pdsa/membership/bloom.pyx":89
+  /* "pdsa/membership/bloom.pyx":91
  *                     be less then 1.
  *         """
  *         if capacity < 1:             # <<<<<<<<<<<<<<
@@ -2463,20 +2498,20 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   __pyx_t_1 = ((__pyx_v_capacity < 1) != 0);
   if (__pyx_t_1) {
 
-    /* "pdsa/membership/bloom.pyx":90
+    /* "pdsa/membership/bloom.pyx":92
  *         """
  *         if capacity < 1:
  *             raise ValueError("Filter capacity can't be 0 or negative")             # <<<<<<<<<<<<<<
  * 
  *         if error <= 0 or error >= 1:
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 90, __pyx_L1_error)
+    __PYX_ERR(0, 92, __pyx_L1_error)
 
-    /* "pdsa/membership/bloom.pyx":89
+    /* "pdsa/membership/bloom.pyx":91
  *                     be less then 1.
  *         """
  *         if capacity < 1:             # <<<<<<<<<<<<<<
@@ -2485,7 +2520,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":92
+  /* "pdsa/membership/bloom.pyx":94
  *             raise ValueError("Filter capacity can't be 0 or negative")
  * 
  *         if error <= 0 or error >= 1:             # <<<<<<<<<<<<<<
@@ -2503,20 +2538,20 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   __pyx_L5_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "pdsa/membership/bloom.pyx":93
+    /* "pdsa/membership/bloom.pyx":95
  * 
  *         if error <= 0 or error >= 1:
  *             raise ValueError("Error rate shell be in (0, 1)")             # <<<<<<<<<<<<<<
  * 
  *         cdef size_t length = - <int>(capacity * log(error) / (log(2) ** 2))
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 93, __pyx_L1_error)
+    __PYX_ERR(0, 95, __pyx_L1_error)
 
-    /* "pdsa/membership/bloom.pyx":92
+    /* "pdsa/membership/bloom.pyx":94
  *             raise ValueError("Filter capacity can't be 0 or negative")
  * 
  *         if error <= 0 or error >= 1:             # <<<<<<<<<<<<<<
@@ -2525,7 +2560,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":95
+  /* "pdsa/membership/bloom.pyx":97
  *             raise ValueError("Error rate shell be in (0, 1)")
  * 
  *         cdef size_t length = - <int>(capacity * log(error) / (log(2) ** 2))             # <<<<<<<<<<<<<<
@@ -2536,11 +2571,11 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   __pyx_t_5 = pow(log(2.0), 2.0);
   if (unlikely(__pyx_t_5 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 95, __pyx_L1_error)
+    __PYX_ERR(0, 97, __pyx_L1_error)
   }
   __pyx_v_length = (-((int)(__pyx_t_4 / __pyx_t_5)));
 
-  /* "pdsa/membership/bloom.pyx":96
+  /* "pdsa/membership/bloom.pyx":98
  * 
  *         cdef size_t length = - <int>(capacity * log(error) / (log(2) ** 2))
  *         cdef uint8_t num_of_hashes = - <int>(ceil(log(error) / log(2)))             # <<<<<<<<<<<<<<
@@ -2551,11 +2586,11 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   __pyx_t_4 = log(2.0);
   if (unlikely(__pyx_t_4 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 96, __pyx_L1_error)
+    __PYX_ERR(0, 98, __pyx_L1_error)
   }
   __pyx_v_num_of_hashes = (-((int)ceil((__pyx_t_5 / __pyx_t_4))));
 
-  /* "pdsa/membership/bloom.pyx":98
+  /* "pdsa/membership/bloom.pyx":100
  *         cdef uint8_t num_of_hashes = - <int>(ceil(log(error) / log(2)))
  * 
  *         return cls(length, num_of_hashes)             # <<<<<<<<<<<<<<
@@ -2563,11 +2598,11 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
  *     cdef uint32_t _hash(self, object key, uint8_t seed):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyInt_FromSize_t(__pyx_v_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_FromSize_t(__pyx_v_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyInt_From_uint8_t(__pyx_v_num_of_hashes); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_uint8_t(__pyx_v_num_of_hashes); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2);
@@ -2575,14 +2610,14 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_6);
   __pyx_t_2 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_v_cls), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_v_cls), __pyx_t_7, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_r = __pyx_t_6;
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":77
+  /* "pdsa/membership/bloom.pyx":79
  * 
  *     @classmethod
  *     def create_from_capacity(cls, const size_t capacity, const float error):             # <<<<<<<<<<<<<<
@@ -2603,7 +2638,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_2create_from_c
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":100
+/* "pdsa/membership/bloom.pyx":102
  *         return cls(length, num_of_hashes)
  * 
  *     cdef uint32_t _hash(self, object key, uint8_t seed):             # <<<<<<<<<<<<<<
@@ -2618,7 +2653,7 @@ static uint32_t __pyx_f_4pdsa_10membership_5bloom_11BloomFilter__hash(CYTHON_UNU
   struct __pyx_opt_args_4pdsa_5utils_4hash_3mmh_mmh3_x86_32bit __pyx_t_2;
   __Pyx_RefNannySetupContext("_hash", 0);
 
-  /* "pdsa/membership/bloom.pyx":102
+  /* "pdsa/membership/bloom.pyx":104
  *     cdef uint32_t _hash(self, object key, uint8_t seed):
  *         # self.algorithm = "mmh3_x86_32bit"
  *         return mmh3_x86_32bit(key, seed)             # <<<<<<<<<<<<<<
@@ -2631,7 +2666,7 @@ static uint32_t __pyx_f_4pdsa_10membership_5bloom_11BloomFilter__hash(CYTHON_UNU
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":100
+  /* "pdsa/membership/bloom.pyx":102
  *         return cls(length, num_of_hashes)
  * 
  *     cdef uint32_t _hash(self, object key, uint8_t seed):             # <<<<<<<<<<<<<<
@@ -2645,7 +2680,7 @@ static uint32_t __pyx_f_4pdsa_10membership_5bloom_11BloomFilter__hash(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":104
+/* "pdsa/membership/bloom.pyx":106
  *         return mmh3_x86_32bit(key, seed)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2668,7 +2703,7 @@ static void __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_4__dealloc__(struct
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "pdsa/membership/bloom.pyx":105
+  /* "pdsa/membership/bloom.pyx":107
  * 
  *     def __dealloc__(self):
  *         PyMem_Free(self._table)             # <<<<<<<<<<<<<<
@@ -2677,7 +2712,7 @@ static void __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_4__dealloc__(struct
  */
   PyMem_Free(__pyx_v_self->_table);
 
-  /* "pdsa/membership/bloom.pyx":104
+  /* "pdsa/membership/bloom.pyx":106
  *         return mmh3_x86_32bit(key, seed)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2689,7 +2724,7 @@ static void __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_4__dealloc__(struct
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pdsa/membership/bloom.pyx":109
+/* "pdsa/membership/bloom.pyx":111
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     cpdef void add(self, object element) except *:             # <<<<<<<<<<<<<<
@@ -2717,7 +2752,7 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_4pdsa_10membership_5bloom_11BloomFilter_7add)) {
       __Pyx_INCREF(__pyx_t_1);
@@ -2732,13 +2767,13 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_element); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_element); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_element};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
@@ -2746,19 +2781,19 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_element};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
         #endif
         {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 109, __pyx_L1_error)
+          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
           __Pyx_INCREF(__pyx_v_element);
           __Pyx_GIVEREF(__pyx_v_element);
           PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_element);
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
@@ -2771,7 +2806,7 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "pdsa/membership/bloom.pyx":114
+  /* "pdsa/membership/bloom.pyx":116
  *         cdef uint8_t seed
  *         cdef size_t index
  *         for seed_index in range(self.num_of_hashes):             # <<<<<<<<<<<<<<
@@ -2782,18 +2817,18 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
   for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
     __pyx_v_seed_index = __pyx_t_7;
 
-    /* "pdsa/membership/bloom.pyx":115
+    /* "pdsa/membership/bloom.pyx":117
  *         cdef size_t index
  *         for seed_index in range(self.num_of_hashes):
  *             seed = self._seeds[seed_index]             # <<<<<<<<<<<<<<
  *             index = self._hash(element, seed) % self.length
  *             self._table[index] = 1
  */
-    if (unlikely(!__pyx_v_self->_seeds.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 115, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->_seeds.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 117, __pyx_L1_error)}
     __pyx_t_8 = __pyx_v_seed_index;
     __pyx_v_seed = (*((uint8_t *) ( /* dim=0 */ (__pyx_v_self->_seeds.data + __pyx_t_8 * __pyx_v_self->_seeds.strides[0]) )));
 
-    /* "pdsa/membership/bloom.pyx":116
+    /* "pdsa/membership/bloom.pyx":118
  *         for seed_index in range(self.num_of_hashes):
  *             seed = self._seeds[seed_index]
  *             index = self._hash(element, seed) % self.length             # <<<<<<<<<<<<<<
@@ -2803,11 +2838,11 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
     __pyx_t_9 = ((struct __pyx_vtabstruct_4pdsa_10membership_5bloom_BloomFilter *)__pyx_v_self->__pyx_vtab)->_hash(__pyx_v_self, __pyx_v_element, __pyx_v_seed);
     if (unlikely(__pyx_v_self->length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 116, __pyx_L1_error)
+      __PYX_ERR(0, 118, __pyx_L1_error)
     }
     __pyx_v_index = (__pyx_t_9 % __pyx_v_self->length);
 
-    /* "pdsa/membership/bloom.pyx":117
+    /* "pdsa/membership/bloom.pyx":119
  *             seed = self._seeds[seed_index]
  *             index = self._hash(element, seed) % self.length
  *             self._table[index] = 1             # <<<<<<<<<<<<<<
@@ -2817,7 +2852,7 @@ static void __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(struct __pyx_obj
     (__pyx_v_self->_table[__pyx_v_index]) = 1;
   }
 
-  /* "pdsa/membership/bloom.pyx":109
+  /* "pdsa/membership/bloom.pyx":111
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     cpdef void add(self, object element) except *:             # <<<<<<<<<<<<<<
@@ -2858,8 +2893,8 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_6add(struct __
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("add", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(__pyx_v_self, __pyx_v_element, 1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 109, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_void_to_None(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_add(__pyx_v_self, __pyx_v_element, 1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2876,7 +2911,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_6add(struct __
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":121
+/* "pdsa/membership/bloom.pyx":123
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     cpdef bint test(self, object element) except *:             # <<<<<<<<<<<<<<
@@ -2906,7 +2941,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_test); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_test); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_4pdsa_10membership_5bloom_11BloomFilter_9test)) {
       __Pyx_INCREF(__pyx_t_1);
@@ -2921,13 +2956,13 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_element); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_element); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_element};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
@@ -2935,25 +2970,25 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_element};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
         #endif
         {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 121, __pyx_L1_error)
+          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
           __Pyx_INCREF(__pyx_v_element);
           __Pyx_GIVEREF(__pyx_v_element);
           PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_element);
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 123, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_r = __pyx_t_6;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2962,7 +2997,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "pdsa/membership/bloom.pyx":130
+  /* "pdsa/membership/bloom.pyx":132
  *         cdef uint8_t seed
  *         cdef size_t index
  *         for seed_index in range(self.num_of_hashes):             # <<<<<<<<<<<<<<
@@ -2973,18 +3008,18 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_seed_index = __pyx_t_8;
 
-    /* "pdsa/membership/bloom.pyx":131
+    /* "pdsa/membership/bloom.pyx":133
  *         cdef size_t index
  *         for seed_index in range(self.num_of_hashes):
  *             seed = self._seeds[seed_index]             # <<<<<<<<<<<<<<
  *             index = self._hash(element, seed) % self.length
  *             if self._table[index] != 1:
  */
-    if (unlikely(!__pyx_v_self->_seeds.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 131, __pyx_L1_error)}
+    if (unlikely(!__pyx_v_self->_seeds.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 133, __pyx_L1_error)}
     __pyx_t_9 = __pyx_v_seed_index;
     __pyx_v_seed = (*((uint8_t *) ( /* dim=0 */ (__pyx_v_self->_seeds.data + __pyx_t_9 * __pyx_v_self->_seeds.strides[0]) )));
 
-    /* "pdsa/membership/bloom.pyx":132
+    /* "pdsa/membership/bloom.pyx":134
  *         for seed_index in range(self.num_of_hashes):
  *             seed = self._seeds[seed_index]
  *             index = self._hash(element, seed) % self.length             # <<<<<<<<<<<<<<
@@ -2994,11 +3029,11 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
     __pyx_t_10 = ((struct __pyx_vtabstruct_4pdsa_10membership_5bloom_BloomFilter *)__pyx_v_self->__pyx_vtab)->_hash(__pyx_v_self, __pyx_v_element, __pyx_v_seed);
     if (unlikely(__pyx_v_self->length == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-      __PYX_ERR(0, 132, __pyx_L1_error)
+      __PYX_ERR(0, 134, __pyx_L1_error)
     }
     __pyx_v_index = (__pyx_t_10 % __pyx_v_self->length);
 
-    /* "pdsa/membership/bloom.pyx":133
+    /* "pdsa/membership/bloom.pyx":135
  *             seed = self._seeds[seed_index]
  *             index = self._hash(element, seed) % self.length
  *             if self._table[index] != 1:             # <<<<<<<<<<<<<<
@@ -3008,7 +3043,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
     __pyx_t_6 = (((__pyx_v_self->_table[__pyx_v_index]) != 1) != 0);
     if (__pyx_t_6) {
 
-      /* "pdsa/membership/bloom.pyx":134
+      /* "pdsa/membership/bloom.pyx":136
  *             index = self._hash(element, seed) % self.length
  *             if self._table[index] != 1:
  *                 return False             # <<<<<<<<<<<<<<
@@ -3018,7 +3053,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "pdsa/membership/bloom.pyx":133
+      /* "pdsa/membership/bloom.pyx":135
  *             seed = self._seeds[seed_index]
  *             index = self._hash(element, seed) % self.length
  *             if self._table[index] != 1:             # <<<<<<<<<<<<<<
@@ -3028,7 +3063,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
     }
   }
 
-  /* "pdsa/membership/bloom.pyx":135
+  /* "pdsa/membership/bloom.pyx":137
  *             if self._table[index] != 1:
  *                 return False
  *         return True             # <<<<<<<<<<<<<<
@@ -3038,7 +3073,7 @@ static int __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(struct __pyx_obj
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":121
+  /* "pdsa/membership/bloom.pyx":123
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     cpdef bint test(self, object element) except *:             # <<<<<<<<<<<<<<
@@ -3081,8 +3116,8 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_8test(struct _
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("test", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(__pyx_v_self, __pyx_v_element, 1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_4pdsa_10membership_5bloom_11BloomFilter_test(__pyx_v_self, __pyx_v_element, 1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 123, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -3099,7 +3134,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_8test(struct _
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":137
+/* "pdsa/membership/bloom.pyx":139
  *         return True
  * 
  *     def sizeof(self):             # <<<<<<<<<<<<<<
@@ -3126,7 +3161,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_10sizeof(struc
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sizeof", 0);
 
-  /* "pdsa/membership/bloom.pyx":141
+  /* "pdsa/membership/bloom.pyx":143
  *         # using only 1 bit. Actually, it needs 1 entire byte
  *         # for representing 0/not-0 instead of 0/1 ...
  *         return self.length * sizeof(bint)             # <<<<<<<<<<<<<<
@@ -3134,13 +3169,13 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_10sizeof(struc
  *     def __repr__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_FromSize_t((__pyx_v_self->length * (sizeof(int)))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_FromSize_t((__pyx_v_self->length * (sizeof(int)))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":137
+  /* "pdsa/membership/bloom.pyx":139
  *         return True
  * 
  *     def sizeof(self):             # <<<<<<<<<<<<<<
@@ -3159,7 +3194,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_10sizeof(struc
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":143
+/* "pdsa/membership/bloom.pyx":145
  *         return self.length * sizeof(bint)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -3192,7 +3227,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "pdsa/membership/bloom.pyx":144
+  /* "pdsa/membership/bloom.pyx":146
  * 
  *     def __repr__(self):
  *         return "<BloomFilter (length: {}, hashes: {})>".format(             # <<<<<<<<<<<<<<
@@ -3200,27 +3235,27 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
  *             self.num_of_hashes
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_BloomFilter_length_hashes, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 144, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_BloomFilter_length_hashes, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 146, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "pdsa/membership/bloom.pyx":145
+  /* "pdsa/membership/bloom.pyx":147
  *     def __repr__(self):
  *         return "<BloomFilter (length: {}, hashes: {})>".format(
  *             self.length,             # <<<<<<<<<<<<<<
  *             self.num_of_hashes
  *         )
  */
-  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
 
-  /* "pdsa/membership/bloom.pyx":146
+  /* "pdsa/membership/bloom.pyx":148
  *         return "<BloomFilter (length: {}, hashes: {})>".format(
  *             self.length,
  *             self.num_of_hashes             # <<<<<<<<<<<<<<
  *         )
  * 
  */
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -3237,7 +3272,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3247,7 +3282,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3255,7 +3290,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_5) {
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -3266,7 +3301,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_4);
     __pyx_t_3 = 0;
     __pyx_t_4 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
@@ -3275,7 +3310,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":143
+  /* "pdsa/membership/bloom.pyx":145
  *         return self.length * sizeof(bint)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -3299,7 +3334,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_12__repr__(str
   return __pyx_r;
 }
 
-/* "pdsa/membership/bloom.pyx":149
+/* "pdsa/membership/bloom.pyx":151
  *         )
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -3339,7 +3374,7 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
   Py_ssize_t __pyx_t_7;
   __Pyx_RefNannySetupContext("__len__", 0);
 
-  /* "pdsa/membership/bloom.pyx":163
+  /* "pdsa/membership/bloom.pyx":165
  * 
  *         """
  *         num_of_bits = 0             # <<<<<<<<<<<<<<
@@ -3349,7 +3384,7 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_num_of_bits = __pyx_int_0;
 
-  /* "pdsa/membership/bloom.pyx":164
+  /* "pdsa/membership/bloom.pyx":166
  *         """
  *         num_of_bits = 0
  *         for index in range(self.length):             # <<<<<<<<<<<<<<
@@ -3360,38 +3395,38 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_index = __pyx_t_2;
 
-    /* "pdsa/membership/bloom.pyx":166
+    /* "pdsa/membership/bloom.pyx":168
  *         for index in range(self.length):
  *             # TODO: not efficient count of all 1 present in the table
  *             num_of_bits += self._table[index]             # <<<<<<<<<<<<<<
  * 
  *         if num_of_bits < self.num_of_hashes:
  */
-    __pyx_t_3 = __Pyx_PyBool_FromLong((__pyx_v_self->_table[__pyx_v_index])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyBool_FromLong((__pyx_v_self->_table[__pyx_v_index])); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_num_of_bits, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_num_of_bits, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 168, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_num_of_bits, __pyx_t_4);
     __pyx_t_4 = 0;
   }
 
-  /* "pdsa/membership/bloom.pyx":168
+  /* "pdsa/membership/bloom.pyx":170
  *             num_of_bits += self._table[index]
  * 
  *         if num_of_bits < self.num_of_hashes:             # <<<<<<<<<<<<<<
  *             return 0
  * 
  */
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 170, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_4, Py_LT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_4, Py_LT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 170, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_5) {
 
-    /* "pdsa/membership/bloom.pyx":169
+    /* "pdsa/membership/bloom.pyx":171
  * 
  *         if num_of_bits < self.num_of_hashes:
  *             return 0             # <<<<<<<<<<<<<<
@@ -3401,7 +3436,7 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "pdsa/membership/bloom.pyx":168
+    /* "pdsa/membership/bloom.pyx":170
  *             num_of_bits += self._table[index]
  * 
  *         if num_of_bits < self.num_of_hashes:             # <<<<<<<<<<<<<<
@@ -3410,22 +3445,22 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":171
+  /* "pdsa/membership/bloom.pyx":173
  *             return 0
  * 
  *         if num_of_bits == self.num_of_hashes:             # <<<<<<<<<<<<<<
  *             return 1
  * 
  */
-  __pyx_t_3 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num_of_hashes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 173, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (__pyx_t_5) {
 
-    /* "pdsa/membership/bloom.pyx":172
+    /* "pdsa/membership/bloom.pyx":174
  * 
  *         if num_of_bits == self.num_of_hashes:
  *             return 1             # <<<<<<<<<<<<<<
@@ -3435,7 +3470,7 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
     __pyx_r = 1;
     goto __pyx_L0;
 
-    /* "pdsa/membership/bloom.pyx":171
+    /* "pdsa/membership/bloom.pyx":173
  *             return 0
  * 
  *         if num_of_bits == self.num_of_hashes:             # <<<<<<<<<<<<<<
@@ -3444,22 +3479,22 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":174
+  /* "pdsa/membership/bloom.pyx":176
  *             return 1
  * 
  *         if num_of_bits == self.length:             # <<<<<<<<<<<<<<
  *             return self.length
  * 
  */
-  __pyx_t_4 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 176, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_v_num_of_bits, __pyx_t_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 176, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_5) {
 
-    /* "pdsa/membership/bloom.pyx":175
+    /* "pdsa/membership/bloom.pyx":177
  * 
  *         if num_of_bits == self.length:
  *             return self.length             # <<<<<<<<<<<<<<
@@ -3469,7 +3504,7 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
     __pyx_r = __pyx_v_self->length;
     goto __pyx_L0;
 
-    /* "pdsa/membership/bloom.pyx":174
+    /* "pdsa/membership/bloom.pyx":176
  *             return 1
  * 
  *         if num_of_bits == self.length:             # <<<<<<<<<<<<<<
@@ -3478,22 +3513,22 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
  */
   }
 
-  /* "pdsa/membership/bloom.pyx":177
+  /* "pdsa/membership/bloom.pyx":179
  *             return self.length
  * 
  *         est = log(self.length - num_of_bits) - log(self.length)             # <<<<<<<<<<<<<<
  *         return - int(self.length * est / self.num_of_hashes)
  */
-  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_self->length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Subtract(__pyx_t_3, __pyx_v_num_of_bits); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Subtract(__pyx_t_3, __pyx_v_num_of_bits); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 179, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_est = (log(__pyx_t_6) - log(__pyx_v_self->length));
 
-  /* "pdsa/membership/bloom.pyx":178
+  /* "pdsa/membership/bloom.pyx":180
  * 
  *         est = log(self.length - num_of_bits) - log(self.length)
  *         return - int(self.length * est / self.num_of_hashes)             # <<<<<<<<<<<<<<
@@ -3501,19 +3536,19 @@ static Py_ssize_t __pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_14__len__(str
   __pyx_t_6 = (__pyx_v_self->length * __pyx_v_est);
   if (unlikely(__pyx_v_self->num_of_hashes == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 178, __pyx_L1_error)
+    __PYX_ERR(0, 180, __pyx_L1_error)
   }
-  __pyx_t_4 = __Pyx_PyInt_FromDouble((__pyx_t_6 / __pyx_v_self->num_of_hashes)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_FromDouble((__pyx_t_6 / __pyx_v_self->num_of_hashes)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Negative(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Negative(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_3); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_t_3); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_7;
   goto __pyx_L0;
 
-  /* "pdsa/membership/bloom.pyx":149
+  /* "pdsa/membership/bloom.pyx":151
  *         )
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -3564,7 +3599,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_16__reduce_cyt
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3617,7 +3652,7 @@ static PyObject *__pyx_pf_4pdsa_10membership_5bloom_11BloomFilter_18__setstate_c
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4470,7 +4505,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if itemsize <= 0:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 131, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 131, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -4502,7 +4537,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if not isinstance(format, bytes):
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 134, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 134, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -4537,7 +4572,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  */
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_format, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 137, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_format, __pyx_t_5);
@@ -4613,7 +4648,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  * 
  */
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 146, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 146, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -4897,7 +4932,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *             if self.dtype_is_object:
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 174, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 174, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5135,7 +5170,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(stru
  *         info.buf = self.data
  *         info.len = self.len
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 190, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5801,7 +5836,7 @@ static PyObject *__pyx_pf___pyx_array___reduce_cython__(CYTHON_UNUSED struct __p
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -5854,7 +5889,7 @@ static PyObject *__pyx_pf___pyx_array_2__setstate_cython__(CYTHON_UNUSED struct 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8502,7 +8537,7 @@ static PyObject *__pyx_memoryview_convert_item_to_object(struct __pyx_memoryview
  *         else:
  *             if len(self.view.format) == 1:
  */
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 484, __pyx_L5_except_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 484, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -9343,7 +9378,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_7strides___get__(st
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 556, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 556, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -9457,7 +9492,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_10suboffsets___get_
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->view.ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 563, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__17, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 563, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__18, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 563, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_3;
@@ -10464,7 +10499,7 @@ static PyObject *__pyx_pf___pyx_memoryview___reduce_cython__(CYTHON_UNUSED struc
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -10517,7 +10552,7 @@ static PyObject *__pyx_pf___pyx_memoryview_2__setstate_cython__(CYTHON_UNUSED st
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -10868,9 +10903,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
         __Pyx_GOTREF(__pyx_t_7);
         { Py_ssize_t __pyx_temp;
           for (__pyx_temp=0; __pyx_temp < ((__pyx_v_ndim - __pyx_t_8) + 1); __pyx_temp++) {
-            __Pyx_INCREF(__pyx_slice__20);
-            __Pyx_GIVEREF(__pyx_slice__20);
-            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__20);
+            __Pyx_INCREF(__pyx_slice__21);
+            __Pyx_GIVEREF(__pyx_slice__21);
+            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__21);
           }
         }
         __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 668, __pyx_L1_error)
@@ -10903,7 +10938,7 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
  *         else:
  */
       /*else*/ {
-        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__21); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 671, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__22); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 671, __pyx_L1_error)
       }
       __pyx_L7:;
 
@@ -11048,9 +11083,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
     __Pyx_GOTREF(__pyx_t_3);
     { Py_ssize_t __pyx_temp;
       for (__pyx_temp=0; __pyx_temp < __pyx_v_nslices; __pyx_temp++) {
-        __Pyx_INCREF(__pyx_slice__22);
-        __Pyx_GIVEREF(__pyx_slice__22);
-        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__22);
+        __Pyx_INCREF(__pyx_slice__23);
+        __Pyx_GIVEREF(__pyx_slice__23);
+        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__23);
       }
     }
     __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_3); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(1, 682, __pyx_L1_error)
@@ -11174,7 +11209,7 @@ static PyObject *assert_direct_dimensions(Py_ssize_t *__pyx_v_suboffsets, int __
  * 
  * 
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 689, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 689, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -13345,7 +13380,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -13398,7 +13433,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUS
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -17841,6 +17876,7 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ASCII, __pyx_k_ASCII, sizeof(__pyx_k_ASCII), 0, 0, 1, 1},
+  {&__pyx_kp_s_At_least_one_ahsh_function_is_re, __pyx_k_At_least_one_ahsh_function_is_re, sizeof(__pyx_k_At_least_one_ahsh_function_is_re), 0, 0, 1, 0},
   {&__pyx_n_s_B, __pyx_k_B, sizeof(__pyx_k_B), 0, 0, 1, 1},
   {&__pyx_kp_s_BloomFilter_length_hashes, __pyx_k_BloomFilter_length_hashes, sizeof(__pyx_k_BloomFilter_length_hashes), 0, 0, 1, 0},
   {&__pyx_kp_s_Buffer_view_does_not_expose_stri, __pyx_k_Buffer_view_does_not_expose_stri, sizeof(__pyx_k_Buffer_view_does_not_expose_stri), 0, 0, 1, 0},
@@ -17937,12 +17973,12 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 58, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 65, __pyx_L1_error)
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 71, __pyx_L1_error)
   #if PY_MAJOR_VERSION >= 3
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 72, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 74, __pyx_L1_error)
   #else
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 72, __pyx_L1_error)
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 74, __pyx_L1_error)
   #endif
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 149, __pyx_L1_error)
@@ -17962,45 +17998,56 @@ static int __Pyx_InitCachedConstants(void) {
  *         """
  *         if length < 1:
  *             raise ValueError("Filter length can't be 0 or negative")             # <<<<<<<<<<<<<<
- * 
- *         # NOTE: Floor length to the closest power of 2
+ *         if num_of_hashes < 1:
+ *             raise ValueError("At least one ahsh function is required")
  */
   __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_Filter_length_can_t_be_0_or_nega); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "pdsa/membership/bloom.pyx":69
+  /* "pdsa/membership/bloom.pyx":60
+ *             raise ValueError("Filter length can't be 0 or negative")
+ *         if num_of_hashes < 1:
+ *             raise ValueError("At least one ahsh function is required")             # <<<<<<<<<<<<<<
+ * 
+ *         # NOTE: Floor length to the closest power of 2
+ */
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_At_least_one_ahsh_function_is_re); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__2);
+  __Pyx_GIVEREF(__pyx_tuple__2);
+
+  /* "pdsa/membership/bloom.pyx":71
  *         self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
  *         if not self._table:
  *             raise MemoryError("Can't allocate filter table")             # <<<<<<<<<<<<<<
  * 
  *         cdef size_t index
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_Can_t_allocate_filter_table); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 69, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__2);
-  __Pyx_GIVEREF(__pyx_tuple__2);
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Can_t_allocate_filter_table); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "pdsa/membership/bloom.pyx":90
+  /* "pdsa/membership/bloom.pyx":92
  *         """
  *         if capacity < 1:
  *             raise ValueError("Filter capacity can't be 0 or negative")             # <<<<<<<<<<<<<<
  * 
  *         if error <= 0 or error >= 1:
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Filter_capacity_can_t_be_0_or_ne); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 90, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_Filter_capacity_can_t_be_0_or_ne); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "pdsa/membership/bloom.pyx":93
+  /* "pdsa/membership/bloom.pyx":95
  * 
  *         if error <= 0 or error >= 1:
  *             raise ValueError("Error rate shell be in (0, 1)")             # <<<<<<<<<<<<<<
  * 
  *         cdef size_t length = - <int>(capacity * log(error) / (log(2) ** 2))
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_Error_rate_shell_be_in_0_1); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 93, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_s_Error_rate_shell_be_in_0_1); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__5);
+  __Pyx_GIVEREF(__pyx_tuple__5);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -18008,18 +18055,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__6);
-  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
 
   /* "View.MemoryView":131
  * 
@@ -18028,9 +18075,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if itemsize <= 0:
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 131, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
 
   /* "View.MemoryView":134
  * 
@@ -18039,9 +18086,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if not isinstance(format, bytes):
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 134, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 134, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__9);
+  __Pyx_GIVEREF(__pyx_tuple__9);
 
   /* "View.MemoryView":137
  * 
@@ -18050,9 +18097,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         self._format = format  # keep a reference to the byte string
  *         self.format = self._format
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 137, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_n_s_ASCII); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 137, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
 
   /* "View.MemoryView":146
  * 
@@ -18061,9 +18108,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 146, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__10);
-  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 146, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "View.MemoryView":174
  *             self.data = <char *>malloc(self.len)
@@ -18072,9 +18119,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             if self.dtype_is_object:
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 174, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 174, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "View.MemoryView":190
  *             bufmode = PyBUF_F_CONTIGUOUS | PyBUF_ANY_CONTIGUOUS
@@ -18083,9 +18130,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         info.buf = self.data
  *         info.len = self.len
  */
-  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 190, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 190, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -18093,18 +18140,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
 
   /* "View.MemoryView":484
  *             result = struct.unpack(self.view.format, bytesitem)
@@ -18113,9 +18160,9 @@ static int __Pyx_InitCachedConstants(void) {
  *         else:
  *             if len(self.view.format) == 1:
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 484, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(1, 484, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
 
   /* "View.MemoryView":556
  *         if self.view.strides == NULL:
@@ -18124,9 +18171,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(1, 556, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__16);
-  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 556, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
 
   /* "View.MemoryView":563
  *     def suboffsets(self):
@@ -18135,12 +18182,12 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([suboffset for suboffset in self.view.suboffsets[:self.view.ndim]])
  */
-  __pyx_tuple__17 = PyTuple_New(1); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 563, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
+  __pyx_tuple__18 = PyTuple_New(1); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 563, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
   __Pyx_INCREF(__pyx_int_neg_1);
   __Pyx_GIVEREF(__pyx_int_neg_1);
-  PyTuple_SET_ITEM(__pyx_tuple__17, 0, __pyx_int_neg_1);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  PyTuple_SET_ITEM(__pyx_tuple__18, 0, __pyx_int_neg_1);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -18148,18 +18195,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
   /* "View.MemoryView":668
  *         if item is Ellipsis:
@@ -18168,9 +18215,9 @@ static int __Pyx_InitCachedConstants(void) {
  *                 seen_ellipsis = True
  *             else:
  */
-  __pyx_slice__20 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__20)) __PYX_ERR(1, 668, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__20);
-  __Pyx_GIVEREF(__pyx_slice__20);
+  __pyx_slice__21 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__21)) __PYX_ERR(1, 668, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__21);
+  __Pyx_GIVEREF(__pyx_slice__21);
 
   /* "View.MemoryView":671
  *                 seen_ellipsis = True
@@ -18179,9 +18226,9 @@ static int __Pyx_InitCachedConstants(void) {
  *             have_slices = True
  *         else:
  */
-  __pyx_slice__21 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__21)) __PYX_ERR(1, 671, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__21);
-  __Pyx_GIVEREF(__pyx_slice__21);
+  __pyx_slice__22 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__22)) __PYX_ERR(1, 671, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__22);
+  __Pyx_GIVEREF(__pyx_slice__22);
 
   /* "View.MemoryView":682
  *     nslices = ndim - len(result)
@@ -18190,9 +18237,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *     return have_slices or nslices, tuple(result)
  */
-  __pyx_slice__22 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__22)) __PYX_ERR(1, 682, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__22);
-  __Pyx_GIVEREF(__pyx_slice__22);
+  __pyx_slice__23 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__23)) __PYX_ERR(1, 682, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__23);
+  __Pyx_GIVEREF(__pyx_slice__23);
 
   /* "View.MemoryView":689
  *     for suboffset in suboffsets[:ndim]:
@@ -18201,9 +18248,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 689, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(1, 689, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -18211,18 +18258,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__24);
-  __Pyx_GIVEREF(__pyx_tuple__24);
+  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
+  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
 
   /* "View.MemoryView":282
  *         return self.name
@@ -18231,9 +18278,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(1, 282, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__26);
-  __Pyx_GIVEREF(__pyx_tuple__26);
+  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(1, 282, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
 
   /* "View.MemoryView":283
  * 
@@ -18242,9 +18289,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(1, 283, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 283, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__28);
+  __Pyx_GIVEREF(__pyx_tuple__28);
 
   /* "View.MemoryView":284
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -18253,9 +18300,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 284, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__28);
-  __Pyx_GIVEREF(__pyx_tuple__28);
+  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(1, 284, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
 
   /* "View.MemoryView":287
  * 
@@ -18264,9 +18311,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(1, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__30);
+  __Pyx_GIVEREF(__pyx_tuple__30);
 
   /* "View.MemoryView":288
  * 
@@ -18275,19 +18322,19 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__30);
-  __Pyx_GIVEREF(__pyx_tuple__30);
+  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Enum(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     if __pyx_checksum != 0xb068931:
  *         from pickle import PickleError
  */
-  __pyx_tuple__31 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_PickleError, __pyx_n_s_result); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__31);
-  __Pyx_GIVEREF(__pyx_tuple__31);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__32 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_PickleError, __pyx_n_s_result); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__32);
+  __Pyx_GIVEREF(__pyx_tuple__32);
+  __pyx_codeobj__33 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__32, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__33)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -18472,27 +18519,27 @@ PyMODINIT_FUNC PyInit_bloom(void)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "pdsa/membership/bloom.pyx":77
+  /* "pdsa/membership/bloom.pyx":79
  * 
  *     @classmethod
  *     def create_from_capacity(cls, const size_t capacity, const float error):             # <<<<<<<<<<<<<<
  *         """Initialize Bloom filter from expected capacity and error rate.
  * 
  */
-  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_4pdsa_10membership_5bloom_BloomFilter, __pyx_n_s_create_from_capacity); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_4pdsa_10membership_5bloom_BloomFilter, __pyx_n_s_create_from_capacity); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "pdsa/membership/bloom.pyx":76
+  /* "pdsa/membership/bloom.pyx":78
  * 
  * 
  *     @classmethod             # <<<<<<<<<<<<<<
  *     def create_from_capacity(cls, const size_t capacity, const float error):
  *         """Initialize Bloom filter from expected capacity and error rate.
  */
-  __pyx_t_3 = __Pyx_Method_ClassMethod(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_Method_ClassMethod(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_4pdsa_10membership_5bloom_BloomFilter->tp_dict, __pyx_n_s_create_from_capacity, __pyx_t_3) < 0) __PYX_ERR(0, 77, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_4pdsa_10membership_5bloom_BloomFilter->tp_dict, __pyx_n_s_create_from_capacity, __pyx_t_3) < 0) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_4pdsa_10membership_5bloom_BloomFilter);
 
@@ -18526,7 +18573,7 @@ PyMODINIT_FUNC PyInit_bloom(void)
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 282, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 282, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_3);
@@ -18540,7 +18587,7 @@ PyMODINIT_FUNC PyInit_bloom(void)
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 283, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_3);
@@ -18554,7 +18601,7 @@ PyMODINIT_FUNC PyInit_bloom(void)
  * 
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 284, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 284, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_3);
@@ -18568,7 +18615,7 @@ PyMODINIT_FUNC PyInit_bloom(void)
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_3);
@@ -18582,7 +18629,7 @@ PyMODINIT_FUNC PyInit_bloom(void)
  * 
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_3);
