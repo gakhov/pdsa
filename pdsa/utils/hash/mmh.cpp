@@ -4,21 +4,21 @@
 {
     "distutils": {
         "depends": [
-            "pds/utils/hash/src/MurmurHash3.h"
+            "pdsa/utils/hash/src/MurmurHash3.h"
         ],
         "include_dirs": [
-            "pds/utils/hash",
-            "/work/python-pds/include/python3.4m",
-            "pds/utils/hash/src"
+            "pdsa/utils/hash",
+            "/work/python-pdsa/include/python3.4m",
+            "pdsa/utils/hash/src"
         ],
         "language": "c++",
-        "name": "pds.utils.hash.mmh",
+        "name": "pdsa.utils.hash.mmh",
         "sources": [
-            "pds/utils/hash/mmh.pyx",
-            "pds/utils/hash/src/MurmurHash3.cpp"
+            "pdsa/utils/hash/mmh.pyx",
+            "pdsa/utils/hash/src/MurmurHash3.cpp"
         ]
     },
-    "module_name": "pds.utils.hash.mmh"
+    "module_name": "pdsa.utils.hash.mmh"
 }
 END: Cython Metadata */
 
@@ -503,8 +503,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__pds__utils__hash__mmh
-#define __PYX_HAVE_API__pds__utils__hash__mmh
+#define __PYX_HAVE__pdsa__utils__hash__mmh
+#define __PYX_HAVE_API__pdsa__utils__hash__mmh
 #include <stdint.h>
 #include "src/MurmurHash3.h"
 #ifdef _OPENMP
@@ -707,44 +707,44 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "pds/utils/hash/mmh.pyx",
+  "pdsa/utils/hash/mmh.pyx",
 };
 
 /*--- Type declarations ---*/
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes;
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int;
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit;
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes;
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int;
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit;
 
-/* "pds/utils/hash/mmh.pxd":3
+/* "pdsa/utils/hash/mmh.pxd":3
  * from libc.stdint cimport uint32_t
- * 
+ *
  * cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=*)             # <<<<<<<<<<<<<<
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=*)
- * 
+ *
  */
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes {
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes {
   int __pyx_n;
   uint32_t seed;
 };
 
-/* "pds/utils/hash/mmh.pxd":4
- * 
+/* "pdsa/utils/hash/mmh.pxd":4
+ *
  * cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=*)
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=*)             # <<<<<<<<<<<<<<
- * 
+ *
  * cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=*)
  */
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int {
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int {
   int __pyx_n;
   uint32_t seed;
 };
 
-/* "pds/utils/hash/mmh.pxd":6
+/* "pdsa/utils/hash/mmh.pxd":6
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=*)
- * 
+ *
  * cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=*)             # <<<<<<<<<<<<<<
  */
-struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit {
+struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit {
   int __pyx_n;
   uint32_t seed;
 };
@@ -992,14 +992,14 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 /* Module declarations from 'libc.stdint' */
 
-/* Module declarations from 'pds.utils.hash.mmh' */
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args); /*proto*/
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(int, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args); /*proto*/
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args); /*proto*/
-#define __Pyx_MODULE_NAME "pds.utils.hash.mmh"
-int __pyx_module_is_main_pds__utils__hash__mmh = 0;
+/* Module declarations from 'pdsa.utils.hash.mmh' */
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args); /*proto*/
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int(int, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args); /*proto*/
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args); /*proto*/
+#define __Pyx_MODULE_NAME "pdsa.utils.hash.mmh"
+int __pyx_module_is_main_pdsa__utils__hash__mmh = 0;
 
-/* Implementation of 'pds.utils.hash.mmh' */
+/* Implementation of 'pdsa.utils.hash.mmh' */
 static PyObject *__pyx_builtin_AttributeError;
 static PyObject *__pyx_builtin_ValueError;
 static const char __pyx_k_key[] = "key";
@@ -1027,18 +1027,18 @@ static PyObject *__pyx_n_s_repr;
 static PyObject *__pyx_n_s_seed;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_s_utf_8;
-static PyObject *__pyx_pf_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_key, uint32_t __pyx_v_seed); /* proto */
+static PyObject *__pyx_pf_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_key, uint32_t __pyx_v_seed); /* proto */
 static PyObject *__pyx_tuple_;
 
-/* "pds/utils/hash/mmh.pyx":15
- * 
- * 
+/* "pdsa/utils/hash/mmh.pyx":15
+ *
+ *
  * cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(<char*> key, sizeof(key), seed, &hash_value)
  */
 
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *__pyx_v_key, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args) {
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *__pyx_v_key, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args) {
   uint32_t __pyx_v_seed = ((uint32_t)42);
   uint32_t __pyx_v_hash_value;
   uint32_t __pyx_r;
@@ -1051,29 +1051,29 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *__
     }
   }
 
-  /* "pds/utils/hash/mmh.pyx":17
+  /* "pdsa/utils/hash/mmh.pyx":17
  * cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=42):
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(<char*> key, sizeof(key), seed, &hash_value)             # <<<<<<<<<<<<<<
  *     return hash_value
- * 
+ *
  */
   __pyx_t_1 = __Pyx_PyObject_AsWritableString(__pyx_v_key); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 17, __pyx_L1_error)
   MurmurHash3_x86_32(((char *)__pyx_t_1), (sizeof(__pyx_v_key)), __pyx_v_seed, (&__pyx_v_hash_value));
 
-  /* "pds/utils/hash/mmh.pyx":18
+  /* "pdsa/utils/hash/mmh.pyx":18
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(<char*> key, sizeof(key), seed, &hash_value)
  *     return hash_value             # <<<<<<<<<<<<<<
- * 
+ *
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):
  */
   __pyx_r = __pyx_v_hash_value;
   goto __pyx_L0;
 
-  /* "pds/utils/hash/mmh.pyx":15
- * 
- * 
+  /* "pdsa/utils/hash/mmh.pyx":15
+ *
+ *
  * cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(<char*> key, sizeof(key), seed, &hash_value)
@@ -1081,22 +1081,22 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(PyObject *__
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_WriteUnraisable("pds.utils.hash.mmh.mmh3_x86_32bit_bytes", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("pdsa.utils.hash.mmh.mmh3_x86_32bit_bytes", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pds/utils/hash/mmh.pyx":20
+/* "pdsa/utils/hash/mmh.pyx":20
  *     return hash_value
- * 
+ *
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(&key, sizeof(key), seed, &hash_value)
  */
 
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(int __pyx_v_key, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args) {
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int(int __pyx_v_key, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args) {
   uint32_t __pyx_v_seed = ((uint32_t)42);
   uint32_t __pyx_v_hash_value;
   uint32_t __pyx_r;
@@ -1108,28 +1108,28 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(int __pyx_v_ke
     }
   }
 
-  /* "pds/utils/hash/mmh.pyx":22
+  /* "pdsa/utils/hash/mmh.pyx":22
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(&key, sizeof(key), seed, &hash_value)             # <<<<<<<<<<<<<<
  *     return hash_value
- * 
+ *
  */
   MurmurHash3_x86_32((&__pyx_v_key), (sizeof(__pyx_v_key)), __pyx_v_seed, (&__pyx_v_hash_value));
 
-  /* "pds/utils/hash/mmh.pyx":23
+  /* "pdsa/utils/hash/mmh.pyx":23
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(&key, sizeof(key), seed, &hash_value)
  *     return hash_value             # <<<<<<<<<<<<<<
- * 
- * 
+ *
+ *
  */
   __pyx_r = __pyx_v_hash_value;
   goto __pyx_L0;
 
-  /* "pds/utils/hash/mmh.pyx":20
+  /* "pdsa/utils/hash/mmh.pyx":20
  *     return hash_value
- * 
+ *
  * cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     cdef uint32_t hash_value
  *     MurmurHash3_x86_32(&key, sizeof(key), seed, &hash_value)
@@ -1141,16 +1141,16 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(int __pyx_v_ke
   return __pyx_r;
 }
 
-/* "pds/utils/hash/mmh.pyx":26
- * 
- * 
+/* "pdsa/utils/hash/mmh.pyx":26
+ *
+ *
  * cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     """Calculate x86 32bit MurmurHash3 hash value."""
- * 
+ *
  */
 
-static PyObject *__pyx_pw_3pds_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_key, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args) {
+static PyObject *__pyx_pw_3pdsa_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static uint32_t __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_key, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args) {
   uint32_t __pyx_v_seed = ((uint32_t)42);
   uint32_t __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -1158,14 +1158,14 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
   int __pyx_t_2;
   int __pyx_t_3;
   uint32_t __pyx_t_4;
-  struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int __pyx_t_5;
+  struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int __pyx_t_5;
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
   PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11 = NULL;
-  struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes __pyx_t_12;
+  struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes __pyx_t_12;
   PyObject *__pyx_t_13 = NULL;
   PyObject *__pyx_t_14 = NULL;
   PyObject *__pyx_t_15 = NULL;
@@ -1177,77 +1177,77 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
     }
   }
 
-  /* "pds/utils/hash/mmh.pyx":29
+  /* "pdsa/utils/hash/mmh.pyx":29
  *     """Calculate x86 32bit MurmurHash3 hash value."""
- * 
+ *
  *     if isinstance(key, int):             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_int(<int>key, seed)
- * 
+ *
  */
-  __pyx_t_1 = PyInt_Check(__pyx_v_key); 
+  __pyx_t_1 = PyInt_Check(__pyx_v_key);
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pds/utils/hash/mmh.pyx":30
- * 
+    /* "pdsa/utils/hash/mmh.pyx":30
+ *
  *     if isinstance(key, int):
  *         return mmh3_x86_32bit_int(<int>key, seed)             # <<<<<<<<<<<<<<
- * 
+ *
  *     if isinstance(key, bytes):
  */
     __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_v_key); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
     __pyx_t_5.__pyx_n = 1;
     __pyx_t_5.seed = __pyx_v_seed;
-    __pyx_t_4 = __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(((int)__pyx_t_3), &__pyx_t_5); 
+    __pyx_t_4 = __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int(((int)__pyx_t_3), &__pyx_t_5);
     __pyx_r = __pyx_t_4;
     goto __pyx_L0;
 
-    /* "pds/utils/hash/mmh.pyx":29
+    /* "pdsa/utils/hash/mmh.pyx":29
  *     """Calculate x86 32bit MurmurHash3 hash value."""
- * 
+ *
  *     if isinstance(key, int):             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_int(<int>key, seed)
- * 
+ *
  */
   }
 
-  /* "pds/utils/hash/mmh.pyx":32
+  /* "pdsa/utils/hash/mmh.pyx":32
  *         return mmh3_x86_32bit_int(<int>key, seed)
- * 
+ *
  *     if isinstance(key, bytes):             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_int(key, seed)
- * 
+ *
  */
-  __pyx_t_2 = PyBytes_Check(__pyx_v_key); 
+  __pyx_t_2 = PyBytes_Check(__pyx_v_key);
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "pds/utils/hash/mmh.pyx":33
- * 
+    /* "pdsa/utils/hash/mmh.pyx":33
+ *
  *     if isinstance(key, bytes):
  *         return mmh3_x86_32bit_int(key, seed)             # <<<<<<<<<<<<<<
- * 
+ *
  *     try:
  */
     __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_v_key); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
     __pyx_t_5.__pyx_n = 1;
     __pyx_t_5.seed = __pyx_v_seed;
-    __pyx_t_4 = __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int(__pyx_t_3, &__pyx_t_5); 
+    __pyx_t_4 = __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int(__pyx_t_3, &__pyx_t_5);
     __pyx_r = __pyx_t_4;
     goto __pyx_L0;
 
-    /* "pds/utils/hash/mmh.pyx":32
+    /* "pdsa/utils/hash/mmh.pyx":32
  *         return mmh3_x86_32bit_int(<int>key, seed)
- * 
+ *
  *     if isinstance(key, bytes):             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_int(key, seed)
- * 
+ *
  */
   }
 
-  /* "pds/utils/hash/mmh.pyx":35
+  /* "pdsa/utils/hash/mmh.pyx":35
  *         return mmh3_x86_32bit_int(key, seed)
- * 
+ *
  *     try:             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
  *     except AttributeError:
@@ -1261,8 +1261,8 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
     __Pyx_XGOTREF(__pyx_t_8);
     /*try:*/ {
 
-      /* "pds/utils/hash/mmh.pyx":36
- * 
+      /* "pdsa/utils/hash/mmh.pyx":36
+ *
  *     try:
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)             # <<<<<<<<<<<<<<
  *     except AttributeError:
@@ -1297,14 +1297,14 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
       if (!(likely(PyBytes_CheckExact(__pyx_t_9))||((__pyx_t_9) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_9)->tp_name), 0))) __PYX_ERR(0, 36, __pyx_L5_error)
       __pyx_t_12.__pyx_n = 1;
       __pyx_t_12.seed = __pyx_v_seed;
-      __pyx_t_4 = __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(((PyObject*)__pyx_t_9), &__pyx_t_12); 
+      __pyx_t_4 = __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes(((PyObject*)__pyx_t_9), &__pyx_t_12);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __pyx_r = __pyx_t_4;
       goto __pyx_L9_try_return;
 
-      /* "pds/utils/hash/mmh.pyx":35
+      /* "pdsa/utils/hash/mmh.pyx":35
  *         return mmh3_x86_32bit_int(key, seed)
- * 
+ *
  *     try:             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
  *     except AttributeError:
@@ -1316,7 +1316,7 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
     __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "pds/utils/hash/mmh.pyx":37
+    /* "pdsa/utils/hash/mmh.pyx":37
  *     try:
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
  *     except AttributeError:             # <<<<<<<<<<<<<<
@@ -1325,13 +1325,13 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
  */
     __pyx_t_3 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_AttributeError);
     if (__pyx_t_3) {
-      __Pyx_AddTraceback("pds.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("pdsa.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
       if (__Pyx_GetException(&__pyx_t_9, &__pyx_t_10, &__pyx_t_11) < 0) __PYX_ERR(0, 37, __pyx_L7_except_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_GOTREF(__pyx_t_11);
 
-      /* "pds/utils/hash/mmh.pyx":39
+      /* "pdsa/utils/hash/mmh.pyx":39
  *     except AttributeError:
  *         raise ValueError(
  *             "key {} has no string representation".format(key))             # <<<<<<<<<<<<<<
@@ -1382,7 +1382,7 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
       }
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-      /* "pds/utils/hash/mmh.pyx":38
+      /* "pdsa/utils/hash/mmh.pyx":38
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
  *     except AttributeError:
  *         raise ValueError(             # <<<<<<<<<<<<<<
@@ -1403,9 +1403,9 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
     goto __pyx_L7_except_error;
     __pyx_L7_except_error:;
 
-    /* "pds/utils/hash/mmh.pyx":35
+    /* "pdsa/utils/hash/mmh.pyx":35
  *         return mmh3_x86_32bit_int(key, seed)
- * 
+ *
  *     try:             # <<<<<<<<<<<<<<
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
  *     except AttributeError:
@@ -1425,12 +1425,12 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
     goto __pyx_L0;
   }
 
-  /* "pds/utils/hash/mmh.pyx":26
- * 
- * 
+  /* "pdsa/utils/hash/mmh.pyx":26
+ *
+ *
  * cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=42):             # <<<<<<<<<<<<<<
  *     """Calculate x86 32bit MurmurHash3 hash value."""
- * 
+ *
  */
 
   /* function exit code */
@@ -1442,7 +1442,7 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
   __Pyx_XDECREF(__pyx_t_14);
   __Pyx_XDECREF(__pyx_t_15);
   __Pyx_XDECREF(__pyx_t_16);
-  __Pyx_WriteUnraisable("pds.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("pdsa.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -1450,9 +1450,9 @@ static uint32_t __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(PyObject *__pyx_v_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_3pds_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_3pds_5utils_4hash_3mmh_mmh3_x86_32bit[] = "Calculate x86 32bit MurmurHash3 hash value.";
-static PyObject *__pyx_pw_3pds_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_3pdsa_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit[] = "Calculate x86 32bit MurmurHash3 hash value.";
+static PyObject *__pyx_pw_3pdsa_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_key = 0;
   uint32_t __pyx_v_seed;
   PyObject *__pyx_r = 0;
@@ -1507,28 +1507,28 @@ static PyObject *__pyx_pw_3pds_5utils_4hash_3mmh_1mmh3_x86_32bit(PyObject *__pyx
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("mmh3_x86_32bit", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 26, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pds.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pdsa.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(__pyx_self, __pyx_v_key, __pyx_v_seed);
+  __pyx_r = __pyx_pf_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(__pyx_self, __pyx_v_key, __pyx_v_seed);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_key, uint32_t __pyx_v_seed) {
+static PyObject *__pyx_pf_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_key, uint32_t __pyx_v_seed) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   uint32_t __pyx_t_1;
-  struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit __pyx_t_2;
+  struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("mmh3_x86_32bit", 0);
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.seed = __pyx_v_seed;
-  __pyx_t_1 = __pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(__pyx_v_key, 0, &__pyx_t_2); 
+  __pyx_t_1 = __pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit(__pyx_v_key, 0, &__pyx_t_2);
   __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
@@ -1538,7 +1538,7 @@ static PyObject *__pyx_pf_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED Py
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("pds.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pdsa.utils.hash.mmh.mmh3_x86_32bit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1547,7 +1547,7 @@ static PyObject *__pyx_pf_3pds_5utils_4hash_3mmh_mmh3_x86_32bit(CYTHON_UNUSED Py
 }
 
 static PyMethodDef __pyx_methods[] = {
-  {"mmh3_x86_32bit", (PyCFunction)__pyx_pw_3pds_5utils_4hash_3mmh_1mmh3_x86_32bit, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3pds_5utils_4hash_3mmh_mmh3_x86_32bit},
+  {"mmh3_x86_32bit", (PyCFunction)__pyx_pw_3pdsa_5utils_4hash_3mmh_1mmh3_x86_32bit, METH_VARARGS|METH_KEYWORDS, __pyx_doc_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit},
   {0, 0, 0, 0}
 };
 
@@ -1596,8 +1596,8 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "pds/utils/hash/mmh.pyx":36
- * 
+  /* "pdsa/utils/hash/mmh.pyx":36
+ *
  *     try:
  *         return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)             # <<<<<<<<<<<<<<
  *     except AttributeError:
@@ -1686,14 +1686,14 @@ PyMODINIT_FUNC PyInit_mmh(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_pds__utils__hash__mmh) {
+  if (__pyx_module_is_main_pdsa__utils__hash__mmh) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "pds.utils.hash.mmh")) {
-      if (unlikely(PyDict_SetItemString(modules, "pds.utils.hash.mmh", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "pdsa.utils.hash.mmh")) {
+      if (unlikely(PyDict_SetItemString(modules, "pdsa.utils.hash.mmh", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -1704,9 +1704,9 @@ PyMODINIT_FUNC PyInit_mmh(void)
   /*--- Global init code ---*/
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
-  if (__Pyx_ExportFunction("mmh3_x86_32bit_bytes", (void (*)(void))__pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes, "uint32_t (PyObject *, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  if (__Pyx_ExportFunction("mmh3_x86_32bit_int", (void (*)(void))__pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int, "uint32_t (int, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  if (__Pyx_ExportFunction("mmh3_x86_32bit", (void (*)(void))__pyx_f_3pds_5utils_4hash_3mmh_mmh3_x86_32bit, "uint32_t (PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_3pds_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("mmh3_x86_32bit_bytes", (void (*)(void))__pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes, "uint32_t (PyObject *, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_bytes *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("mmh3_x86_32bit_int", (void (*)(void))__pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int, "uint32_t (int, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit_int *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("mmh3_x86_32bit", (void (*)(void))__pyx_f_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit, "uint32_t (PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_3pdsa_5utils_4hash_3mmh_mmh3_x86_32bit *__pyx_optional_args)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   /*--- Type init code ---*/
   /*--- Type import code ---*/
   /*--- Variable import code ---*/
@@ -1716,9 +1716,9 @@ PyMODINIT_FUNC PyInit_mmh(void)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "pds/utils/hash/mmh.pyx":1
+  /* "pdsa/utils/hash/mmh.pyx":1
  * """Cython interface to MurmurHash3 C++ code by A. Appleby             # <<<<<<<<<<<<<<
- * 
+ *
  * MurmurHash3 is a non-cryptographic hash function.
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -1733,11 +1733,11 @@ PyMODINIT_FUNC PyInit_mmh(void)
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init pds.utils.hash.mmh", 0, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init pdsa.utils.hash.mmh", 0, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init pds.utils.hash.mmh");
+    PyErr_SetString(PyExc_ImportError, "init pdsa.utils.hash.mmh");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

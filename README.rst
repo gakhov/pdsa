@@ -1,5 +1,5 @@
-Probabilistic Data Structures in Python
-========================================
+Probabilistic Data Structures and Algorithms in Python
+========================================================
 
 .. contents ::
 
@@ -38,7 +38,7 @@ MIT License
 Source code
 -----------
 
-* https://github.com/gakhov/python-pds/
+* https://github.com/gakhov/python-pdsa/
 
 
 Authors
@@ -50,23 +50,23 @@ Authors
 Install
 --------
 
-1. Download `python-pds` archive::
+1. Download `python-pdsa` archive::
 
-    $ git clone https://github.com/gakhov/python-pds.git
-    $ cd python-pds
+    $ git clone https://github.com/gakhov/python-pdsa.git
+    $ cd python-pdsa
 
-For other download options (zip, tarball) visit the github web page of `python-pds <https://github.com/gakhov/python-pds>`_
+For other download options (zip, tarball) visit the github web page of `python-pdsa <https://github.com/gakhov/python-pdsa>`_
 
-2. Build `python-pds` extension module::
+2. Build `python-pdsa` extension module::
 
     $ make build
 
-3. Install `python-pds` module into your Python distribution::
+3. Install `python-pdsa` module into your Python distribution::
 
     $ [sudo] make install
 
 3. Test install::
 
     $ bin/python
-    >>> import pds
+    >>> import pdsa
     >>>

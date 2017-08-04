@@ -5,17 +5,17 @@ from distutils.core import Extension, setup
 from Cython.Build import cythonize
 
 PACKAGES = [
-    'pds',
-    'pds.membership',
-    'pds.utils',
-    'pds.utils.hash',
+    'pdsa',
+    'pdsa.membership',
+    'pdsa.utils',
+    'pdsa.utils.hash',
 ]
 
 
 def setup_package():
     root = os.path.abspath(os.path.dirname(__file__))
 
-    with open(os.path.join(root, 'pds', 'about.py')) as f:
+    with open(os.path.join(root, 'pdsa', '__about__.py')) as f:
         about = {}
         exec(f.read(), about)
 
@@ -25,9 +25,9 @@ def setup_package():
     extensions = []
     extensions.append(
         Extension(
-            "pds.membership.bloom",
+            "pdsa.membership.bloom",
             language='c++',
-            sources=['pds/membership/bloom.pyx'],
+            sources=['pdsa/membership/bloom.pyx'],
             include_dirs=[
                 get_python_inc(plat_specific=True),
             ]
@@ -35,21 +35,21 @@ def setup_package():
     )
     extensions.append(
         Extension(
-            "pds.utils.hash.mmh",
+            "pdsa.utils.hash.mmh",
             language='c++',
             sources=[
-                'pds/utils/hash/mmh.pyx',
-                os.path.join('pds/utils/hash', 'src', 'MurmurHash3.cpp')
+                'pdsa/utils/hash/mmh.pyx',
+                os.path.join('pdsa/utils/hash', 'src', 'MurmurHash3.cpp')
             ],
             include_dirs=[
                 get_python_inc(plat_specific=True),
-                os.path.join('pds/utils/hash', 'src')
+                os.path.join('pdsa/utils/hash', 'src')
             ]
         )
     )
 
     setup(
-        name=about['__title__'],
+        name="pdsaa",
         packages=PACKAGES,
         package_data={'': ['*.pyx', '*.pxd', '*.cpp', '*.h']},
         description=about['__summary__'],
