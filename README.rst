@@ -1,5 +1,5 @@
-Probabilistic Data Structures and Algorithms in Python
-********************************************************
+PDSA: Probabilistic Data Structures and Algorithms in Python
+************************************************************
 
 .. image:: https://img.shields.io/travis/gakhov/pdsa/master.svg?style=flat-square
     :target: https://travis-ci.org/gakhov/pdsa
@@ -12,6 +12,10 @@ Probabilistic Data Structures and Algorithms in Python
 .. image:: https://img.shields.io/pypi/v/pdsa.svg?style=flat-square
     :target: https://pypi.python.org/pypi/pdsa
     :alt: pypi Version
+
+.. image:: https://readthedocs.org/projects/pip/badge/?version=latest&style=flat-square
+    :target: http://pdsa.readthedocs.io/en/latest/
+    :alt: Documentation Version
 
 
 .. contents ::
@@ -37,10 +41,11 @@ Dependencies
 * Cython 0.25+ (http://cython.org/#download)
 
 
-📖 Documentation
+Documentation
 --------------
 
-TODO
+The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/>`_
+
 
 License
 -------
