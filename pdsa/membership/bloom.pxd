@@ -1,5 +1,7 @@
 from libc.stdint cimport uint32_t, uint8_t
 
+from pdsa.utils.storage.bitvector cimport BitVector
+
 cdef class BloomFilter:
     cdef size_t length
     cdef uint8_t num_of_hashes
@@ -8,7 +10,7 @@ cdef class BloomFilter:
     cdef float error_rate
 
     cdef uint8_t[:] _seeds
-    cdef bint * _table
+    cdef BitVector _table
 
     cpdef void add(self, object element) except *
     cpdef bint test(self, object element) except *

@@ -28,8 +28,8 @@ from libc.math cimport ceil, log
 from libc.stdint cimport uint32_t, uint8_t
 
 from cpython.array cimport array
-from cpython.mem cimport PyMem_Malloc, PyMem_Free
 from cpython.ref cimport PyObject
+from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
 from pdsa.utils.hash.mmh cimport mmh3_x86_32bit
 
@@ -60,15 +60,14 @@ cdef class BloomFilter:
             raise ValueError("At least one ahsh function is required")
 
         # NOTE: Floor length to the closest power of 2
-        self.length = 1 << (length - 1).bit_length()
+        # TODO/FIXME Floot to the closest divisable by 8
+        # self.length = 1 << (length - 1).bit_length()
+        self.length = length
 
         self.num_of_hashes = num_of_hashes
 
         self._seeds = array('B', range(self.num_of_hashes))
-
-        self._table = <bint *>PyMem_Malloc(self.length * sizeof(bint))
-        if not self._table:
-            raise MemoryError("Can't allocate filter table")
+        self._table = BitVector(self.length)
 
         cdef size_t index
         for index in xrange(self.length):
@@ -104,7 +103,7 @@ cdef class BloomFilter:
         return mmh3_x86_32bit(key, seed)
 
     def __dealloc__(self):
-        PyMem_Free(self._table)
+        pass
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
@@ -137,10 +136,7 @@ cdef class BloomFilter:
         return True
 
     def sizeof(self):
-        # NOTE: Unfortunatelly, bint (or bool) isn't stored
-        # using only 1 bit. Actually, it needs 1 entire byte
-        # for representing 0/not-0 instead of 0/1 ...
-        return self.length * sizeof(bint)
+        return self._table.sizeof()
 
     def __repr__(self):
         return "<BloomFilter (length: {}, hashes: {})>".format(
