@@ -7,13 +7,16 @@ python:
   - "3.6"
 
 install:
-  - pip install -r requirements.txt
-  - pip install -e .
-  - pip install pytest-cov
-  - pip install coveralls
+  - make
+  - make install
+  - bin/pip3 install -r requirements-dev.txt
+  - bin/pip3 install python-coveralls
 
 script:
-  - python -m pytest pds --cov=pds
+  - PYTHONPATH=$PWD:$PYTHONPATH make test
 
 after_success:
-  coveralls
+  - bin/coveralls
+
+notifications:
+  email: false
