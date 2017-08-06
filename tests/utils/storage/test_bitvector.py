@@ -1,0 +1,51 @@
+import pytest
+
+from pdsa.utils.storage.bitvector import BitVector
+
+
+def test_bitvector():
+    bv = BitVector(42)
+
+    assert len(bv) == 48
+    assert bv.sizeof() == 6, "Unexpexted size in bytes"
+
+
+def test_init():
+    bv = BitVector(42)
+
+    for i in range(len(bv)):
+        assert bv[i] == 0, "{}-th value failed to be 0".format(i)
+
+
+def test_repr():
+    bv = BitVector(42)
+
+    assert repr(bv) == "<BitVector (size: 6, length: 48)>"
+
+
+def test_setitem():
+    bv = BitVector(42)
+
+    assert bv[37] == 0
+
+    bv[37] = 1
+    assert bv[37] == 1
+
+    bv[37] = 0
+    assert bv[37] == 0
+
+    with pytest.raises(IndexError):
+        bv[73] = 1
+
+    with pytest.raises(OverflowError):
+        bv[-73] = 1
+
+
+def test_getitem():
+    bv = BitVector(42)
+
+    with pytest.raises(IndexError):
+        bv[73]
+
+    with pytest.raises(OverflowError):
+        bv[-73] = 1
