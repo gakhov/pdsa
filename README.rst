@@ -1,5 +1,18 @@
 Probabilistic Data Structures and Algorithms in Python
-========================================================
+********************************************************
+
+.. image:: https://img.shields.io/travis/gakhov/pdsa/master.svg?style=flat-square
+    :target: https://travis-ci.org/gakhov/pdsa
+    :alt: Travis Build Status
+
+.. image:: https://img.shields.io/github/release/gakhov/pdsa.svg?style=flat-square
+    :target: https://github.com/gakhov/pdsa/releases
+    :alt: Current Release Version
+
+.. image:: https://img.shields.io/pypi/v/pdsa.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/pdsa
+    :alt: pypi Version
+
 
 .. contents ::
 
@@ -24,7 +37,7 @@ Dependencies
 * Cython 0.25+ (http://cython.org/#download)
 
 
-Documentation
+📖 Documentation
 --------------
 
 TODO
@@ -38,7 +51,7 @@ MIT License
 Source code
 -----------
 
-* https://github.com/gakhov/python-pdsa/
+* https://github.com/gakhov/pdsa/
 
 
 Authors
@@ -47,26 +60,38 @@ Authors
 * Maintainer: `Andrii Gakhov <andrii.gakhov@gmail.com>`
 
 
-Install
---------
+Install with pip
+--------------------
 
-1. Download `python-pdsa` archive::
+Installation requires a working build environment.
 
-    $ git clone https://github.com/gakhov/python-pdsa.git
-    $ cd python-pdsa
+Using pip, PDSA releases are currently only available as source packages.
 
-For other download options (zip, tarball) visit the github web page of `python-pdsa <https://github.com/gakhov/python-pdsa>`_
+.. code:: bash
 
-2. Build `python-pdsa` extension module::
+    $pip install -U pdsa
+
+When using pip it is generally recommended to install packages in a ``virtualenv``
+to avoid modifying system state:
+
+.. code:: bash
+
+    $ virtualenv .env
+    $ source .env/bin/activate
+    $ pip install pdsa
+
+
+Compile from source
+---------------------
+
+The other way to install PDSA is to clone its
+`GitHub repository <https://github.com/gakhov/pdsa>`_ and build it from
+source. 
+
+.. code:: bash
+
+    $ git clone https://github.com/gakhov/pdsa.git
+    $ cd pdsa
 
     $ make build
-
-3. Install `python-pdsa` module into your Python distribution::
-
-    $ [sudo] make install
-
-3. Test install::
-
-    $ bin/python
-    >>> import pdsa
-    >>>
+    $ make tests
