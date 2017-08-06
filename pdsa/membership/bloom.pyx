@@ -28,8 +28,10 @@ from libc.math cimport ceil, log
 from libc.stdint cimport uint32_t, uint8_t
 
 from cpython.array cimport array
+from cpython.ref cimport PyObject
+from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
-from pdsa.utils.hash.mmh cimport mmh3_x86_32bit
+from pdsa.utils.hashing.mmh cimport mmh3_x86_32bit
 
 cdef class BloomFilter:
     """Bloom filter is a realisation of a probabilistic set.

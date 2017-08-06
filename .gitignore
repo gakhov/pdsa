@@ -107,3 +107,9 @@ pip-selfcheck.json
 #cython
 cythonize.json
 /include/
+
+
+#PDSA
+pdsa/utils/hashing/mmh.cpp
+pdsa/utils/storage/bitvector.cpp
+pdsa/membership/bloom.cpp

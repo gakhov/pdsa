@@ -14,7 +14,6 @@ install: build
 	bin/python3 setup.py install
 
 build: bin/python3
-	bin/python3 setup.py build
 	bin/python3 setup.py build_py
 	bin/python3 setup.py build_ext --inplace
 

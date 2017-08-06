@@ -8,7 +8,8 @@ PACKAGES = [
     'pdsa',
     'pdsa.membership',
     'pdsa.utils',
-    'pdsa.utils.hash',
+    'pdsa.utils.hashing',
+    'pdsa.utils.storage',
 ]
 
 
@@ -35,15 +36,15 @@ def setup_package():
     )
     extensions.append(
         Extension(
-            "pdsa.utils.hash.mmh",
+            "pdsa.utils.hashing.mmh",
             language='c++',
             sources=[
-                'pdsa/utils/hash/mmh.pyx',
-                os.path.join('pdsa/utils/hash', 'src', 'MurmurHash3.cpp')
+                'pdsa/utils/hashing/mmh.pyx',
+                os.path.join('pdsa/utils/hashing', 'src', 'MurmurHash3.cpp')
             ],
             include_dirs=[
                 get_python_inc(plat_specific=True),
-                os.path.join('pdsa/utils/hash', 'src')
+                os.path.join('pdsa/utils/hashing', 'src')
             ]
         )
     )
