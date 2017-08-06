@@ -47,6 +47,20 @@ def setup_package():
             ]
         )
     )
+    extensions.append(
+        Extension(
+            "pdsa.utils.storage.bitvector",
+            language='c++',
+            sources=[
+                'pdsa/utils/storage/bitvector.pyx',
+                os.path.join('pdsa/utils/storage', 'src', 'BitField.cpp')
+            ],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+                os.path.join('pdsa/utils/storage', 'src')
+            ]
+        )
+    )
 
     setup(
         name="pdsa",
