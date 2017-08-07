@@ -1,3 +1,13 @@
+"""
+BitVector.
+
+BitVector is an array of C++ BitFields (8 bits long) that
+supports flatten navigation.
+"""
+
+import cython
+
+from libc.math cimport ceil
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
 
@@ -7,6 +17,9 @@ cdef class BitVector:
 
     __slots__ = ()
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.cdivision(True)
     def __cinit__(self, const size_t length):
         """Allocate and initialize the bit vector.
 
@@ -16,21 +29,18 @@ cdef class BitVector:
         It's guaranteed that all bits in newly created structure will
         be cleared (set to 0).
         """
-
-        cdef size_t quotient
-        cdef int remainder
-
-        quotient, remainder = divmod(length, BITFIELD_BITSIZE)
-
-        self.size = quotient if remainder == 0 else quotient + 1
-        self.length = self.size * BITFIELD_BITSIZE
+        self.length = length + (-length & (BITFIELD_BITSIZE - 1))
+        self.size = self.length // BITFIELD_BITSIZE
 
         self.vector = <BitField *>PyMem_Malloc(self.size * sizeof(BitField))
         for bucket in range(self.size):
             self.vector[bucket].clear()
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.cdivision(True)
     def __getitem__(self, const size_t index):
-        if index > self.length:
+        if index >= self.length:
             raise IndexError("Index {} out of range".format(index))
 
         cdef int bucket
@@ -39,8 +49,11 @@ cdef class BitVector:
         bucket, bit = divmod(index, BITFIELD_BITSIZE)
         return self.vector[bucket].get_bit(bit)
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.cdivision(True)
     def __setitem__(self, const size_t index, const bint flag):
-        if index > self.length:
+        if index >= self.length:
             raise IndexError("Index {} out of range".format(index))
 
         cdef int bucket

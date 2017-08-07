@@ -59,15 +59,12 @@ cdef class BloomFilter:
         if num_of_hashes < 1:
             raise ValueError("At least one ahsh function is required")
 
-        # NOTE: Floor length to the closest power of 2
-        # TODO/FIXME Floot to the closest divisable by 8
-        # self.length = 1 << (length - 1).bit_length()
-        self.length = length
-
         self.num_of_hashes = num_of_hashes
 
         self._seeds = array('B', range(self.num_of_hashes))
-        self._table = BitVector(self.length)
+        self._table = BitVector(length)
+
+        self.length = len(self._table)
 
         cdef size_t index
         for index in xrange(self.length):
@@ -93,8 +90,8 @@ cdef class BloomFilter:
         if error <= 0 or error >= 1:
             raise ValueError("Error rate shell be in (0, 1)")
 
-        cdef size_t length = - <int>(capacity * log(error) / (log(2) ** 2))
-        cdef uint8_t num_of_hashes = - <int>(ceil(log(error) / log(2)))
+        cdef size_t length = - <size_t>(capacity * log(error) / (log(2) ** 2))
+        cdef uint8_t num_of_hashes = - <uint8_t>(ceil(log(error) / log(2)))
 
         return cls(length, num_of_hashes)
 

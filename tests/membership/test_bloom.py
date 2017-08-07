@@ -22,7 +22,7 @@ def test_repr():
 
     bf = BloomFilter.create_from_capacity(5000, 0.02)
 
-    assert repr(bf) == "<BloomFilter (length: 40711, hashes: 5)>"
+    assert repr(bf) == "<BloomFilter (length: 40712, hashes: 5)>"
 
 
 def test_add():

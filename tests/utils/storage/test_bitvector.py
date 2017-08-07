@@ -24,7 +24,7 @@ def test_repr():
 
 
 def test_setitem():
-    bv = BitVector(42)
+    bv = BitVector(48)
 
     assert bv[37] == 0
 
@@ -42,10 +42,13 @@ def test_setitem():
 
 
 def test_getitem():
-    bv = BitVector(42)
+    bv = BitVector(48)
+
+    assert len(bv) == 48
+    assert bv[47] == 0
 
     with pytest.raises(IndexError):
-        bv[73]
+        bv[48] == 0
 
     with pytest.raises(OverflowError):
         bv[-73] = 1
