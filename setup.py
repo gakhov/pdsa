@@ -2,7 +2,12 @@ import os
 
 from distutils.sysconfig import get_python_inc
 from distutils.core import Extension, setup
-from Cython.Build import cythonize
+
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    print("Please install cython and try again.")
+    raise SystemExit
 
 PACKAGES = [
     'pdsa',
