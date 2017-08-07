@@ -10,9 +10,10 @@ install:
   - make
   - make install
   - bin/pip3 install -r requirements-dev.txt
+  - bin/pip3 install pytest-random-order
 
 script:
-  - PYTHONPATH=$PWD:$PYTHONPATH make test
+  - PYTHONPATH=$PWD:$PYTHONPATH bin/py.test -m 'not ignore' --pep8 --random-order-bucket=global tests
 
 notifications:
   email: false
