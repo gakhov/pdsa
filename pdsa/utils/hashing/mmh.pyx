@@ -30,10 +30,7 @@ cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=42):
         return mmh3_x86_32bit_int(<int>key, seed)
 
     if isinstance(key, bytes):
-        return mmh3_x86_32bit_int(key, seed)
+        return mmh3_x86_32bit_bytes(key, seed)
 
-    try:
-        return mmh3_x86_32bit_bytes(key.__repr__().encode("utf-8"), seed)
-    except AttributeError:
-        raise ValueError(
-            "key {} has no string representation".format(key))
+    return mmh3_x86_32bit_bytes(repr(key).encode("utf-8"), seed)
+
