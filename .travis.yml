@@ -10,13 +10,9 @@ install:
   - make
   - make install
   - bin/pip3 install -r requirements-dev.txt
-  - bin/pip3 install python-coveralls
 
 script:
   - PYTHONPATH=$PWD:$PYTHONPATH make test
-
-after_success:
-  - bin/coveralls
 
 notifications:
   email: false

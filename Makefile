@@ -27,5 +27,5 @@ clean:
 	rm -Rf cythonize.json
 
 test:
-	bin/py.test -m 'not ignore' --pep8 --cov pdsa --cov-report term-missing tests
+	bin/py.test -m 'not ignore' --pep8 tests
 
