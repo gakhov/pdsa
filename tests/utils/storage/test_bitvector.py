@@ -7,7 +7,7 @@ def test_bitvector():
     bv = BitVector(42)
 
     assert len(bv) == 48
-    assert bv.sizeof() == 6, "Unexpexted size in bytes"
+    assert bv.sizeof() == 6, "Unexpected size in bytes"
 
 
 def test_init():

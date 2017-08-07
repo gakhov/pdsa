@@ -14,8 +14,8 @@ cdef class BitPosition:
 cdef class BitVector:
 
     __slots__ = ()
-   
-    def __cinit__(self, size_t length):
+
+    def __cinit__(self, const size_t length):
         """Allocate and initialize the bit vector.
 
         NOTE: we allocate space in chucks of 8 bits (byte, size of BitField),
