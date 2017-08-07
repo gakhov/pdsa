@@ -107,6 +107,7 @@ cdef class BloomFilter:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.cdivision(True)
     cpdef void add(self, object element) except *:
         """Add a new element into the filter."""
         cdef uint8_t seed_index
@@ -119,6 +120,7 @@ cdef class BloomFilter:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
+    @cython.cdivision(True)
     cpdef bint test(self, object element) except *:
         """Test whether element is in the filter.
 
