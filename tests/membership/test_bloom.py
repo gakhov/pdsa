@@ -30,12 +30,27 @@ def test_add():
 
     for word in ["test", 1, {"hello": "world"}]:
         bf.add(word)
-        bf.test(word) == 1, "Can't find recently added element"
+        assert bf.test(word) == 1, "Can't find recently added element"
 
 
 def test_lookup():
     bf = BloomFilter(8000, 3)
 
     bf.add("test")
-    bf.test("test") == 1, "Can't find recently added element"
-    bf.test("test_test") == 0, "False positive detected"
+    assert bf.test("test") == 1, "Can't find recently added element"
+    assert bf.test("test_test") == 0, "False positive detected"
+
+
+def test_count():
+    bf = BloomFilter(8000, 3)
+
+    assert bf.count() == 0
+
+    bf.add("test")
+    assert bf.count() == 1
+
+
+def test_len():
+    bf = BloomFilter(8000, 3)
+
+    assert len(bf) == 8000

@@ -33,6 +33,8 @@ cdef class BitVector:
         self.size = self.length // BITFIELD_BITSIZE
 
         self.vector = <BitField *>PyMem_Malloc(self.size * sizeof(BitField))
+
+        cdef size_t bucket
         for bucket in range(self.size):
             self.vector[bucket].clear()
 
@@ -43,7 +45,7 @@ cdef class BitVector:
         if index >= self.length:
             raise IndexError("Index {} out of range".format(index))
 
-        cdef int bucket
+        cdef size_t bucket
         cdef uint8_t bit
 
         bucket, bit = divmod(index, BITFIELD_BITSIZE)
@@ -56,7 +58,7 @@ cdef class BitVector:
         if index >= self.length:
             raise IndexError("Index {} out of range".format(index))
 
-        cdef int bucket
+        cdef size_t bucket
         cdef uint8_t bit
 
         bucket, bit = divmod(index, BITFIELD_BITSIZE)
@@ -74,5 +76,17 @@ cdef class BitVector:
     def __len__(self):
         return self.length
 
-    def sizeof(self):
+    cpdef size_t sizeof(self):
         return self.size * sizeof(BitField)
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cpdef size_t count(self):
+        cdef size_t num_of_bits = 0
+
+        cdef size_t bucket
+        for bucket in range(self.size):
+            num_of_bits += self.vector[bucket].count()
+
+        return num_of_bits
+

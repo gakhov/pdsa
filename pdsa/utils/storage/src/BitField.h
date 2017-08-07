@@ -21,6 +21,7 @@ class BitField {
       ~BitField() {}
 
       void clear();
+      uint8_t count();
 
       void set_bit(uint8_t bit_number, bool flag);
       void toggle_bit(uint8_t bit_number);

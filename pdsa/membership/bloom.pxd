@@ -14,5 +14,7 @@ cdef class BloomFilter:
 
     cpdef void add(self, object element) except *
     cpdef bint test(self, object element) except *
+    cpdef size_t count(self)
+    cpdef size_t sizeof(self)
 
     cdef uint32_t _hash(self, object element, uint8_t seed)

@@ -24,7 +24,7 @@ References
 """
 import cython
 
-from libc.math cimport ceil, log
+from libc.math cimport ceil, log, round
 from libc.stdint cimport uint32_t, uint8_t
 
 from cpython.array cimport array
@@ -134,8 +134,11 @@ cdef class BloomFilter:
                 return False
         return True
 
-    def sizeof(self):
+    cpdef size_t sizeof(self):
         return self._table.sizeof()
+
+    def __contains__(self, object element):
+        return self.test(element)
 
     def __repr__(self):
         return "<BloomFilter (length: {}, hashes: {})>".format(
@@ -144,6 +147,12 @@ cdef class BloomFilter:
         )
 
     def __len__(self):
+        return self.length
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    @cython.cdivision(True)
+    cpdef size_t count(self):
         """Approximate number of elements already in the filter.
 
         There is no reliable way to calculate exact number of elements
@@ -157,10 +166,7 @@ cdef class BloomFilter:
             Journal of Chemical Information and Modeling, 47(3): 952-964, 2007.
 
         """
-        num_of_bits = 0
-        for index in range(self.length):
-            # TODO: not efficient count of all 1 present in the table
-            num_of_bits += self._table[index]
+        cdef size_t num_of_bits = self._table.count()
 
         if num_of_bits < self.num_of_hashes:
             return 0
@@ -171,5 +177,5 @@ cdef class BloomFilter:
         if num_of_bits == self.length:
             return self.length
 
-        est = log(self.length - num_of_bits) - log(self.length)
-        return - int(self.length * est / self.num_of_hashes)
+        estimation = log(self.length - num_of_bits) - log(self.length)
+        return <size_t>(- round(self.length * estimation / self.num_of_hashes))

@@ -52,3 +52,12 @@ def test_getitem():
 
     with pytest.raises(OverflowError):
         bv[-73] = 1
+
+
+def test_count():
+    bv = BitVector(48)
+
+    assert bv.count() == 0
+
+    bv[42] = 1
+    assert bv.count() == 1

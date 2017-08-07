@@ -18,7 +18,7 @@ if __name__ == '__main__':
     print(bf)
     print("Bloom filter uses {} bytes in the memory".format(bf.sizeof()))
 
-    print("In the filter approximately {} elements".format(len(bf)))
+    print("Filter contains approximately {} elements".format(bf.count()))
 
     print("'Lorem' {} in the filter".format(
         "is" if bf.test("Lorem") else "is not"))
