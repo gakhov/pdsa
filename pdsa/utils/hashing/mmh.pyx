@@ -14,7 +14,7 @@ cdef extern from "src/MurmurHash3.h":
 
 cdef uint32_t mmh3_x86_32bit_bytes(bytes key, uint32_t seed=42):
     cdef uint32_t hash_value
-    MurmurHash3_x86_32(<char*> key, sizeof(key), seed, &hash_value)
+    MurmurHash3_x86_32(<char*> key, len(key), seed, &hash_value)
     return hash_value
 
 cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):

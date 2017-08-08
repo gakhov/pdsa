@@ -8,12 +8,12 @@ def test_int():
 
 
 def test_string():
-    assert mmh3_x86_32bit("test", 42) == 727786307
+    assert mmh3_x86_32bit("test", 42) == 1956065189
     assert mmh3_x86_32bit("test", 42) != mmh3_x86_32bit(b"test", 42)
 
 
 def test_bytes():
-    assert mmh3_x86_32bit(b"test", 42) == 1340272300
+    assert mmh3_x86_32bit(b"test", 42) == 3959873882
 
 
 def test_arbitrary():
