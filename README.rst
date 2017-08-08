@@ -17,6 +17,10 @@ PDSA: Probabilistic Data Structures and Algorithms in Python
     :target: http://pdsa.readthedocs.io/en/latest/
     :alt: Documentation Version
 
+.. image:: https://img.shields.io/pypi/pyversions/limonado.svg?style=flat-square
+    :target: https://github.com/gakhov/pdsa
+    :alt: Python versions
+
 
 
 .. contents ::
@@ -75,7 +79,7 @@ Using pip, PDSA releases are currently only available as source packages.
 
 .. code:: bash
 
-    $pip3 install -U pdsa
+    $ pip3 install -U pdsa
 
 When using pip it is generally recommended to install packages in a ``virtualenv``
 to avoid modifying system state:
