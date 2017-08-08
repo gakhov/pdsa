@@ -1,7 +1,16 @@
 recursive-include pdsa *
+recursive-include tests *.py
+recursive-include examples *.py
 include LICENSE.txt
+include requirements.txt
 include README.rst
+include MANIFEST.in
+
 global-exclude *.pyc
 global-exclude __pycache__/*
 global-exclude *.so
 global-exclude .DS_Store
+
+global-exclude pdsa/membership/bloom.cpp
+global-exclude pdsa/utils/hashing/mmh.cpp
+global-exclude pdsa/utils/storage/bitvector.cpp

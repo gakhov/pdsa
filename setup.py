@@ -74,6 +74,7 @@ def setup_package():
         package_data={'': ['*.pyx', '*.pxd', '*.cpp', '*.h']},
         description=about['__summary__'],
         long_description=readme,
+        keywords=about['__keywords__'],
         author=about['__author__'],
         author_email=about['__email__'],
         version=about['__version__'],

@@ -16,6 +16,7 @@ __version__ = '0.1.1'
 
 
 __summary__ = "Probabilistic Data Structures and Algorithms in Python"
+__keywords__ = "pdsa, probabilistic data structures, cython, bloom filter"
 __uri__ = 'https://github.com/gakhov/pdsa'
 
 __author__ = 'Andrii Gakhov'
