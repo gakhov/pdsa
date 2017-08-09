@@ -31,9 +31,9 @@ def setup_package():
     extensions = []
     extensions.append(
         Extension(
-            "pdsa.membership.bloom",
+            "pdsa.membership.bloom_filter",
             language='c++',
-            sources=['pdsa/membership/bloom.pyx'],
+            sources=['pdsa/membership/bloom_filter.pyx'],
             include_dirs=[
                 get_python_inc(plat_specific=True),
             ]

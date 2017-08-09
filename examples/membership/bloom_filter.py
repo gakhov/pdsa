@@ -1,6 +1,6 @@
 """Example how to use Classical Bloom Filter."""
 
-from pdsa.membership.bloom import BloomFilter
+from pdsa.membership.bloom_filter import BloomFilter
 
 
 LOREM_IPSUM = (
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         bf.add(word.strip(" .,"))
 
     print("Added {} words, in the filter approximately {} elements".format(
-        len(words), len(bf)))
+        len(words), bf.count()))
 
     print("'Lorem' {} in the filter".format(
         "is" if bf.test("Lorem") else "is not"))
