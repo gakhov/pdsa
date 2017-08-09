@@ -113,4 +113,4 @@ cythonize.json
 #PDSA
 pdsa/utils/hashing/mmh.cpp
 pdsa/utils/storage/bitvector.cpp
-pdsa/membership/bloom.cpp
+pdsa/membership/bloom_filter.cpp

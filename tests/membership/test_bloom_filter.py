@@ -1,6 +1,6 @@
 import pytest
 
-from pdsa.membership.bloom import BloomFilter
+from pdsa.membership.bloom_filter import BloomFilter
 
 
 def test_init():
