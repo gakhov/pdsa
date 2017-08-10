@@ -67,6 +67,20 @@ def setup_package():
             ]
         )
     )
+    extensions.append(
+        Extension(
+            "pdsa.helpers.storage.bitvector_counter",
+            language='c++',
+            sources=[
+                'pdsa/helpers/storage/bitvector_counter.pyx',
+                os.path.join('pdsa/helpers/storage', 'src', 'BitCounter.cpp')
+            ],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+                os.path.join('pdsa/helpers/storage', 'src')
+            ]
+        )
+    )
 
     setup(
         name="pdsa",
