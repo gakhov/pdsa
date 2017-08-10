@@ -1,6 +1,6 @@
 import pytest
 
-from pdsa.utils.storage.bitvector import BitVector
+from pdsa.helpers.storage.bitvector import BitVector
 
 
 def test_bitvector():

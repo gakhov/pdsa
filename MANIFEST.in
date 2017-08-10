@@ -12,5 +12,5 @@ global-exclude *.so
 global-exclude .DS_Store
 
 global-exclude pdsa/membership/bloom_filter.cpp
-global-exclude pdsa/utils/hashing/mmh.cpp
-global-exclude pdsa/utils/storage/bitvector.cpp
+global-exclude pdsa/helpers/hashing/mmh.cpp
+global-exclude pdsa/helpers/storage/bitvector.cpp

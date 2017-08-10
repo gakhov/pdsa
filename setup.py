@@ -12,9 +12,9 @@ except ImportError:
 PACKAGES = [
     'pdsa',
     'pdsa.membership',
-    'pdsa.utils',
-    'pdsa.utils.hashing',
-    'pdsa.utils.storage',
+    'pdsa.helpers',
+    'pdsa.helpers.hashing',
+    'pdsa.helpers.storage',
 ]
 
 
@@ -41,29 +41,29 @@ def setup_package():
     )
     extensions.append(
         Extension(
-            "pdsa.utils.hashing.mmh",
+            "pdsa.helpers.hashing.mmh",
             language='c++',
             sources=[
-                'pdsa/utils/hashing/mmh.pyx',
-                os.path.join('pdsa/utils/hashing', 'src', 'MurmurHash3.cpp')
+                'pdsa/helpers/hashing/mmh.pyx',
+                os.path.join('pdsa/helpers/hashing', 'src', 'MurmurHash3.cpp')
             ],
             include_dirs=[
                 get_python_inc(plat_specific=True),
-                os.path.join('pdsa/utils/hashing', 'src')
+                os.path.join('pdsa/helpers/hashing', 'src')
             ]
         )
     )
     extensions.append(
         Extension(
-            "pdsa.utils.storage.bitvector",
+            "pdsa.helpers.storage.bitvector",
             language='c++',
             sources=[
-                'pdsa/utils/storage/bitvector.pyx',
-                os.path.join('pdsa/utils/storage', 'src', 'BitField.cpp')
+                'pdsa/helpers/storage/bitvector.pyx',
+                os.path.join('pdsa/helpers/storage', 'src', 'BitField.cpp')
             ],
             include_dirs=[
                 get_python_inc(plat_specific=True),
-                os.path.join('pdsa/utils/storage', 'src')
+                os.path.join('pdsa/helpers/storage', 'src')
             ]
         )
     )

@@ -1,6 +1,6 @@
 from libc.stdint cimport uint32_t, uint8_t
 
-from pdsa.utils.storage.bitvector cimport BitVector
+from pdsa.helpers.storage.bitvector cimport BitVector
 
 cdef class BloomFilter:
     cdef size_t length

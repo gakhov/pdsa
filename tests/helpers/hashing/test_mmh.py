@@ -1,6 +1,6 @@
 import pytest
 
-from pdsa.utils.hashing.mmh import mmh3_x86_32bit
+from pdsa.helpers.hashing.mmh import mmh3_x86_32bit
 
 
 def test_int():
