@@ -14,3 +14,5 @@ global-exclude .DS_Store
 global-exclude pdsa/membership/bloom_filter.cpp
 global-exclude pdsa/helpers/hashing/mmh.cpp
 global-exclude pdsa/helpers/storage/bitvector.cpp
+global-exclude pdsa/helpers/storage/bitvector_counter.cpp
+
