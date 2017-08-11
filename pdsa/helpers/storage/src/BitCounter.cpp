@@ -49,7 +49,7 @@ void BitCounter::inc(uint8_t counter_number) {
         }
     }
     if(counter_number == lowest) {
-        if ((counter & 0b11110000) != 0b1111000) {
+        if ((counter & 0b11110000) != 0b11110000) {
             counter = add(counter & 0b11110000, 0b00010000);
         }
     }

@@ -57,27 +57,23 @@ def test_getitem():
 
 def test_freeze():
     """Counter should freeze if reached its maximal value.
-    For 4-bits counter the maximal value is 1111 = 15
+    For 4-bits counter the maximal value is 0b1111 = 15
     """
 
     bc = BitVectorCounter(42)
 
     assert bc[21] == 0
-
-    for i in range(16):
+    for i in range(15):
         bc.increment(21)
-
-    assert bc[21] == 15
+        assert bc[21] == i + 1
 
     bc.increment(21)
     assert bc[21] == 15
 
     assert bc[22] == 0
-
-    for i in range(16):
+    for i in range(15):
         bc.increment(22)
-
-    assert bc[22] == 15
+        assert bc[22] == i + 1
 
     bc.increment(22)
     assert bc[22] == 15
@@ -87,11 +83,9 @@ def test_decrement_zero():
     bc = BitVectorCounter(42)
 
     assert bc[21] == 0
-
     bc.decrement(21)
     assert bc[21] == 0
 
     assert bc[22] == 0
-
     bc.decrement(22)
     assert bc[22] == 0
