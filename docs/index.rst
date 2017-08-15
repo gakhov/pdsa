@@ -16,4 +16,4 @@ low memory requirements, constant query time and scaling.
    :maxdepth: 2
 
    quickstart
-   membership
+   membership/index
