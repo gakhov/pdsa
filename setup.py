@@ -41,6 +41,16 @@ def setup_package():
     )
     extensions.append(
         Extension(
+            "pdsa.membership.counting_bloom_filter",
+            language='c++',
+            sources=['pdsa/membership/counting_bloom_filter.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
             "pdsa.helpers.hashing.mmh",
             language='c++',
             sources=[
