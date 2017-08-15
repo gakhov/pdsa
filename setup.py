@@ -118,6 +118,7 @@ def setup_package():
             'Programming Language :: Python :: 3.6',
             'Topic :: Scientific/Engineering'
         ],
+        requires=["cython"]
     )
 
 
