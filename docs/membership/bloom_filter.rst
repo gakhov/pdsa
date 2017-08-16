@@ -55,7 +55,7 @@ with the requested error.
 
 
 Add element into the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 
 .. code:: python
@@ -71,7 +71,7 @@ Add element into the filter
 
 
 Test if element is in the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 .. code:: python
 
@@ -79,7 +79,7 @@ Test if element is in the filter
 
 
 Size of the filter in bytes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 .. code:: python
 
@@ -87,7 +87,7 @@ Size of the filter in bytes
 
 
 Length of the filter
-~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 .. code:: python
 
@@ -95,7 +95,7 @@ Length of the filter
 
 
 Count of unique elements in the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 .. code:: python
 
