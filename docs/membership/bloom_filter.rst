@@ -6,7 +6,7 @@ This implementation uses bitvector to store the bloom filter array.
 
 .. code:: python
 
-   from pdsa.membership.bloom import BloomFilter
+   from pdsa.membership.bloom_filter import BloomFilter
 
    bf = BloomFilter(1000000, 5)
    bf.add("hello")
@@ -22,12 +22,12 @@ number of hash functions, or from the expected capacity and error
 probability.
 
 
-Build filter from its length
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Build filter from its length and number of hash function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
-   from pdsa.membership.bloom import BloomFilter
+   from pdsa.membership.bloom_filter import BloomFilter
 
    bf = BloomFilter(100000, 5)
 
@@ -39,8 +39,8 @@ Build filter from its length
 
 
 
-Build filter from expected capacity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Build filter from the expected capacity and error probability
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this case length of the filter and number of hash functions
 will be calculated to handle the requested number of elements
@@ -49,7 +49,7 @@ with the requested error.
 
 .. code:: python
 
-   from pdsa.membership.bloom import BloomFilter
+   from pdsa.membership.bloom_filter import BloomFilter
 
    bf = BloomFilter().create_from_capacity(10000, 0.02)
 

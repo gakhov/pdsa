@@ -4,7 +4,7 @@ Quickstart
 
 .. code:: python
 
-    from pdsa.membership.bloom import BloomFilter
+    from pdsa.membership.bloom_filter import BloomFilter
 
     bf = BloomFilter(80000, 4)
 

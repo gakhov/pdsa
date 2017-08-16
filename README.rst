@@ -5,7 +5,7 @@ PDSA: Probabilistic Data Structures and Algorithms in Python
     :target: https://travis-ci.org/gakhov/pdsa
     :alt: Travis Build Status
 
-.. image:: https://img.shields.io/github/release/gakhov/pdsa.svg?style=flat-square
+.. image:: https://img.shields.io/github/release/gakhov/pdsa/all.svg?style=flat-square
     :target: https://github.com/gakhov/pdsa/releases
     :alt: Current Release Version
 
@@ -32,12 +32,13 @@ Introduction
 Probabilistic data structures is a common name of data structures
 based on different hashing techniques.
 
-Unlike regular (or deterministic) data structures, they always give you
-approximated answers and usually provide reliable ways to estimate
+Unlike regular (or deterministic) data structures, they always provide
+approximated answers, but usually with reliable ways to estimate
 the error probability.
 
 The potential losses or errors are fully compensated by extremely
 low memory requirements, constant query time and scaling.
+
 
 Dependencies
 ---------------------
@@ -88,6 +89,7 @@ to avoid modifying system state:
 
     $ virtualenv .env -p python3 --no-site-packages
     $ source .env/bin/activate
+    $ pip3 install -U cython
     $ pip3 install -U pdsa
 
 
