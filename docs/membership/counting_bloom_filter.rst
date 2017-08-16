@@ -78,7 +78,9 @@ Test if element is in the filter
 
 .. code:: python
 
-    bf.test("hello") == 1
+    bf.test("hello") == True
+
+    "hello" in bf
 
 
 Delete element from the filter
