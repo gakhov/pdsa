@@ -16,6 +16,10 @@ def test_init():
     for i in range(len(bc)):
         assert bc[i] == 0, "{}-th value failed to be 0".format(i)
 
+    with pytest.raises(ValueError) as excinfo:
+        bc = BitVectorCounter(0)
+    assert str(excinfo.value) == 'Length can\'t be 0 or negative'
+
 
 def test_repr():
     bc = BitVectorCounter(41)
