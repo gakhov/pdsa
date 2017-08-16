@@ -5,14 +5,31 @@ from pdsa.membership.bloom_filter import BloomFilter
 
 def test_init():
     bf = BloomFilter(8000, 3)
-
     assert bf.sizeof() == 1000, "Unexpected size in bytes"
+
+    with pytest.raises(ValueError) as excinfo:
+        bf = BloomFilter(8000, 0)
+    assert str(excinfo.value) == 'At least one hash function is required'
+
+    with pytest.raises(ValueError) as excinfo:
+        bf = BloomFilter(0, 5)
+    assert str(excinfo.value) == 'Filter length can\'t be 0 or negative'
 
 
 def test_init_from_capacity():
     bf = BloomFilter.create_from_capacity(5000, 0.02)
-
     assert bf.sizeof() == 5089, "Unexpected size in bytes"
+
+    with pytest.raises(ValueError) as excinfo:
+        bf = BloomFilter.create_from_capacity(5000, 2)
+    assert str(excinfo.value) == 'Error rate shell be in (0, 1)'
+
+    with pytest.raises(ValueError) as excinfo:
+        bf = BloomFilter.create_from_capacity(0, 0.02)
+    assert str(excinfo.value) == 'Filter capacity can\'t be 0 or negative'
+
+    bf = BloomFilter.create_from_capacity(5000, 0.999)
+    assert len(bf) == 16
 
 
 def test_repr():

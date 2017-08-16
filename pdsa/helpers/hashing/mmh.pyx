@@ -24,8 +24,16 @@ cdef uint32_t mmh3_x86_32bit_int(int key, uint32_t seed=42):
 
 
 cpdef uint32_t mmh3_x86_32bit(object key, uint32_t seed=42):
-    """Calculate x86 32bit MurmurHash3 hash value."""
+    """Compute x86 32bit MurmurHash3 hash value.
 
+    Parameters
+    ----------
+    key : obj
+        The object to compute the hash value from.
+    seed : :obj:`int`
+        The seed to support reproducable hash calculation.
+
+    """
     if isinstance(key, int):
         return mmh3_x86_32bit_int(<int>key, seed)
 

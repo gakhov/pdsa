@@ -57,7 +57,7 @@ with the requested error.
 
 
 Add element into the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 
 .. code:: python
@@ -74,15 +74,17 @@ Add element into the filter
 
 
 Test if element is in the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------
 
 .. code:: python
 
-    bf.test("hello") == 1
+    bf.test("hello") == True
+
+    "hello" in bf
 
 
 Delete element from the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 .. code:: python
 
@@ -97,7 +99,7 @@ Delete element from the filter
 
 
 Size of the filter in bytes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 .. code:: python
 
@@ -105,7 +107,7 @@ Size of the filter in bytes
 
 
 Length of the filter
-~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 .. code:: python
 
@@ -113,7 +115,7 @@ Length of the filter
 
 
 Count of unique elements in the filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 .. code:: python
 
