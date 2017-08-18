@@ -60,17 +60,24 @@ def test_lookup():
 
 def test_count():
     bf = CountingBloomFilter(8000, 3)
-
     assert bf.count() == 0
 
     bf.add("test")
     assert bf.count() == 1
 
+    bf.add("test")
+    assert bf.count() == 1
+
+    bf.add("test2")
+    assert bf.count() == 2
+
 
 def test_len():
     bf = CountingBloomFilter(8000, 3)
-
     assert len(bf) == 8000
+
+    bf = CountingBloomFilter(8001, 3)
+    assert len(bf) == 8008
 
 
 def test_delete():

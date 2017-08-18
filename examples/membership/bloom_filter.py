@@ -18,7 +18,7 @@ if __name__ == '__main__':
     print(bf)
     print("Bloom filter uses {} bytes in the memory".format(bf.sizeof()))
 
-    print("Filter contains approximately {} elements".format(bf.count()))
+    print("Filter contains approx. {} unique elements".format(bf.count()))
 
     print("'Lorem' {} in the filter".format(
         "is" if bf.test("Lorem") else "is not"))
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     for word in words:
         bf.add(word.strip(" .,"))
 
-    print("Added {} words, in the filter approximately {} elements".format(
+    print("Added {} words, in the filter approx. {} unique elements".format(
         len(words), bf.count()))
 
     print("'Lorem' {} in the filter".format(

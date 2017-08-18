@@ -11,6 +11,7 @@ except ImportError:
 
 PACKAGES = [
     'pdsa',
+    'pdsa.cardinality',
     'pdsa.membership',
     'pdsa.helpers',
     'pdsa.helpers.hashing',
@@ -44,6 +45,16 @@ def setup_package():
             "pdsa.membership.counting_bloom_filter",
             language='c++',
             sources=['pdsa/membership/counting_bloom_filter.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
+            "pdsa.cardinality.linear_counter",
+            language='c++',
+            sources=['pdsa/cardinality/linear_counter.pyx'],
             include_dirs=[
                 get_python_inc(plat_specific=True),
             ]
