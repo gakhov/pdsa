@@ -273,6 +273,7 @@ cdef class CountingBloomFilter:
         ----
             There is no reliable way to calculate exact number of elements
             in the filter, but there are methods [1] to approximate such number.
+            This is an analog of the Linear Counting algorithm.
 
         References
         ----------
@@ -293,5 +294,5 @@ cdef class CountingBloomFilter:
         if num_of_bits == self.length:
             return self.length
 
-        estimation = log(self.length - num_of_bits) - log(self.length)
-        return <size_t>(- round(self.length * estimation / self.num_of_hashes))
+        cdef float estimation = log(self.length - num_of_bits) - log(self.length)
+        return <size_t>(round(self.length * (- estimation) / self.num_of_hashes))
