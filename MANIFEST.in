@@ -11,6 +11,7 @@ global-exclude __pycache__/*
 global-exclude *.so
 global-exclude .DS_Store
 
+global-exclude pdsa/cardinality/linear_counter.cpp
 global-exclude pdsa/membership/bloom_filter.cpp
 global-exclude pdsa/membership/counting_bloom_filter.cpp
 global-exclude pdsa/helpers/hashing/mmh.cpp
