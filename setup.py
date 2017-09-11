@@ -62,6 +62,16 @@ def setup_package():
     )
     extensions.append(
         Extension(
+            "pdsa.cardinality.probabilistic_counter",
+            language='c++',
+            sources=['pdsa/cardinality/probabilistic_counter.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
             "pdsa.helpers.hashing.mmh",
             language='c++',
             sources=[
