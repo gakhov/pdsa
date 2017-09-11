@@ -12,7 +12,7 @@ including duplicates.
 """
 import cython
 
-from libc.math cimport ceil, log, round
+from libc.math cimport log, round
 from libc.stdint cimport uint32_t, uint8_t
 from libc.stdlib cimport rand
 
