@@ -8,7 +8,7 @@ cdef class LinearCounter:
     cdef size_t capacity
 
     cdef uint8_t _seed
-    cdef BitVector _table
+    cdef BitVector _counter
 
     cpdef void add(self, object element) except *
     cpdef size_t count(self)

@@ -1,6 +1,6 @@
 """Linear Counter.
 
-A Linear-Time probabilistic counting algorithm, or Linear Counting algorithm, 
+A Linear-Time probabilistic counting algorithm, or Linear Counting algorithm,
 was proposed by Kyu-Young Whang at al. in 1990.
 
 It's a hash-based probabilistic algorithm for counting the number of
@@ -69,13 +69,13 @@ cdef class LinearCounter:
             raise ValueError("Counter length can't be 0 or negative")
 
         self._seed = <uint8_t>(rand())
-        self._table = BitVector(length)
+        self._counter = BitVector(length)
 
-        self.length = len(self._table)
+        self.length = len(self._counter)
 
         cdef size_t index
         for index in xrange(self.length):
-            self._table[index] = 0
+            self._counter[index] = 0
 
 
     cdef uint32_t _hash(self, object key, uint8_t seed):
@@ -99,7 +99,7 @@ cdef class LinearCounter:
         """
         cdef size_t index
         index = self._hash(element, self._seed) % self.length
-        self._table[index] = 1
+        self._counter[index] = 1
 
     cpdef size_t sizeof(self):
         """Size of the counter in bytes.
@@ -110,7 +110,7 @@ cdef class LinearCounter:
             Number of bytes allocated for the counter.
 
         """
-        return self._table.sizeof()
+        return self._counter.sizeof()
 
     def __repr__(self):
         return "<LinearCounter (length: {})>".format(self.length)
@@ -140,20 +140,20 @@ cdef class LinearCounter:
         Note
         ----
             According to [1], the estimation of cardinality can be done by:
-                
+
                 n ≈ –length * ln V,
-                
+
             where V - the fraction of empty bits in the counter.
 
         References
         ----------
-        [1] Flajolet, P., Martin, G.N.
-            A Linear-Time Probabilistic Counting Algorithms
-            for Data Base Applications.
-            Journal of Computer and System Sciences. Vol. 31 (2), 182–209 (1985)
+        [1] Whang, K.-Y., Vander-Zanden B.T., Taylor H.M.: A Linear-Time Probabilistic
+            Counting Algorithm for Database Applications.
+            Journal ACM Transactions on Database Systems.
+            Vol. 15 (2), 208--229  (1990)
 
         """
-        cdef size_t num_of_bits = self._table.count()
+        cdef size_t num_of_bits = self._counter.count()
 
         if num_of_bits == 0:
             return 0
