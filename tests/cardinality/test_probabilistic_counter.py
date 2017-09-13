@@ -82,8 +82,8 @@ def test_count_small():
     num_of_unique_words = LOREM_TEXT["num_of_unique_words"]
 
     cardinality = pc.count()
-    assert cardinality >= 0.9 * num_of_unique_words
-    assert cardinality <= 1.1 * num_of_unique_words
+    assert cardinality >= 0.75 * num_of_unique_words
+    assert cardinality <= 1.25 * num_of_unique_words
 
 
 def test_len():
