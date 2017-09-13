@@ -73,7 +73,7 @@ def test_count_big():
 
 
 def test_count_small():
-    pc = ProbabilisticCounter(256, True)
+    pc = ProbabilisticCounter(64, True)
     assert pc.count() == 0
 
     for word in LOREM_TEXT["text"].split():
@@ -82,8 +82,8 @@ def test_count_small():
     num_of_unique_words = LOREM_TEXT["num_of_unique_words"]
 
     cardinality = pc.count()
-    assert cardinality >= 0.75 * num_of_unique_words
-    assert cardinality <= 1.25 * num_of_unique_words
+    assert cardinality >= 0.5 * num_of_unique_words
+    assert cardinality <= 1.5 * num_of_unique_words
 
 
 def test_len():
