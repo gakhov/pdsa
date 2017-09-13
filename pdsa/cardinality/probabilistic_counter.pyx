@@ -1,7 +1,7 @@
-"""Probabilistic Counter.
+"""Probabilistic Counter (with sotchastic averaging).
 
-Probabilistic Counting algorithms were proposed by Philippe Flajolet
-and G. Nigel Martin in 1985.
+Probabilistic Counting algorithm (Flajolet-Martin algorithm) was
+proposed by Philippe Flajolet and G. Nigel Martin in 1985.
 
 It's a hash-based probabilistic algorithm for counting the number of
 distinct values in the presence of duplicates.
@@ -20,17 +20,16 @@ from pdsa.helpers.hashing.mmh cimport mmh3_x86_32bit
 
 
 cdef class ProbabilisticCounter:
-    """Probabilistic Counter is a realisation of Probabilistic Counting algorithm.
+    """Probabilistic Counter is a realisation of Flajolet-Martin algorithm.
 
     Example
     -------
 
     >>> from pdsa.cardinality.probabilsitic_counter import ProbabilisticCounter
 
-    >>> lc = ProbabilisticCounter(5)
-    >>> lc.add("hello")
-    >>> lc.count()
-
+    >>> pc = ProbabilisticCounter(256)
+    >>> pc.add("hello")
+    >>> pc.count()
 
     Note
     -----
@@ -41,17 +40,31 @@ cdef class ProbabilisticCounter:
     Attributes
     ----------
     num_of_counters : :obj:`int`
-        The number of simple counters.
+        The number of simple counters (FM Sketches).
+
+    with_small_cardinality_correction : :obj:`int`
+        Flag if small cardinalities correction is required.
+
+    Note
+    -----
+        The Algorithm has been developed for large cardinalities when
+        ratio card()/num_of_counters > 10-20, therefore a special correction
+        required if low cardinality cases has to be supported. In this implementation
+        we use correction proposed by Scheuermann and Mauve (2007).
 
     """
 
-    def __cinit__(self, const uint16_t num_of_counters):
+    def __cinit__(self, const uint16_t num_of_counters,
+                  const bint with_small_cardinality_correction = False):
         """Create probabilsistic counter using `num_of_counters` simple counters.
 
         Parameters
         ----------
         num_of_counters : :obj:`int`
-            The number of simple counters.
+            The number of simple counters (FM Sketches).
+
+        with_small_cardinality_correction : :obj:`int`
+            Flag if small cardinalities correction is required.
 
         Note
         ----
@@ -76,8 +89,9 @@ cdef class ProbabilisticCounter:
 
         self.num_of_counters = num_of_counters
         self.size = 32  # 32-bit hash functions produce 0..2^{32}-1 values
+        self.with_small_cardinality_correction = with_small_cardinality_correction
 
-        self._seeds = array('H', range(self.num_of_counters))
+        self._seed = <uint8_t>(rand())
         self._counter = BitVector(self.num_of_counters * self.size)
 
         self.length = len(self._counter)
@@ -121,15 +135,23 @@ cdef class ProbabilisticCounter:
         element : obj
             The element to be indexed into the counter.
 
+        Note
+        ----
+            The algorithm uses only 1 hash function, thus, to
+            calculate the rank and counter index, it computes
+            quotient and remainder from the hash value and use them
+            respectively.
+
         """
         cdef uint16_t counter_index
+        cdef uint32_t value
         cdef uint8_t value_index
-        cdef uint8_t seed
-        for counter_index in xrange(self.num_of_counters):
-            seed = self._seeds[counter_index]
-            value_index = self._rank(self._hash(element, seed))
-            if value_index >= self.size:
-                continue
+
+        value, counter_index = divmod(
+            self._hash(element, self._seed), self.num_of_counters)
+
+        value_index = self._rank(value)
+        if value_index < self.size:
             self._counter[counter_index * self.size + value_index] = 1
 
     cpdef size_t sizeof(self):
@@ -213,32 +235,67 @@ cdef class ProbabilisticCounter:
         ----
             According to [1], the estimation of cardinality can be computed
             by averaging estimations from each counter and converting
-            the result value A into espected number of unique elements by
-            formula:
+            the result value N into expected number of unique elements by
+            the formula:
 
-                n ≈ 2^{A} / 0.77351
+                n ≈ 2^{N} / 0.77351
+
+        Note
+        -----
+            If number of counters is less then 32, algorithm has a bias that
+            can be corrected as proposed in [1].
+
+        Note
+        -----
+            The Algorithm has been developed for large cardinalities when
+            ratio card()/num_of_counters > 10-20, therefore a special correction
+            required if low cardinality cases has to be supported. In this implementation
+            we use correction proposed by Scheuermann and Mauve [2].
 
         References
         ----------
         [1] Flajolet, P., Martin, G.N.: Probabilistic Counting Algorithms
             for Data Base Applications. Journal of Computer and System Sciences.
             Vol. 31 (2), 182--209  (1985)
-
-        The cardinality estimation can be calculated [1] as:
-
+        [2] Flajolet, P., Martin, G.N.: Near-Optimal Compression of Probabilistic
+            Counting Sketches for Networking Applications
+            In Dial M-POMC 2007: Proceedings of the 4th ACM SIGACT-SIGOPS
+            International Workshop on Foundation of Mobile Computing, 2007
 
         """
         if self._counter.count() == 0:
             return 0
+
+        cdef float fm_magic_constant = 0.77351
+        cdef float fm_correction_constant = 0.31
+        cdef float sm_correction_constant = 1.75
 
         cdef uint16_t counter_index
         cdef uint16_t N = 0
         for counter_index in xrange(self.num_of_counters):
             N += self._value_by_counter(counter_index)
 
-        return <size_t>round(
-            pow(
+        cdef float small_number_of_counters_correction = 1.0
+        if self.num_of_counters < 32:
+            small_number_of_counters_correction = (
+                1 - fm_correction_constant / self.num_of_counters)
+
+        cdef float small_cardinality_correction = 0.0
+        if self.with_small_cardinality_correction:
+            small_cardinality_correction = pow(
                 2,
-                <uint16_t>(round(float(N) / self.num_of_counters))
-            ) / 0.77351
+                - sm_correction_constant * N / self.num_of_counters
+            )
+
+        return <size_t>round(
+            self.num_of_counters *
+            (
+                pow(
+                    2,
+                    float(N) / self.num_of_counters
+                )
+                -
+                small_cardinality_correction
+
+            ) / (fm_magic_constant * small_number_of_counters_correction)
         )

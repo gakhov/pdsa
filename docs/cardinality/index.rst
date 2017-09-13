@@ -1,7 +1,7 @@
 Cardinality
 ============
 
-The cardinality is the number of distinct elements in a set. 
+The cardinality is the number of distinct elements in a set.
 
 Calculating the exact cardinality of a multiset requires an amount of memory proportional to the cardinality, which is impractical for very large data sets.
 
@@ -11,3 +11,4 @@ Calculating the exact cardinality of a multiset requires an amount of memory pro
    :maxdepth: 2
 
    linear_counter
+   probabilistic_counter

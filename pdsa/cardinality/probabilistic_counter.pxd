@@ -7,8 +7,9 @@ cdef class ProbabilisticCounter:
     cdef size_t length
     cdef uint8_t size
     cdef uint16_t num_of_counters
+    cdef bint with_small_cardinality_correction
 
-    cdef uint16_t[:] _seeds
+    cdef uint16_t _seed
     cdef BitVector _counter
 
     cpdef void add(self, object element) except *

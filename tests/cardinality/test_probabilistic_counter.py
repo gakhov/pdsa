@@ -39,14 +39,14 @@ def test_init():
 
     with pytest.raises(ValueError) as excinfo:
         pc = ProbabilisticCounter(0)
-    assert str(excinfo.value) == 'At least one hash function is required'
+    assert str(excinfo.value) == 'At least one simple counter is required'
 
 
 def test_repr():
     pc = ProbabilisticCounter(10)
 
     assert repr(pc) == (
-        "<ProbabilisticCounter (length: 320, num_of_hashes: 10)>")
+        "<ProbabilisticCounter (length: 320, num_of_counters: 10)>")
 
 
 def test_add():
@@ -56,25 +56,34 @@ def test_add():
         pc.add(word)
 
 
-def test_count():
-    # pc = ProbabilisticCounter(10)
+def test_count_big():
+    pc = ProbabilisticCounter(256)
 
-    # assert pc.count() == 0
+    # NOTE: make n/m > 50 to avoid correction for small cardinalities usage
+    boost = 50 * LOREM_TEXT["num_of_unique_words"] // 64 + 1
+    num_of_unique_words = boost * LOREM_TEXT["num_of_unique_words"]
 
-    # pc.add("test")
-    # assert pc.count() == 1
+    for i in range(boost):
+        for word in LOREM_TEXT["text"].split():
+            pc.add("{}_{}".format(word, i))
 
-    # pc.add("test")
-    # assert pc.count() == 1
+    cardinality = pc.count()
+    assert cardinality >= 0.9 * num_of_unique_words
+    assert cardinality <= 1.1 * num_of_unique_words
 
-    # del pc
 
-    pc = ProbabilisticCounter(2)
+def test_count_small():
+    pc = ProbabilisticCounter(256, True)
+    assert pc.count() == 0
 
     for word in LOREM_TEXT["text"].split():
         pc.add(word)
 
-    assert pc.count() == LOREM_TEXT["num_of_unique_words"]
+    num_of_unique_words = LOREM_TEXT["num_of_unique_words"]
+
+    cardinality = pc.count()
+    assert cardinality >= 0.9 * num_of_unique_words
+    assert cardinality <= 1.1 * num_of_unique_words
 
 
 def test_len():
