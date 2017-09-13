@@ -1,7 +1,7 @@
 Linear Counter
 ======================
 
-A Linear-Time probabilistic counting algorithm, or Linear Counting algorithm, 
+A Linear-Time probabilistic counting algorithm, or Linear Counting algorithm,
 was proposed by Kyu-Young Whang at al. in 1990.
 
 It's a hash-based probabilistic algorithm for counting the number of
@@ -21,7 +21,7 @@ This implementation uses bitvector to store the counter's array.
     lc = LinearCounter(1000000)
     lc.add("hello")
     print(lc.count())
-   
+
 
 
 Build a counter
@@ -32,9 +32,9 @@ To build a counter, specify its length.
 
 .. code:: python
 
-   from pdsa.cardinality.linear_counter import LinearCounter
+    from pdsa.cardinality.linear_counter import LinearCounter
 
-   bf = LinearCounter(100000)
+    lc = LinearCounter(100000)
 
 
 .. note::
