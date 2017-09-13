@@ -9,8 +9,8 @@ distinct values in the presence of duplicates.
 """
 import cython
 
-from libc.math cimport floor
-from libc.stdint cimport uint32_t
+from libc.math cimport round
+from libc.stdint cimport uint8_t, uint16_t, uint32_t
 from libc.stdlib cimport rand
 
 from cpython.array cimport array
@@ -40,23 +40,23 @@ cdef class ProbabilisticCounter:
 
     Attributes
     ----------
-    num_of_hashes : :obj:`int`
-        The number of hash functions.
+    num_of_counters : :obj:`int`
+        The number of simple counters.
 
     """
 
-    def __cinit__(self, const uint32_t num_of_hashes):
-        """Create counter using `num_of_hashes` hash functions.
+    def __cinit__(self, const uint16_t num_of_counters):
+        """Create probabilsistic counter using `num_of_counters` simple counters.
 
         Parameters
         ----------
-        num_of_hashes : :obj:`int`
-            The number of hash functions.
+        num_of_counters : :obj:`int`
+            The number of simple counters.
 
         Note
         ----
-            The length of the counter is defined by the size of
-            hashes that produced by the used family of hash functions
+            The length of the probabilsitic counter is defined by the size of
+            hashe values that produced by the family of hash functions
             (in our case it's 32 bits functions)
 
         Note
@@ -68,19 +68,17 @@ cdef class ProbabilisticCounter:
         Raises
         ------
         ValueError
-            If `num_of_hashes` is 0 or negative.
+            If `num_of_counters` is 0 or negative.
 
         """
-        if num_of_hashes < 1:
-            raise ValueError("At least one hash function is required")
+        if num_of_counters < 1:
+            raise ValueError("At least one simple counter is required")
 
-        self.num_of_hashes = num_of_hashes
+        self.num_of_counters = num_of_counters
         self.size = 32  # 32-bit hash functions produce 0..2^{32}-1 values
 
-        self._seeds = array('I', range(self.num_of_hashes))
-
-        cdef size_t length = self.num_of_hashes * self.size
-        self._counter = BitVector(length)
+        self._seeds = array('H', range(self.num_of_counters))
+        self._counter = BitVector(self.num_of_counters * self.size)
 
         self.length = len(self._counter)
 
@@ -91,8 +89,22 @@ cdef class ProbabilisticCounter:
     cdef uint32_t _hash(self, object key, uint32_t seed):
         return mmh3_x86_32bit(key, seed)
 
-    cdef uint32_t _rank(self, uint32_t value):
-        """Calculate rank that is the least significant bit position."""
+    cdef uint8_t _rank(self, uint32_t value):
+        """Calculate rank that is the least significant bit position.
+
+        Parameters
+        ----------
+        value : int
+            The unsinged integer to find the LSB in binary representation.
+
+        Returns
+        -------
+        :obj:`int`
+            The LSB or, if value is zero, the `self.size`.
+
+        """
+        if value == 0:
+            return self.size
         return (value & -value).bit_length() - 1
 
     def __dealloc__(self):
@@ -110,14 +122,15 @@ cdef class ProbabilisticCounter:
             The element to be indexed into the counter.
 
         """
-        cdef size_t index
-        cdef uint32_t value_index
-        cdef uint32_t counter_index
-        for counter_index in xrange(self.num_of_hashes):
+        cdef uint16_t counter_index
+        cdef uint8_t value_index
+        cdef uint8_t seed
+        for counter_index in xrange(self.num_of_counters):
             seed = self._seeds[counter_index]
             value_index = self._rank(self._hash(element, seed))
-            index = counter_index * self.size + value_index
-            self._counter[index] = 1
+            if value_index >= self.size:
+                continue
+            self._counter[counter_index * self.size + value_index] = 1
 
     cpdef size_t sizeof(self):
         """Size of the counter in bytes.
@@ -131,9 +144,9 @@ cdef class ProbabilisticCounter:
         return self._counter.sizeof()
 
     def __repr__(self):
-        return "<ProbabilisticCounter (length: {}, num_of_hashes: {})>".format(
+        return "<ProbabilisticCounter (length: {}, num_of_counters: {})>".format(
             self.length,
-            self.num_of_hashes)
+            self.num_of_counters)
 
     def __len__(self):
         """Get length of the counter.
@@ -148,46 +161,41 @@ cdef class ProbabilisticCounter:
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
-    cdef size_t _count_by_counter(self, uint32_t counter_index):
-        """Calculate cardinality estimiation by a single counter.
+    cdef uint8_t _value_by_counter(self, uint16_t counter_index):
+        """Get value from a single simple counter.
 
-        The k-th bit in the counter correspods to the 0{k}1 pattern
+        The k-th bit in the counter correspods to the 0^{k}1 pattern
         that is used to estimate number of unique elements known
         to the counter. The leftmost 0 in the counter is an indicator
-        of log_{2}(n).
+        of log_{2}(n) (in fact, with some correction factor).
 
-        The cardinality estimation can be calculated [1] as:
+        Parameters
+        ----------
+        counter_index : int
+            The index of the counter.
 
-            n ≈ 2^{k} / 0.77351
+        Returns
+        -------
+        :obj:`int`
+            Relative index of the leftmost value 0 or, if all values
+            are zero, the counter's size.
 
         Note
         ----
-            Since all counters are stored in a single vector,
-            we get counter by its index and it's self.size bits long.
-            In this case the index k is the relative index inside
-            that single counter.
-
-        References
-        ----------
-        [1] Flajolet, P., Martin, G.N.: Probabilistic Counting Algorithms
-            for Data Base Applications. Journal of Computer and System Sciences.
-            Vol. 31 (2), 182--209  (1985)
+            Since all simple counters are stored in a single vector,
+            we get counter by its index, and it is `self.size` bits long.
+            In this case the returning value is the relative index
+            inside that single counter.
 
         """
-        cdef size_t index
-        cdef uint32_t k
+        cdef uint8_t value_index
         cdef bint found = False
 
-        for index in xrange(self.size):
-            if self._counter[counter_index * self.size + index] == 0:
-                k = index
-                found = True
-                break
+        for value_index in xrange(self.size):
+            if self._counter[counter_index * self.size + value_index] == 0:
+                return value_index
 
-        if not found:
-            k = self.size
-
-        return <size_t>floor(pow(2, k) / 0.77351)
+        return self.size
 
 
     @cython.boundscheck(False)
@@ -204,7 +212,11 @@ cdef class ProbabilisticCounter:
         Note
         ----
             According to [1], the estimation of cardinality can be computed
-            by averaging estimations from each counter.
+            by averaging estimations from each counter and converting
+            the result value A into espected number of unique elements by
+            formula:
+
+                n ≈ 2^{A} / 0.77351
 
         References
         ----------
@@ -212,11 +224,21 @@ cdef class ProbabilisticCounter:
             for Data Base Applications. Journal of Computer and System Sciences.
             Vol. 31 (2), 182--209  (1985)
 
-        """
-        cdef uint32_t counter_index
-        cdef float N = 0
-        for counter_index in xrange(self.num_of_hashes):
-            print(self._count_by_counter(self._counter[counter_index]))
-            N += self._count_by_counter(self._counter[counter_index])/ float(self.num_of_hashes)
+        The cardinality estimation can be calculated [1] as:
 
-        return <size_t>(floor(N))
+
+        """
+        if self._counter.count() == 0:
+            return 0
+
+        cdef uint16_t counter_index
+        cdef uint16_t N = 0
+        for counter_index in xrange(self.num_of_counters):
+            N += self._value_by_counter(counter_index)
+
+        return <size_t>round(
+            pow(
+                2,
+                <uint16_t>(round(float(N) / self.num_of_counters))
+            ) / 0.77351
+        )
