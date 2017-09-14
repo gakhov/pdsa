@@ -13,7 +13,7 @@ PDSA: Probabilistic Data Structures and Algorithms in Python
     :target: https://pypi.python.org/pypi/pdsa
     :alt: pypi Version
 
-.. image:: https://readthedocs.org/projects/pip/badge/?version=latest&style=flat-square
+.. image:: https://readthedocs.org/projects/pdsa/badge/?version=latest&style=flat-square
     :target: http://pdsa.readthedocs.io/en/latest/
     :alt: Documentation Version
 
