@@ -53,6 +53,17 @@ Documentation
 The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/>`_
 
 
+**Membership problem**
+
+- `Bloom Filter <http://pdsa.readthedocs.io/en/latest/membership/bloom_filter.html>`_
+- `Counting Bloom Filter <http://pdsa.readthedocs.io/en/latest/membership/counting_bloom_filter.html>`_
+
+**Cardinality problem**
+
+- `Linear counter <http://pdsa.readthedocs.io/en/latest/cardinality/linear_counter.html>`_
+- `Probabilistic counter (Flajolet–Martin algorithm) <http://pdsa.readthedocs.io/en/latest/cardinality/probabilistic_counter.html>`_
+
+
 License
 -------
 
