@@ -118,3 +118,4 @@ pdsa/cardinality/linear_counter.cpp
 pdsa/cardinality/probabilistic_counter.cpp
 pdsa/membership/bloom_filter.cpp
 pdsa/membership/counting_bloom_filter.cpp
+pdsa/rank/qdigest.cpp
