@@ -91,10 +91,10 @@ cdef class QuantileDigest:
         self.with_hashing = enable_hashing
 
         self._min_range = 0
-        self._max_range = 1 << self.range_in_bits - 1
+        self._max_range = (<uint64_t>1 << self.range_in_bits) - 1
 
         self._tree_height = self.range_in_bits + 1
-        self._max_number_of_nodes = 1 << self._tree_height - 1
+        self._max_number_of_nodes = (<uint64_t>1 << self._tree_height) - 1
 
         self._number_of_buckets = 0
         self._exact_boundary_value = 0
@@ -159,7 +159,7 @@ cdef class QuantileDigest:
         Parameters
         ----------
         bucket_id : :obj:`int`
-            The bucket ID of the bucket whose parent is computed.
+            The bucket ID of the bucket whose parent is to be computed.
 
         Returns
         -------
@@ -180,7 +180,7 @@ cdef class QuantileDigest:
         Parameters
         ----------
         bucket_id : :obj:`int`
-            The bucket ID of the bucket whose sibling is computed.
+            The bucket ID of the bucket whose sibling is to be computed.
 
         Note
         ----
@@ -222,8 +222,8 @@ cdef class QuantileDigest:
             indices 2^{k-1} .. 2^{k} - 1.
 
         """
-        cdef uint64_t bucket_ids_start = 1 << (level - 1)
-        cdef uint64_t bucket_ids_end = 2 * bucket_ids_start -  1
+        cdef uint64_t bucket_ids_start = <uint64_t>1 << (level - 1)
+        cdef uint64_t bucket_ids_end = 2 * bucket_ids_start - 1
 
         # NOTE: We iterate over q-digest (instead of the tree)
         # since it has less buckets than the average level of full tree.
@@ -473,9 +473,6 @@ cdef class QuantileDigest:
         """
         return self._number_of_buckets
 
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
-    @cython.cdivision(True)
     cpdef size_t count(self):
         """Number of elements (incl. duplicates) in the q-digest.
 
@@ -503,3 +500,4 @@ cdef class QuantileDigest:
 
         """
         raise NotImplementedError
+
