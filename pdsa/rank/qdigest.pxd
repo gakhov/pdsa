@@ -26,6 +26,7 @@ cdef class QuantileDigest:
 
     cpdef size_t sizeof(self)
     cpdef size_t count(self)
+    cpdef void merge(self, QuantileDigest other)
 
     cdef uint32_t _hash(self, object element, uint8_t seed)
     cdef uint64_t _bucket_canonical_id(self, uint32_t value)

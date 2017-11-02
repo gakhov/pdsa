@@ -72,22 +72,16 @@ def test_compress_from_shrivastava_example():
 
     for i in range(1):
         qd.add(0)
-
     for i in range(4):
         qd.add(2)
-
     for i in range(6):
         qd.add(3)
-
     for i in range(1):
         qd.add(4)
-
     for i in range(1):
         qd.add(5)
-
     for i in range(1):
         qd.add(6)
-
     for i in range(1):
         qd.add(7)
 
@@ -108,22 +102,16 @@ def test_queries_from_shrivastava_example():
 
     for i in range(1):
         qd.add(0)
-
     for i in range(4):
         qd.add(2)
-
     for i in range(6):
         qd.add(3)
-
     for i in range(1):
         qd.add(4)
-
     for i in range(1):
         qd.add(5)
-
     for i in range(1):
         qd.add(6)
-
     for i in range(1):
         qd.add(7)
 
@@ -143,3 +131,45 @@ def test_queries_from_shrivastava_example():
 
     num_of_values = qd.interval_query(3, 5)
     assert num_of_values == 6, "Incorrect approx. number of values in interval"
+
+
+def test_merge():
+    qd1 = QuantileDigest(3, 5)
+
+    for i in range(8):
+        qd1.add(0)
+    for i in range(8):
+        qd1.add(1)
+    for i in range(4):
+        qd1.add(2)
+    for i in range(1):
+        qd1.add(3)
+    for i in range(5):
+        qd1.add(4)
+    for i in range(3):
+        qd1.add(5)
+    for i in range(5):
+        qd1.add(6)
+    for i in range(2):
+        qd1.add(7)
+
+    q1_counts = qd1.count()
+    qd1.compress()
+
+    qd2 = QuantileDigest(3, 5)
+
+    for i in range(10):
+        qd2.add(0)
+    for i in range(12):
+        qd2.add(1)
+    for i in range(8):
+        qd2.add(2)
+    for i in range(20):
+        qd2.add(3)
+
+    q2_counts = qd2.count()
+    qd2.compress()
+
+    qd1.merge(qd2)
+    assert qd1.count() == q1_counts + q2_counts, "Incorrect counts"
+    assert len(qd1) == 6, "Incorrect length"

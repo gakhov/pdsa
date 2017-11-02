@@ -124,12 +124,12 @@ Merge q-digests
 
 .. code:: python
 
-    qd = qd1 + qd2
+    qd1.merge(qd2)
 
 
 .. warning::
 
-   Only q-digets with same compression_factor and range is available to be merged.
+   Only q-digets with same compression_factor and range is possible to merge correctly.
 
 
 

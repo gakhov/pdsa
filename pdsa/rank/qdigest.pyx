@@ -748,3 +748,53 @@ cdef class QuantileDigest:
         end_rank = self.inverse_quantile_query(end)
 
         return end_rank - start_rank
+
+    cpdef void merge(self, QuantileDigest other):
+        """Merge q-digest with another similar one.
+       
+        Parameters
+        ----------
+        other : QuantileDigest
+            The q-digest to be mered with the current one.
+
+        Raises
+        ------
+        ValueError
+            If compression factors differ.
+        ValueError
+            If ranges differ.
+        ValueError
+            If hashing status differs.
+
+        Note
+        -----
+            The merge is computing by taking the union of the two q-digest 
+            and adding the counts of buckets with the same range. Then, the
+            resulting q-digest has to be compressed.
+
+        """
+        if other.compression_factor != self.compression_factor:
+            raise ValueError("Compression factors have to be equal")
+        if other.range_in_bits != self.range_in_bits:
+            raise ValueError("Ranges have to be equal")
+        if other.with_hashing != self.with_hashing:
+            raise ValueError("Hashing statuses have to be equal")
+
+        if self.with_hashing:
+            # TODO: if hashing is used, _seed has to be the same!!!
+            raise NotImplementedError
+        
+        for bucket_id, counts in other._qdigest.items():
+            if bucket_id in self._qdigest:
+                self._qdigest[bucket_id] += counts
+            else:
+                self._qdigest[bucket_id] = counts
+
+        self._number_of_buckets = len(self._qdigest)
+        self._exact_boundary_value = float(self.count()) / self.compression_factor
+
+        self.compress()
+
+
+
+
