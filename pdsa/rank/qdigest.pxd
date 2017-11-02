@@ -20,9 +20,9 @@ cdef class QuantileDigest:
     cpdef void add(self, object element, bint compress=*)
     cpdef void compress(self)
 
-    # cpdef void quantile_query(self, uint8_t quantile)
-    # cpdef void inverse_quantile_query(self, object element) except *
-    # cpdef void range_query(self, uint8_t r) except *
+    cpdef uint64_t quantile_query(self, float quantile) except *
+    cpdef size_t inverse_quantile_query(self, object element) except *
+    cpdef size_t interval_query(self, uint64_t start, uint64_t end) except *
 
     cpdef size_t sizeof(self)
     cpdef size_t count(self)
@@ -32,8 +32,10 @@ cdef class QuantileDigest:
     cdef uint64_t _bucket_parent_id(self, uint32_t bucket_id)
     cdef uint64_t _bucket_sibling_id(self, uint32_t bucket_id)
 
+    cdef uint32_t _bucket_level(self, uint64_t bucket_id)
+    cdef tuple _bucket_range(self, uint64_t bucket_id)
+
     cdef list _buckets_on_level(self, uint8_t level)
     cdef bint _merge_if_needed(self, uint64_t bucket_id)
     cdef bint _delete_bucket_if_exists(self, uint64_t bucket_id) except *
     cdef bint _is_worth_to_store(self, size_t counts_sum)
-

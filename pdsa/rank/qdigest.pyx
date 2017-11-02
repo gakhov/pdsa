@@ -18,7 +18,7 @@ References
 
 import cython
 
-from libc.math cimport floor, log, round
+from libc.math cimport ceil, floor, log, round
 from libc.stdint cimport uint64_t, uint32_t, uint8_t, UINT32_MAX
 from libc.stdlib cimport rand
 
@@ -123,6 +123,30 @@ cdef class QuantileDigest:
         # self.algorithm = "mmh3_x86_32bit"
         # return mmh3_x86_32bit(key, seed)
         return <uint32_t>key
+
+    def _sortkey_buckets_by_range(self, tuple bucket):
+        """Define sorting key for buckets for queries.
+
+        Parameters
+        ----------
+        bucket : :obj:`int`
+            The bucket (ID, counts) whose sorting key is to be computed.
+
+        Note
+        ----
+            To perform quantile queries, buckets in the q-digest have
+            to be sorted in increasing order of their max ranges, breaking
+            the tie by putting smaller ranges (thus, bucket IDs) first.
+
+        Returns
+        -------
+        tuple
+            Tuple of values to sort by and break the tie.
+
+        """
+        cdef uint64_t bucket_id = bucket[0]
+        cdef uint32_t level = self._bucket_level(bucket_id)
+        return (level, -bucket_id)
 
     cdef uint64_t _bucket_canonical_id(self, uint32_t value):
         """Compute the canonical bucket for the input value.
@@ -235,6 +259,66 @@ cdef class QuantileDigest:
             if bucket_ids_start <= bucket_id <= bucket_ids_end:
                 buckets.append(bucket_id)
         return buckets
+
+    cdef uint32_t _bucket_level(self, uint64_t bucket_id):
+        """Compute level where the bucket is located.
+
+        Parameters
+        ----------
+        bucket_id : :obj:`int`
+            The bucket ID of the bucket whose level is to be computed.
+
+        Note
+        ----
+            For full and complete binary tree built from a binary
+            partition, the buckets from level `k` have
+            indices 2^{k-1} .. 2^{k} - 1. Thus, finding the closest
+            power of 2 bigger than the bucket ID will give us the
+            level.
+
+        Returns
+        -------
+        :obj:`int`
+            The level of the binary tree where the bucket is located.
+
+        """
+        return bucket_id.bit_length()
+
+    @cython.cdivision(True)
+    cdef tuple _bucket_range(self, uint64_t bucket_id):
+        """Compute range in binary parition associated with the bucket.
+
+        Parameters
+        ----------
+        bucket_id : :obj:`int`
+            The bucket ID of the bucket whose sibling is computed.
+
+        Note
+        ----
+            For full and complete binary tree built from a binary
+            partition, every bucket is associated with a sub-range
+            of the main range.
+
+            The collection of buckets on each levels is the complete
+            partition of the initial range. Thus, number of buckets
+            on level `k` is `2^{k-1}` and, because IDs of the buckets
+            associated from left to right, the position of the bucket
+            defined its interval of the partition.
+
+        Returns
+        -------
+        tuple
+            The interval [a, b] associated with the bucket.
+
+        """
+        cdef uint32_t level = self._bucket_level(bucket_id)
+        cdef uint64_t buckets_on_level = <uint64_t>1 << (level - 1)
+        cdef float delta = (self._max_range - self._min_range) / float(buckets_on_level)
+        cdef uint32_t bucket_position = bucket_id % buckets_on_level
+        return (
+            self._min_range + <uint64_t>ceil(delta * bucket_position),
+            self._min_range + <uint64_t>floor(delta * (bucket_position + 1))
+        )
 
     @cython.cdivision(True)
     cpdef void add(self, object element, bint compress=False):
@@ -501,3 +585,166 @@ cdef class QuantileDigest:
         """
         raise NotImplementedError
 
+    @cython.cdivision(True)
+    cpdef uint64_t quantile_query(self, float quantile) except *:
+        """Execute quantile query to find the quantile element.
+
+        Parameters
+        ----------
+        quantile : :obj:`float`
+            The fraction from [0, 1].
+
+        Raises
+        ------
+        ValueError
+            If `quantile` outside the expected interval of [0, 1].
+
+        Note
+        ----
+            Given a fraction `quantile` [0, 1], the quantile query
+            is about to find the value whose rank in sorted sequence
+            of the `n` values is `quantile * n`.
+
+            To calculate the quantile, the q-digest has to be compressed
+            and its buckets have to be sorted in increasing their
+            intervals' upper bounds, breaking ties by the putting smaller
+            ranges (thus, smaller bucker IDs) first.
+
+            Afterwords, we scan those sorted list and sum counts of
+            buckets we have seen until we found some buckets on which
+            those counts exceed the rank `quantile * n`. Such bucket
+            is reported as the estimate for the requested quantile.
+
+        Returns
+        -------
+        :obj:`int`
+            The estimate of the quantile element from the q-digest.
+
+        """
+        if quantile < 0.0 or quantile > 1.0:
+            raise ValueError("Quantile has to be in [0, 1] interval")
+
+        cdef list ordered_qdigest = sorted(
+            self._qdigest.items(),
+            key=self._sortkey_buckets_by_range,
+            reverse=True
+        )
+
+        cdef float boundary_rank = self.count() * quantile
+        cdef size_t rank = 0
+
+        for bucket_id, counts in ordered_qdigest:
+            rank += counts
+            if rank > boundary_rank:
+                break
+
+        cdef uint64_t start, end
+        (start, end) = self._bucket_range(bucket_id)
+        return end
+
+    @cython.cdivision(True)
+    cpdef size_t inverse_quantile_query(self, object element) except *:
+        """Execute inverse quantile query to find the element's rank.
+
+        Parameters
+        ----------
+        element : obj
+            The element whose rank is to be computed.
+
+        Raises
+        ------
+        ValueError
+            If value of the element is out of range.
+
+        Note
+        ----
+            Given an element, the inverse quantile query
+            is about to find its rank in sorted sequence of values.
+
+            To calculate the rank, the q-digest has to be compressed
+            and its buckets have to be sorted in increasing their
+            intervals' upper bounds, breaking ties by the putting smaller
+            ranges (thus, smaller bucker IDs) first.
+
+            Afterwords, we scan those sorted list from beginning to the end
+            and sum counts of buckets whose interval's upper boundary
+            is less then the requested element's value. That sum is reported
+            as the estimate for the requested rank of the element.
+
+        Returns
+        -------
+        :obj:`int`
+            The estimate of the element's rank in the q-digest.
+
+        """
+        cdef uint32_t value
+
+        if not self.with_hashing:
+            value = <uint32_t>element
+        else:
+            value = self._hash(element, self._seed)
+
+        if value > self._max_range or value < self._min_range:
+            raise ValueError("Value out of range")
+
+        cdef list ordered_qdigest = sorted(
+            self._qdigest.items(),
+            key=self._sortkey_buckets_by_range,
+            reverse=True
+        )
+
+        cdef size_t start, end, rank = 0
+        for bucket_id, counts in ordered_qdigest:
+            (start, end) = self._bucket_range(bucket_id)
+            if value > end:
+                rank += counts
+
+        return rank
+
+    cpdef size_t interval_query(self, uint64_t start, uint64_t end) except *:
+        """Execute interval query to find number of elements in it.
+
+        Parameters
+        ----------
+        start : :obj:`int`
+            The lower boundary of the interval.
+        end : :obj:`int`
+            The upper boundary of the interval.
+
+        Raises
+        ------
+        ValueError
+            If upper boundary smaller or equal to the lower boundary.
+        ValueError
+            If upper boundary is out of range.
+        ValueError
+            If lower boundary is out of range.
+
+        Note
+        ----
+            Given a value the interval (range) query
+            is about to find number of elements in the given range
+            in the sequence of elements.
+
+            To calculate the number of elements, we simply perform two
+            inverse quantile queries for lower and upper boundaries
+            and report their difference as the estimate for the number
+            of elements in the requested interval.
+
+        Returns
+        -------
+        :obj:`int`
+            The number of elements in the given interval in the q-digest.
+
+        """
+        if start >= end:
+            raise ValueError("Invalid interval")
+        if start < self._min_range or start > self._max_range:
+            raise ValueError("Interval lower boundary out of range")
+        if end < self._min_range or end > self._max_range:
+            raise ValueError("Interval upper boundary out of range")
+
+        start_rank = self.inverse_quantile_query(start)
+        end_rank = self.inverse_quantile_query(end)
+
+        return end_rank - start_rank

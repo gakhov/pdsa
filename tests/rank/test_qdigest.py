@@ -98,3 +98,48 @@ def test_compress_from_shrivastava_example():
 
     assert len(qd) == 5, "Incorrect number of nodes"
     assert qd.count() == 15, "Invalid counts"
+
+
+def test_queries_from_shrivastava_example():
+    # NOTE: percentiles and rank given by q-digest are
+    # approximated, thus no sense to compare them to the
+    # exact values in a test.
+    qd = QuantileDigest(3, 5)
+
+    for i in range(1):
+        qd.add(0)
+
+    for i in range(4):
+        qd.add(2)
+
+    for i in range(6):
+        qd.add(3)
+
+    for i in range(1):
+        qd.add(4)
+
+    for i in range(1):
+        qd.add(5)
+
+    for i in range(1):
+        qd.add(6)
+
+    for i in range(1):
+        qd.add(7)
+
+    qd.compress()
+
+    median = qd.quantile_query(0.5)
+    assert median == 3, "Incorrect approx. median"
+
+    rank = qd.inverse_quantile_query(3)
+    assert rank == 4, "Incorrect approx. rank"
+
+    percentile85 = qd.quantile_query(0.85)
+    assert percentile85 == 7, "Incorrect approx. 85th percentile"
+
+    rank = qd.inverse_quantile_query(5)
+    assert rank == 10, "Incorrect approx. rank"
+
+    num_of_values = qd.interval_query(3, 5)
+    assert num_of_values == 6, "Incorrect approx. number of values in interval"
