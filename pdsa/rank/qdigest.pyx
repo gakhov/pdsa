@@ -91,10 +91,10 @@ cdef class QuantileDigest:
         self.with_hashing = enable_hashing
 
         self._min_range = 0
-        self._max_range = 2**self.range_in_bits - 1
+        self._max_range = 1 << self.range_in_bits - 1
 
         self._tree_height = self.range_in_bits + 1
-        self._max_number_of_nodes = 2**self._tree_height - 1
+        self._max_number_of_nodes = 1 << self._tree_height - 1
 
         self._number_of_buckets = 0
         self._exact_boundary_value = 0
@@ -222,7 +222,7 @@ cdef class QuantileDigest:
             indices 2^{k-1} .. 2^{k} - 1.
 
         """
-        cdef uint64_t bucket_ids_start = 2**(level - 1)
+        cdef uint64_t bucket_ids_start = 1 << (level - 1)
         cdef uint64_t bucket_ids_end = 2 * bucket_ids_start -  1
 
         # NOTE: We iterate over q-digest (instead of the tree)
@@ -237,7 +237,7 @@ cdef class QuantileDigest:
         return buckets
 
     @cython.cdivision(True)
-    cpdef void add(self, object element, bint compress=False) except *:
+    cpdef void add(self, object element, bint compress=False):
         """Add element into the q-digest.
 
         Parameters
@@ -342,7 +342,7 @@ cdef class QuantileDigest:
         """Return q-digest for debug purposes."""
         return self._qdigest
 
-    cdef bint _delete_bucket_if_exists(self, uint64_t bucket_id):
+    cdef bint _delete_bucket_if_exists(self, uint64_t bucket_id) except *:
         """Delete bucket from q-digest if it's exists.
 
         Parameters
@@ -425,7 +425,7 @@ cdef class QuantileDigest:
 
         return True
 
-    cpdef void compress(self) except *:
+    cpdef void compress(self):
         """Compress q-digest.
 
         Note

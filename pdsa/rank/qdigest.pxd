@@ -17,10 +17,10 @@ cdef class QuantileDigest:
     cdef dict _qdigest
     cdef uint8_t _seed
 
-    cpdef void add(self, object element, bint compress=*) except *
-    cpdef void compress(self) except *
+    cpdef void add(self, object element, bint compress=*)
+    cpdef void compress(self)
 
-    # cpdef void quantile_query(self, uint8_t quantile) except *
+    # cpdef void quantile_query(self, uint8_t quantile)
     # cpdef void inverse_quantile_query(self, object element) except *
     # cpdef void range_query(self, uint8_t r) except *
 
@@ -34,6 +34,6 @@ cdef class QuantileDigest:
 
     cdef list _buckets_on_level(self, uint8_t level)
     cdef bint _merge_if_needed(self, uint64_t bucket_id)
-    cdef bint _delete_bucket_if_exists(self, uint64_t bucket_id)
+    cdef bint _delete_bucket_if_exists(self, uint64_t bucket_id) except *
     cdef bint _is_worth_to_store(self, size_t counts_sum)
 
