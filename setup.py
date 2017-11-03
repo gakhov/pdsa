@@ -16,6 +16,7 @@ PACKAGES = [
     'pdsa.helpers',
     'pdsa.helpers.hashing',
     'pdsa.helpers.storage',
+    'pdsa.rank',
 ]
 
 
@@ -109,6 +110,16 @@ def setup_package():
             include_dirs=[
                 get_python_inc(plat_specific=True),
                 os.path.join('pdsa/helpers/storage', 'src')
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
+            "pdsa.rank.qdigest",
+            language='c++',
+            sources=['pdsa/rank/qdigest.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
             ]
         )
     )

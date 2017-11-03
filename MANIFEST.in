@@ -18,4 +18,5 @@ global-exclude pdsa/membership/counting_bloom_filter.cpp
 global-exclude pdsa/helpers/hashing/mmh.cpp
 global-exclude pdsa/helpers/storage/bitvector.cpp
 global-exclude pdsa/helpers/storage/bitvector_counter.cpp
+global-exclude pdsa/rank/qdigest.cpp
 

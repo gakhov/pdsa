@@ -39,6 +39,8 @@ the error probability.
 The potential losses or errors are fully compensated by extremely
 low memory requirements, constant query time and scaling.
 
+GitHub repository: `<https://github.com/gakhov/pdsa>`_
+
 
 Dependencies
 ---------------------
@@ -62,6 +64,10 @@ The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/
 
 - `Linear counter <http://pdsa.readthedocs.io/en/latest/cardinality/linear_counter.html>`_
 - `Probabilistic counter (Flajolet–Martin algorithm) <http://pdsa.readthedocs.io/en/latest/cardinality/probabilistic_counter.html>`_
+
+**Rank problem**
+
+- `q-digest <http://pdsa.readthedocs.io/en/latest/rank/qdigest.html>`_
 
 
 License
