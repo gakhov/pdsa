@@ -13,6 +13,7 @@ if __name__ == '__main__':
     qd.compress()
 
     print(qd)
+    print("Size in bytes of the q-digest:", qd.sizeof())
     print("Total elements in the q-digest:", qd.count())
 
     print("50th percentile (median):", qd.quantile_query(0.5))

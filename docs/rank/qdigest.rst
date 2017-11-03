@@ -24,12 +24,7 @@ from sensors.
 Build a q-digest
 ----------------
 
-Quantile Digest is designed to be build from integer numbers, so to
-support other objects we have to use hashing.
-
-
-Build q-digest from its range for integers only
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Quantile Digest is designed to be build on integer numbers from known range.
 
 The range of the supported integers is defined by number of bytes in
 maximal representation. Thus, for k-bytes integers, the range will
@@ -47,23 +42,6 @@ be [0, 2^k - 1].
    The ranges up to 32 bytes only are supported in the current implementation.
 
 
-
-Build q-digest with hashging
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-.. code:: python
-
-   from pdsa.rank.qdigest import QuantileDigest
-
-   qd = QuantileDigest().create_with_hashing(5)
-
-
-.. note::
-
-   Only 32-bytes MurmurHash3 is supported in the current implementation.
-
-
 Add element into q-digest
 -----------------------------
 
@@ -71,16 +49,6 @@ Add element into q-digest
 .. code:: python
 
     qd.add(5)
-
-
-.. note::
-
-   If using q-digest with hashing, all input elements a hashed and their
-   integer representation is actually stored in the q-digest.
-   It is possible to add into the q-digest any elements (internally
-   it uses *repr()* of the python object to calculate hash values for
-   elements that are not integers, strings or bytes.
-
 
 
 Quantile Query
@@ -144,6 +112,20 @@ Length of the q-digest is the number of buckets (nodes) included into the q-dige
     print(len(qd))
 
 
+Size of the q-digest in bytes
+------------------------------
+
+.. code:: python
+
+    print(qd.sizeof())
+
+
+.. warning::
+
+    Since we can't calculcate exact size of a dict in Cython,
+    this function return some estimation based on ideal size of
+    keys, values of each bucket.
+
 
 Count of elements in the q-digest
 ---------------------------------------
@@ -155,6 +137,6 @@ Count of elements in the q-digest
 
 .. warning::
 
-    While we can't say exactly which elements in the q-digest,
+    While we can't say exactly which elements are in the q-digest,
     (because the compression is a lossy operation), it's still
     possible to say how many in total elements were added.

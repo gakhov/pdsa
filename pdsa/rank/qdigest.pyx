@@ -22,8 +22,6 @@ from libc.math cimport ceil, floor, log, round
 from libc.stdint cimport uint64_t, uint32_t, uint8_t, UINT32_MAX
 from libc.stdlib cimport rand
 
-from pdsa.helpers.hashing.mmh cimport mmh3_x86_32bit
-
 cdef uint8_t ROOT_BUCKET = 1
 
 
@@ -39,12 +37,6 @@ cdef class QuantileDigest:
     >>> qd.add(42)
     >>> qd.merge()
 
-
-    Note
-    -----
-        If requested, this implementation uses MurmurHash3 family of
-        hash functions which yields a 32-bit hash value.
-
     Attributes
     ----------
     range_in_bits : :obj:`int`
@@ -54,8 +46,7 @@ cdef class QuantileDigest:
 
     """
 
-    def __cinit__(self, const uint8_t range_in_bits, const uint8_t compression_factor,
-                  const bint enable_hashing=False):
+    def __cinit__(self, const uint8_t range_in_bits, const uint8_t compression_factor):
         """Create a q-digest with a requested compression factor.
 
         Parameters
@@ -64,15 +55,11 @@ cdef class QuantileDigest:
             The maximal supported input non-negative integer values in bits.
         compression_factor : :obj:`int`
             The level of the compression in q-digest.
-        enable_hashing : bool
-            A flag to enable hashing of input values (to support non-integers).
 
         Raises
         ------
         ValueError
             If `compression_factor` is 0 or negative.
-        ValueError
-            If hashing is required, but `range_in_bits` differs from 32.
         ValueError
             If `range_in_bits` is bigger than 32.
 
@@ -80,15 +67,11 @@ cdef class QuantileDigest:
         if compression_factor < 1:
             raise ValueError("Compression factor is too small")
 
-        if enable_hashing and range_in_bits != 32:
-            raise ValueError("Only 32-bit hashing is supported")
-
         if range_in_bits > 32:
             raise ValueError("Only ranges up to 2^{32} are supported")
 
         self.compression_factor = compression_factor
         self.range_in_bits = range_in_bits
-        self.with_hashing = enable_hashing
 
         self._min_range = 0
         self._max_range = (<uint64_t>1 << self.range_in_bits) - 1
@@ -99,30 +82,7 @@ cdef class QuantileDigest:
         self._number_of_buckets = 0
         self._exact_boundary_value = 0
 
-        self._seed = <uint8_t>(rand())
         self._qdigest = {}
-
-    @classmethod
-    def create_with_hashing(cls, const uint8_t compression_factor):
-        """Create QuantileDigest that supports arbitrary types of inputs.
-
-        Parameters
-        ----------
-        compression_factor : :obj:`int`
-            The level of the compression in q-digest.
-
-        Note
-        ----
-            Currently, we offer only 32-bit hash function that defines
-            the range of the q-digest.
-
-        """
-        return cls(32, compression_factor, enable_hashing=True)
-
-    cdef uint32_t _hash(self, object key, uint8_t seed):
-        # self.algorithm = "mmh3_x86_32bit"
-        # return mmh3_x86_32bit(key, seed)
-        return <uint32_t>key
 
     def _sortkey_buckets_by_range(self, tuple bucket):
         """Define sorting key for buckets for queries.
@@ -145,7 +105,7 @@ cdef class QuantileDigest:
 
         """
         cdef uint64_t bucket_id = bucket[0]
-        cdef uint32_t level = self._bucket_level(bucket_id)
+        cdef uint8_t level = self._bucket_level(bucket_id)
         return (level, -bucket_id)
 
     cdef uint64_t _bucket_canonical_id(self, uint32_t value):
@@ -260,7 +220,7 @@ cdef class QuantileDigest:
                 buckets.append(bucket_id)
         return buckets
 
-    cdef uint32_t _bucket_level(self, uint64_t bucket_id):
+    cdef uint8_t _bucket_level(self, uint64_t bucket_id):
         """Compute level where the bucket is located.
 
         Parameters
@@ -311,7 +271,7 @@ cdef class QuantileDigest:
             The interval [a, b] associated with the bucket.
 
         """
-        cdef uint32_t level = self._bucket_level(bucket_id)
+        cdef uint8_t level = self._bucket_level(bucket_id)
         cdef uint64_t buckets_on_level = <uint64_t>1 << (level - 1)
         cdef float delta = (self._max_range - self._min_range) / float(buckets_on_level)
         cdef uint32_t bucket_position = bucket_id % buckets_on_level
@@ -321,14 +281,13 @@ cdef class QuantileDigest:
         )
 
     @cython.cdivision(True)
-    cpdef void add(self, object element, bint compress=False) except *:
+    cpdef void add(self, uint32_t element, bint compress=False) except *:
         """Add element into the q-digest.
 
         Parameters
         ----------
         element : obj
-            The input element. If hashing is not enabled the `element`
-            will be automatically cast to uint32_t.
+            The input element.
         compress : :obj:bint
             A flag to automatically compress q-digest structure after
             the addition is finished.
@@ -349,17 +308,10 @@ cdef class QuantileDigest:
             If value of the element is out of range.
 
         """
-        cdef uint32_t value
-
-        if not self.with_hashing:
-            value = <uint32_t>element
-        else:
-            value = self._hash(element, self._seed)
-
-        if value > self._max_range or value < self._min_range:
+        if element > self._max_range or element < self._min_range:
             raise ValueError("Value out of range")
 
-        cdef uint64_t canonical_bucket_id = self._bucket_canonical_id(value)
+        cdef uint64_t canonical_bucket_id = self._bucket_canonical_id(element)
         cdef uint64_t bucket_id = canonical_bucket_id
         cdef uint64_t closest_parent_id_in_digest = 0
 
@@ -536,13 +488,11 @@ cdef class QuantileDigest:
             "<QuantileDigest ("
             "compression: {}, "
             "range: [{}, {}], "
-            "with_hashing: {}, "
             "length: {}"
             ")>"
         ).format(
             self.compression_factor,
             self._min_range, self._max_range,
-            "on" if self.with_hashing else "off",
             self._number_of_buckets
         )
 
@@ -593,7 +543,7 @@ cdef class QuantileDigest:
         return self._number_of_buckets * size_of_bucket
 
     @cython.cdivision(True)
-    cpdef uint64_t quantile_query(self, float quantile) except *:
+    cpdef uint32_t quantile_query(self, float quantile) except *:
         """Execute quantile query to find the quantile element.
 
         Parameters
@@ -645,12 +595,12 @@ cdef class QuantileDigest:
             if rank > boundary_rank:
                 break
 
-        cdef uint64_t start, end
+        cdef uint32_t start, end
         (start, end) = self._bucket_range(bucket_id)
         return end
 
     @cython.cdivision(True)
-    cpdef size_t inverse_quantile_query(self, object element) except *:
+    cpdef size_t inverse_quantile_query(self, uint32_t element) except *:
         """Execute inverse quantile query to find the element's rank.
 
         Parameters
@@ -684,14 +634,7 @@ cdef class QuantileDigest:
             The estimate of the element's rank in the q-digest.
 
         """
-        cdef uint32_t value
-
-        if not self.with_hashing:
-            value = <uint32_t>element
-        else:
-            value = self._hash(element, self._seed)
-
-        if value > self._max_range or value < self._min_range:
+        if element > self._max_range or element < self._min_range:
             raise ValueError("Value out of range")
 
         cdef list ordered_qdigest = sorted(
@@ -700,23 +643,24 @@ cdef class QuantileDigest:
             reverse=True
         )
 
-        cdef size_t start, end, rank = 0
+        cdef uint32_t start, end
+        cdef size_t rank = 0
         for bucket_id, counts in ordered_qdigest:
             (start, end) = self._bucket_range(bucket_id)
-            if value > end:
+            if element > end:
                 rank += counts
 
         return rank
 
-    cpdef size_t interval_query(self, uint64_t start, uint64_t end) except *:
+    cpdef size_t interval_query(self, uint32_t start, uint32_t end) except *:
         """Execute interval query to find number of elements in it.
 
         Parameters
         ----------
         start : :obj:`int`
-            The lower boundary of the interval.
+            The lower boundary of the interval [a, b].
         end : :obj:`int`
-            The upper boundary of the interval.
+            The upper boundary of the interval [a, b].
 
         Raises
         ------
@@ -770,8 +714,6 @@ cdef class QuantileDigest:
             If compression factors differ.
         ValueError
             If ranges differ.
-        ValueError
-            If hashing status differs.
 
         Note
         -----
@@ -784,12 +726,6 @@ cdef class QuantileDigest:
             raise ValueError("Compression factors have to be equal")
         if other.range_in_bits != self.range_in_bits:
             raise ValueError("Ranges have to be equal")
-        if other.with_hashing != self.with_hashing:
-            raise ValueError("Hashing statuses have to be equal")
-
-        if self.with_hashing:
-            # TODO: if hashing is used, _seed has to be the same!!!
-            raise NotImplementedError
 
         for bucket_id, counts in other._qdigest.items():
             if bucket_id in self._qdigest:
