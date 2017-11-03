@@ -2,7 +2,7 @@
 
 Quantile Digest.
 
-Quantile Digest or q-digest is a tree-based stream summary algorithm
+Quantile Digest, or q-digest, is a tree-based stream summary algorithm
 that was proposed by Nisheeth Shrivastava, Subhash Suri et al. in
 2004 in the context of monitoring distributed data
 from sensors.
@@ -101,7 +101,7 @@ cdef class QuantileDigest:
         Returns
         -------
         tuple
-            Tuple of values to sort by and break the tie.
+            A tuple of values to sort by and break the tie.
 
         """
         cdef uint64_t bucket_id = bucket[0]
@@ -124,8 +124,9 @@ cdef class QuantileDigest:
         Note
         ----
             In the full and complete binary tree build for the
-            binary parition of a range [0 .. self._max_range]
-            is the value-th value (from left) in the last level (=height).
+            binary partition of a range [0 .. self._max_range]
+            is the `value`-th value (from left) in the last level
+            (that is equal to the tree's height).
 
             The canonical bucket is a leaf bucket for the inserted value.
 
@@ -152,7 +153,7 @@ cdef class QuantileDigest:
 
         Note
         ----
-            In the full and complete binary tree build parent ID can be
+            In the full and complete binary tree, parent ID can be
             computed as integer division by 2 of the bucket's ID.
 
         """
@@ -168,7 +169,7 @@ cdef class QuantileDigest:
 
         Note
         ----
-            In the full and complete binary tree build every parent bucket
+            In the full and complete binary tree, every parent bucket
             has exactly 2 children. Suppose, the parent id is `i`, then
             children have ids `2 * i` and `2 * i + 1`. Thus, the id of the
             sibling can be computed by the XOR of binary shift of the
@@ -209,10 +210,10 @@ cdef class QuantileDigest:
         cdef uint64_t bucket_ids_start = <uint64_t>1 << (level - 1)
         cdef uint64_t bucket_ids_end = 2 * bucket_ids_start - 1
 
-        # NOTE: We iterate over q-digest (instead of the tree)
-        # since it has less buckets than the average level of full tree.
+        # NOTE: We iterate over q-digest (instead of the tree) since
+        # it has fewer buckets than the average level of a full tree.
         # TODO: Does it make sense to iterate over all possible buckets'
-        # ids if level is low (e.g., if layer < 5)
+        # ids if the level is small (e.g., if layer < 5)?
 
         cdef list buckets = []
         for bucket_id in self._qdigest:
@@ -233,7 +234,7 @@ cdef class QuantileDigest:
             For full and complete binary tree built from a binary
             partition, the buckets from level `k` have
             indices 2^{k-1} .. 2^{k} - 1. Thus, finding the closest
-            power of 2 bigger than the bucket ID will give us the
+            power of 2 bigger than the bucket ID give us the bucket's
             level.
 
         Returns
@@ -259,7 +260,7 @@ cdef class QuantileDigest:
             partition, every bucket is associated with a sub-range
             of the main range.
 
-            The collection of buckets on each levels is the complete
+            The collection of buckets on each level is the complete
             partition of the initial range. Thus, number of buckets
             on level `k` is `2^{k-1}` and, because IDs of the buckets
             associated from left to right, the position of the bucket
@@ -305,7 +306,7 @@ cdef class QuantileDigest:
         Raises
         ------
         ValueError
-            If value of the element is out of range.
+            If the value of the element is out of range.
 
         """
         if element > self._max_range or element < self._min_range:
@@ -344,27 +345,28 @@ cdef class QuantileDigest:
             self.compress()
 
     cdef bint _is_worth_to_store(self, size_t family_counts):
-        """Decide if family of nodes with specified counts is worth to be stored.
+        """Decide if the family of nodes is worth to be stored.
 
         Parameters
         ----------
         family_counts : :obj:`int`
-            The total counts of the family of nodes, parent and its 2
-            children.
+            The total counts of the family of nodes: the parent and its
+            two children.
 
         Note
         ----
             If total counts of the family of nodes (parent and 2 children)
             are satisfy the q-digest property, they are worth to be stored.
 
-            Boundary value for estimate significance of the counts in the
-            q-digest propery is related on the ratio between number of elements
-            already in the q-digest and current compression factor.
+            Boundary value, used to estimate the significance of the counts
+            in the q-digest property, is related to the ratio between
+            the number of elements already in the q-digest and the
+            current compression factor.
 
         Returns
         -------
         bool
-            True if family of nodes is worth to be kept in the q-digest,
+            True if the family of nodes is worth to be kept in the q-digest,
             False otherwise.
 
         """
@@ -388,13 +390,13 @@ cdef class QuantileDigest:
 
         Note
         ----
-            Everytime when bucket if deleted, the number_of_buckets
+            Everytime when a bucket is deleted, the number_of_buckets
             in the q-digest has to be decreased.
 
         Returns
         -------
         bool
-            True if delete was performed, False otherwise.
+            True if the deletion was performed, False otherwise.
 
         """
         try:
@@ -416,13 +418,13 @@ cdef class QuantileDigest:
         Note
         ----
             To optimize q-digest, it's required to merge all non-significant
-            families of nodes (parent and its children) and keep information
-            about family counts at parent node only.
+            families of nodes (a parent and its children) and keep information
+            about family counts at the parent node only.
 
         Returns
         -------
         bool
-            True if merge was performed, False otherwise.
+            True if the node merging was performed, False otherwise.
 
         """
         # NOTE: Bucket might be already removed from the q-digest
@@ -470,7 +472,7 @@ cdef class QuantileDigest:
             (bottom up) according to q-digest property.
 
             If number of nodes in the digest is less than the
-            required compression factor, there is no sense to merge.
+            compression factor, then there is no sense to compress.
 
         """
         if self._number_of_buckets <= self.compression_factor:
@@ -530,13 +532,13 @@ cdef class QuantileDigest:
         Returns
         -------
         :obj:`int`
-            Number of bytes allocated for the q-digest.
+            The number of bytes allocated for the q-digest.
 
         Note
         ----
-            Since we can't calculcate exact size of dict in Cython,
-            this function return some estimation based on ideal size of
-            keys, values of each bucket.
+            Since we can't calculate exact size of a dict in Cython,
+            this function return some estimation based on an ideal
+            size of keys, values of each bucket.
 
         """
         cdef size_t size_of_bucket = sizeof(uint64_t) + sizeof(size_t)
@@ -563,11 +565,11 @@ cdef class QuantileDigest:
             of the `n` values is `quantile * n`.
 
             To calculate the quantile, the q-digest has to be compressed
-            and its buckets have to be sorted in increasing their
+            so its buckets have to be sorted in increasing their
             intervals' upper bounds, breaking ties by the putting smaller
             ranges (thus, smaller bucker IDs) first.
 
-            Afterwords, we scan those sorted list and sum counts of
+            Afterwards, we scan those sorted list and sum counts of
             buckets we have seen until we found some buckets on which
             those counts exceed the rank `quantile * n`. Such bucket
             is reported as the estimate for the requested quantile.
@@ -611,21 +613,21 @@ cdef class QuantileDigest:
         Raises
         ------
         ValueError
-            If value of the element is out of range.
+            If the value of the element is out of range.
 
         Note
         ----
             Given an element, the inverse quantile query
-            is about to find its rank in sorted sequence of values.
+            is about to find its rank in a sorted sequence of values.
 
             To calculate the rank, the q-digest has to be compressed
-            and its buckets have to be sorted in increasing their
+            so its buckets have to be sorted in increasing their
             intervals' upper bounds, breaking ties by the putting smaller
             ranges (thus, smaller bucker IDs) first.
 
-            Afterwords, we scan those sorted list from beginning to the end
+            Afterwards, we scan that sorted list from beginning to the end
             and sum counts of buckets whose interval's upper boundary
-            is less then the requested element's value. That sum is reported
+            is less than the requested element's value. That sum is reported
             as the estimate for the requested rank of the element.
 
         Returns
@@ -665,16 +667,16 @@ cdef class QuantileDigest:
         Raises
         ------
         ValueError
-            If upper boundary smaller or equal to the lower boundary.
+            If the upper boundary smaller or equal to the lower boundary.
         ValueError
-            If upper boundary is out of range.
+            If the upper boundary is out of range.
         ValueError
-            If lower boundary is out of range.
+            If the lower boundary is out of range.
 
         Note
         ----
             Given a value the interval (range) query
-            is about to find number of elements in the given range
+            is about to find the number of elements in the given range
             in the sequence of elements.
 
             To calculate the number of elements, we simply perform two
@@ -706,20 +708,20 @@ cdef class QuantileDigest:
         Parameters
         ----------
         other : QuantileDigest
-            The q-digest to be mered with the current one.
+            The q-digest to be merged with the current one.
 
         Raises
         ------
         ValueError
-            If compression factors differ.
+            If the compression factors differ.
         ValueError
-            If ranges differ.
+            If the ranges differ.
 
         Note
         -----
             The merge is computing by taking the union of the two q-digest
-            and adding the counts of buckets with the same range. Then, the
-            resulting q-digest has to be compressed.
+            and adding the counts of their buckets with the same range.
+            Then, the resulting q-digest has to be compressed.
 
         """
         if other.compression_factor != self.compression_factor:

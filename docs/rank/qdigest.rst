@@ -24,9 +24,9 @@ from sensors.
 Build a q-digest
 ----------------
 
-Quantile Digest is designed to be build on integer numbers from known range.
+Quantile Digest is designed to be built on integer numbers from a known range.
 
-The range of the supported integers is defined by number of bytes in
+The range of the supported integers is defined by the number of bytes in thier
 maximal representation. Thus, for k-bytes integers, the range will
 be [0, 2^k - 1].
 
@@ -55,7 +55,7 @@ Quantile Query
 ---------------
 
 Given a fraction ``q`` from [0, 1], the quantile query
-is about to find the value whose rank in sorted sequence
+is about to find the value whose rank in a sorted sequence
 of the ``n`` values is ``q * n``.
 
 
@@ -79,7 +79,7 @@ Interval (range) Query
 -----------------------
 
 Given a value the interval (range) query
-is about to find number of elements in the given range
+is about to find the number of elements in the given range
 in the sequence of elements.
 
 .. code:: python
@@ -97,7 +97,7 @@ Merge q-digests
 
 .. warning::
 
-   Only q-digets with same compression_factor and range is possible to merge correctly.
+   Only q-digets with same compression_factor and range are possible to merge correctly.
 
 
 
@@ -122,8 +122,8 @@ Size of the q-digest in bytes
 
 .. warning::
 
-    Since we can't calculcate exact size of a dict in Cython,
-    this function return some estimation based on ideal size of
+    Since we can't calculate exact size of a dict in Cython,
+    this function return some estimation based an ideal size of
     keys, values of each bucket.
 
 
