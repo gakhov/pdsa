@@ -471,11 +471,8 @@ cdef class QuantileDigest:
             The compression of q-digest is made by merge procedure
             (bottom up) according to q-digest property.
 
-            If number of nodes in the digest is less than the
-            compression factor, then there is no sense to compress.
-
         """
-        if self._number_of_buckets <= self.compression_factor:
+        if self._number_of_buckets < 2:
             return
 
         cdef uint8_t level =  self._tree_height
