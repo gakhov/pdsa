@@ -321,7 +321,7 @@ cdef class QuantileDigest:
         )
 
     @cython.cdivision(True)
-    cpdef void add(self, object element, bint compress=False):
+    cpdef void add(self, object element, bint compress=False) except *:
         """Add element into the q-digest.
 
         Parameters
@@ -582,8 +582,15 @@ cdef class QuantileDigest:
         :obj:`int`
             Number of bytes allocated for the q-digest.
 
+        Note
+        ----
+            Since we can't calculcate exact size of dict in Cython,
+            this function return some estimation based on ideal size of
+            keys, values of each bucket.
+
         """
-        raise NotImplementedError
+        cdef size_t size_of_bucket = sizeof(uint64_t) + sizeof(size_t)
+        return self._number_of_buckets * size_of_bucket
 
     @cython.cdivision(True)
     cpdef uint64_t quantile_query(self, float quantile) except *:
@@ -749,9 +756,9 @@ cdef class QuantileDigest:
 
         return end_rank - start_rank
 
-    cpdef void merge(self, QuantileDigest other):
+    cpdef void merge(self, QuantileDigest other) except *:
         """Merge q-digest with another similar one.
-       
+
         Parameters
         ----------
         other : QuantileDigest
@@ -768,7 +775,7 @@ cdef class QuantileDigest:
 
         Note
         -----
-            The merge is computing by taking the union of the two q-digest 
+            The merge is computing by taking the union of the two q-digest
             and adding the counts of buckets with the same range. Then, the
             resulting q-digest has to be compressed.
 
@@ -783,7 +790,7 @@ cdef class QuantileDigest:
         if self.with_hashing:
             # TODO: if hashing is used, _seed has to be the same!!!
             raise NotImplementedError
-        
+
         for bucket_id, counts in other._qdigest.items():
             if bucket_id in self._qdigest:
                 self._qdigest[bucket_id] += counts

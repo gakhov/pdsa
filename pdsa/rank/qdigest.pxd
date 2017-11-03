@@ -17,7 +17,7 @@ cdef class QuantileDigest:
     cdef dict _qdigest
     cdef uint8_t _seed
 
-    cpdef void add(self, object element, bint compress=*)
+    cpdef void add(self, object element, bint compress=*) except *
     cpdef void compress(self)
 
     cpdef uint64_t quantile_query(self, float quantile) except *
@@ -26,7 +26,7 @@ cdef class QuantileDigest:
 
     cpdef size_t sizeof(self)
     cpdef size_t count(self)
-    cpdef void merge(self, QuantileDigest other)
+    cpdef void merge(self, QuantileDigest other) except *
 
     cdef uint32_t _hash(self, object element, uint8_t seed)
     cdef uint64_t _bucket_canonical_id(self, uint32_t value)

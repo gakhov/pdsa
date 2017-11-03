@@ -15,10 +15,6 @@ def test_init():
     assert str(excinfo.value) == 'Compression factor is too small'
 
     with pytest.raises(ValueError) as excinfo:
-        QuantileDigest(64, 5, True)
-    assert str(excinfo.value) == 'Only 32-bit hashing is supported'
-
-    with pytest.raises(ValueError) as excinfo:
         QuantileDigest(64, 5, False)
     assert str(excinfo.value) == 'Only ranges up to 2^{32} are supported'
 
@@ -30,16 +26,59 @@ def test_init_with_hashing():
         "range: [0, 4294967295], with_hashing: on, "
         "length: 0)>")
 
+    with pytest.raises(ValueError) as excinfo:
+        QuantileDigest(64, 5, True)
+    assert str(excinfo.value) == 'Only 32-bit hashing is supported'
 
-def test_add_without_compress():
+
+def test_length():
+    qd = QuantileDigest(3, 3)
+    assert len(qd) == 0, "Non-zero length of empty q-digest"
+
+    for i in range(10):
+        qd.add(0)
+
+    assert len(qd) == 4, "Incorrect length"
+
+
+def test_sizeof():
+    qd = QuantileDigest(3, 3)
+    assert qd.sizeof() == 0, "Non-zero size of empty q-digest"
+
+    for i in range(10):
+        qd.add(0)
+
+    assert qd.sizeof() == len(qd) * 16, "Unexpected size in bytes"
+
+    for i in range(5):
+        qd.add(0)
+
+    assert qd.sizeof() == len(qd) * 16, "Unexpected size in bytes"
+
+    for i in range(5):
+        qd.add(1)
+
+    assert qd.sizeof() == len(qd) * 16, "Unexpected size in bytes"
+
+    qd.compress()
+
+    assert qd.sizeof() == len(qd) * 16, "Unexpected size in bytes"
+
+
+def test_add():
     range_in_bits = 3
     qd = QuantileDigest(range_in_bits, 5)
 
-    for i in range(2**range_in_bits):
+    for i in range(1 << range_in_bits):
         qd.add(i, False)
 
-    assert len(qd) == 2**(range_in_bits + 1) - 1, "Incorrect number of nodes"
-    assert qd.count() == 2**range_in_bits, "Invalid tree"
+    assert len(qd) == (1 << (range_in_bits + 1)) - 1, "Incorrect length"
+    assert qd.count() == 1 << range_in_bits, "Invalid tree"
+
+    qd = QuantileDigest(3, 5)
+    with pytest.raises(ValueError) as excinfo:
+        qd.add(1024)
+    assert str(excinfo.value) == 'Value out of range'
 
 
 def test_compress():
@@ -51,8 +90,11 @@ def test_compress():
     assert len(qd) == 4, "Incorrect number of nodes"
     assert qd.count() == 10, "Invalid counts"
 
+    size_before_compress = qd.sizeof()
+
     qd.compress()
 
+    assert qd.sizeof() < size_before_compress, "Compress didn't reduce size"
     assert len(qd) == 1, "Incorrect number of nodes"
     assert qd.count() == 10, "Invalid counts"
 
@@ -61,8 +103,11 @@ def test_compress():
     assert len(qd) == 5, "Incorrect number of nodes"
     assert qd.count() == 11, "Invalid counts"
 
+    size_before_compress = qd.sizeof()
+
     qd.compress()
 
+    assert qd.sizeof() < size_before_compress, "Compress didn't reduce size"
     assert len(qd) == 2, "Incorrect number of nodes"
     assert qd.count() == 11, "Invalid counts"
 
@@ -131,6 +176,52 @@ def test_queries_from_shrivastava_example():
 
     num_of_values = qd.interval_query(3, 5)
     assert num_of_values == 6, "Incorrect approx. number of values in interval"
+
+
+def test_merge_empty():
+    qd1 = QuantileDigest(3, 5)
+    q1_counts = qd1.count()
+    assert q1_counts == 0, "Incorrect number of elements"
+
+    qd2 = QuantileDigest(3, 5)
+    q2_counts = qd2.count()
+    assert q2_counts == 0, "Incorrect number of elements"
+
+    qd1.merge(qd2)
+
+    print(qd1.debug())
+
+    assert len(qd1) == 0, "Invalid length"
+    assert qd1.count() == 0, "Incorrect number of elements"
+
+
+def test_merge_unmergeable():
+    qd1 = QuantileDigest(3, 5)
+    qd2 = QuantileDigest(3, 2)
+
+    with pytest.raises(ValueError) as excinfo:
+        qd1.merge(qd2)
+    assert str(excinfo.value) == 'Compression factors have to be equal'
+
+    qd1 = QuantileDigest(3, 5)
+    qd2 = QuantileDigest(4, 5)
+
+    with pytest.raises(ValueError) as excinfo:
+        qd1.merge(qd2)
+    assert str(excinfo.value) == 'Ranges have to be equal'
+
+    qd1 = QuantileDigest.create_with_hashing(5)
+    qd2 = QuantileDigest(32, 5)
+
+    with pytest.raises(ValueError) as excinfo:
+        qd1.merge(qd2)
+    assert str(excinfo.value) == 'Hashing statuses have to be equal'
+
+    qd1 = QuantileDigest.create_with_hashing(5)
+    qd2 = QuantileDigest.create_with_hashing(5)
+
+    with pytest.raises(NotImplementedError) as excinfo:
+        qd1.merge(qd2)
 
 
 def test_merge():
