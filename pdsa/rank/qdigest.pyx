@@ -14,6 +14,7 @@ References
     Proceedings of the 2nd International Conference on Embedded Networked Sensor Systems,
     Baltimore, MD, USA - November 03–05, 2004, pp. 58–66, ACM New York, NY (2004)
     https://www.inf.fu-berlin.de/lehre/WS11/Wireless/papers/AgrQdigest.pdf
+
 """
 
 import cython
@@ -35,7 +36,7 @@ cdef class QuantileDigest:
 
     >>> qd = QuantileDigest(16, 5)
     >>> qd.add(42)
-    >>> qd.merge()
+    >>> qd.compress()
 
     Attributes
     ----------
