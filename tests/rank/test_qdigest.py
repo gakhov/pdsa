@@ -165,15 +165,6 @@ def test_queries_from_shrivastava_example():
     num_of_values = qd.interval_query(3, 5)
     assert num_of_values == 6, "Incorrect approx. number of values in interval"
 
-    qd = QuantileDigest(4, 5)
-    for i in [3,5,8,1,9,5,4,3,5,7]:
-        qd.add(i)
-
-    qd.compress()
-
-    assert qd.inverse_quantile_query(5) == 4
-    assert qd.interval_query(0, 7) == 10
-
 
 def test_merge_empty():
     qd1 = QuantileDigest(3, 5)
