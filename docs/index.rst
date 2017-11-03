@@ -32,6 +32,7 @@ the error probability.
 The potential losses or errors are fully compensated by extremely
 low memory requirements, constant query time and scaling.
 
+GitHub repository: `<https://github.com/gakhov/pdsa>`_
 
 .. toctree::
    :maxdepth: 2
@@ -39,5 +40,4 @@ low memory requirements, constant query time and scaling.
    quickstart
    cardinality/index
    membership/index
-
-
+   rank/index
