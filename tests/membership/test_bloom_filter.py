@@ -72,6 +72,22 @@ def test_count():
     assert bf.count() == 2
 
 
+def test_count_when_full():
+    length = 8
+    num_of_hashes = 2
+
+    bf = BloomFilter(length, num_of_hashes)
+
+    # We index 20 strings to kind of guarantee that
+    # filter of length 8 is full afterwards.
+    # NOTE: In perfect situation, only 4 items are required,
+    # but we don't know which ones.
+    for i in range(20):
+        bf.add("test{}".format(i))
+
+    assert bf.count() == length / num_of_hashes
+
+
 def test_len():
     bf = BloomFilter(8000, 3)
     assert len(bf) == 8000

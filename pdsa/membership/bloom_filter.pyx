@@ -263,7 +263,7 @@ cdef class BloomFilter:
             return 1
 
         if num_of_bits == self.length:
-            return self.length
+            return <size_t>(round(self.length / self.num_of_hashes))
 
         cdef float estimation = log(self.length - num_of_bits) - log(self.length)
         return <size_t>(round(self.length * (- estimation) / self.num_of_hashes))
