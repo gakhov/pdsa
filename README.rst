@@ -25,6 +25,16 @@ PDSA: Probabilistic Data Structures and Algorithms in Python
 
 .. contents ::
 
+The Book
+----------
+
+Everybody interested in learning more about probabilistic data structures and
+algorithms could be referred to our recently published book:
+
+`Probabilistic Data Structures and Algorithms for Big Data Applications <https://pdsa.gakhov.com>`_ by Andrii Gakhov
+
+2019, ISBN: 978-3748190486 (paperback) ASIN: B07MYKTY8W (e-book)
+
 
 Introduction
 ------------
