@@ -45,7 +45,7 @@ GitHub repository: `<https://github.com/gakhov/pdsa>`_
 Dependencies
 ---------------------
 
-* Python 3.3+ (http://python.org/download/)
+* Python 3.5+ (http://python.org/download/)
 * Cython 0.25+ (http://cython.org/#download)
 
 
