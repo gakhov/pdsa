@@ -136,7 +136,10 @@ def setup_package():
         version=about['__version__'],
         url=about['__uri__'],
         license=about['__license__'],
-        ext_modules=cythonize(extensions),
+        ext_modules=cythonize(
+            extensions,
+            compiler_directives={"language_level": "3str"}
+        ),
         classifiers=[
             'Environment :: Console',
             'Intended Audience :: Developers',
