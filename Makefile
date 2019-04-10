@@ -1,7 +1,7 @@
 .PHONY: install clean test
 
 SHELL = /bin/bash
-PYTHON = $(shell which python3.7 || which python3.6 || which python3.5)
+PYTHON = $(shell which python3)
 
 default: bin/python3
 
@@ -10,12 +10,12 @@ bin/python3:
 	bin/pip3 install --upgrade pip wheel
 	bin/pip3 install -r requirements.txt
 
-install: bin/python3
-	bin/python3 setup.py install
-
-build: install
+build: bin/python3
 	bin/python3 setup.py build_py
 	bin/python3 setup.py build_ext --inplace
+
+install: build
+	bin/python3 setup.py install
 
 clean:
 	# virtualenv
