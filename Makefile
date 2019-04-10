@@ -1,25 +1,25 @@
-.PHONY: build install clean test
+.PHONY: install clean test
 
 SHELL = /bin/bash
+PYTHON = $(shell which python3)
 
 default: bin/python3
 
 bin/python3:
-	virtualenv . -p python3 --no-site-packages
-	bin/pip3 install --upgrade pip
-	bin/pip3 install wheel
+	virtualenv . -p ${PYTHON} --no-site-packages
+	bin/pip3 install --upgrade pip wheel
 	bin/pip3 install -r requirements.txt
-
-install: build
-	bin/python3 setup.py install
 
 build: bin/python3
 	bin/python3 setup.py build_py
 	bin/python3 setup.py build_ext --inplace
 
+install: build
+	bin/python3 setup.py install
+
 clean:
 	# virtualenv
-	rm -Rf bin include lib local
+	rm -Rf bin include lib local share
 	# buildout and pip
 	rm -Rf develop-eggs eggs *.egg-info
 	rm -Rf src parts build dist
@@ -28,4 +28,3 @@ clean:
 
 test:
 	bin/py.test -m 'not ignore' --pep8 tests
-
