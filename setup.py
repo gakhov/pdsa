@@ -73,6 +73,16 @@ def setup_package():
     )
     extensions.append(
         Extension(
+            "pdsa.cardinality.hyperloglog",
+            language='c++',
+            sources=['pdsa/cardinality/hyperloglog.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
             "pdsa.helpers.hashing.mmh",
             language='c++',
             sources=[
