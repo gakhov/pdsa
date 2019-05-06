@@ -212,13 +212,14 @@ cdef class HyperLogLog:
             Algorithms, Juan les Pins, France – June 17-22, 2007, pp. 127–146.
 
         """
-        if sum(self._counter) == 0:
-            return 0
-
         cdef float R = 0
         cdef uint16_t counter_index
         for counter_index in xrange(self.num_of_counters):
-            R += 1.0 / float(<uint32_t>1 << self._counter[counter_index])
+            if R > 0:
+                R += 1.0 / float(<uint32_t>1 << self._counter[counter_index])
+
+        if R < 1:
+            return 0
 
         cdef size_t n = <size_t>round(
             self._alpha * self.num_of_counters * self.num_of_counters / R
