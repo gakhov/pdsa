@@ -68,8 +68,8 @@ def test_count_big():
             pc.add("{}_{}".format(word, i))
 
     cardinality = pc.count()
-    assert cardinality >= 0.9 * num_of_unique_words
-    assert cardinality <= 1.1 * num_of_unique_words
+    assert cardinality >= 0.8 * num_of_unique_words
+    assert cardinality <= 1.2 * num_of_unique_words
 
 
 def test_count_small():
