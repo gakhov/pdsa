@@ -1,6 +1,7 @@
 import pytest
 
-from pdsa.cardinality.probabilistic_counter import ProbabilisticCounter
+from math import sqrt
+from pdsa.cardinality.hyperloglog import HyperLogLog
 
 
 LOREM_TEXT = {
@@ -34,58 +35,81 @@ LOREM_TEXT = {
 
 
 def test_init():
-    pc = ProbabilisticCounter(10)
-    assert pc.sizeof() == 40, "Unexpected size in bytes"
+    hll = HyperLogLog(10)
+    assert hll.sizeof() == 4096, "Unexpected size in bytes"
 
     with pytest.raises(ValueError) as excinfo:
-        pc = ProbabilisticCounter(0)
-    assert str(excinfo.value) == 'At least one simple counter is required'
+        hll = HyperLogLog(2)
+    assert str(excinfo.value) == (
+        "Precision has to be in range 4...16")
 
 
 def test_repr():
-    pc = ProbabilisticCounter(10)
+    hll = HyperLogLog(6)
 
-    assert repr(pc) == (
-        "<ProbabilisticCounter (length: 320, num_of_counters: 10)>")
+    assert repr(hll) == (
+        "<HyperLogLog (length: 64, precision: 6)>")
 
 
 def test_add():
-    pc = ProbabilisticCounter(10)
+    hll = HyperLogLog(10)
 
     for word in ["test", 1, {"hello": "world"}]:
-        pc.add(word)
+        hll.add(word)
 
 
-def test_count_big():
-    pc = ProbabilisticCounter(256)
+def test_count():
+    precision = 6
+    hll = HyperLogLog(precision)
+    std = 1.04 / sqrt(1 << precision)
 
-    # NOTE: make n/m > 50 to avoid correction for small cardinalities usage
-    boost = 50 * LOREM_TEXT["num_of_unique_words"] // 64 + 1
+    assert hll.count() == 0
+
+    boost = 50 * LOREM_TEXT["num_of_unique_words"]
     num_of_unique_words = boost * LOREM_TEXT["num_of_unique_words"]
 
     for i in range(boost):
         for word in LOREM_TEXT["text"].split():
-            pc.add("{}_{}".format(word, i))
+            hll.add("{}_{}".format(word, i))
 
-    cardinality = pc.count()
-    assert cardinality >= 0.8 * num_of_unique_words
-    assert cardinality <= 1.2 * num_of_unique_words
+    cardinality = hll.count()
+    assert cardinality >= (1 - 2 * std) * num_of_unique_words
+    assert cardinality <= (1 + 2 * std) * num_of_unique_words
+
+
+def test_count_large():
+    precision = 6
+    hll = HyperLogLog(precision)
+
+    # NOTE: make n larger than the HLL upper correction threshold
+    boost = 143165576 // LOREM_TEXT["num_of_unique_words"] + 1
+    num_of_unique_words = boost * LOREM_TEXT["num_of_unique_words"]
+
+    for i in range(boost):
+        for word in LOREM_TEXT["text"].split():
+            hll.add("{}_{}".format(word, i))
+
+    cardinality = hll.count()
+    assert cardinality >= 0.7 * num_of_unique_words
+    assert cardinality <= 1.3 * num_of_unique_words
 
 
 def test_count_small():
-    pc = ProbabilisticCounter(64, True)
-    assert pc.count() == 0
+    precision = 6
+    hll = HyperLogLog(precision)
+    std = 1.04 / sqrt(1 << precision)
 
-    for word in LOREM_TEXT["text"].split():
-        pc.add(word)
+    short = LOREM_TEXT["text"].split()[:100]
+    num_of_unique_words = len(set(short))
 
-    num_of_unique_words = LOREM_TEXT["num_of_unique_words"]
+    for word in short:
+        hll.add(word)
 
-    cardinality = pc.count()
-    assert cardinality >= 0.5 * num_of_unique_words
-    assert cardinality <= 1.5 * num_of_unique_words
+    cardinality = hll.count()
+    assert cardinality >= (1 - 2 * std) * num_of_unique_words
+    assert cardinality <= (1 + 2 * std) * num_of_unique_words
 
 
 def test_len():
-    pc = ProbabilisticCounter(10)
-    assert len(pc) == 320
+    hll = HyperLogLog(4)
+    assert len(hll) == 16
