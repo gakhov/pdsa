@@ -90,8 +90,8 @@ def test_count_large():
             hll.add("{}_{}".format(word, i))
 
     cardinality = hll.count()
-    assert cardinality >= 0.8 * num_of_unique_words
-    assert cardinality <= 1.2 * num_of_unique_words
+    assert cardinality >= 0.7 * num_of_unique_words
+    assert cardinality <= 1.3 * num_of_unique_words
 
 
 def test_count_small():
