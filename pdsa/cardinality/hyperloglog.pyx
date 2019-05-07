@@ -214,11 +214,14 @@ cdef class HyperLogLog:
         """
         cdef float R = 0
         cdef uint16_t counter_index
+        cdef bint all_zero = 1
         for counter_index in xrange(self.num_of_counters):
-            if R > 0:
-                R += 1.0 / float(<uint32_t>1 << self._counter[counter_index])
+            if self._counter[counter_index] > 0:
+                all_zero = 0
 
-        if R < 1:
+            R += 1.0 / float(<uint32_t>1 << self._counter[counter_index])
+
+        if all_zero:
             return 0
 
         cdef size_t n = <size_t>round(
