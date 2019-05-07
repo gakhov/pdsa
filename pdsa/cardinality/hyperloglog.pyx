@@ -64,9 +64,9 @@ cdef class HyperLogLog:
         Note
         ----
             HyperLogLog algorithm uses a single 32-bit hash function which
-            value is split for index and the indexed value, so we cannot
-            use it whole for the indexing. This required that the
-            precision has to be in the range 4...16
+            value is split for indexing and the hash computation.
+            This implied contrains to the precision that has to be
+            in the range 4...16
 
         Raises
         ------
@@ -159,7 +159,7 @@ cdef class HyperLogLog:
             self.precision)
 
     def __len__(self):
-        """Get number of the simple counters (registers).
+        """Get the number of the simple counters (registers).
 
         Returns
         -------

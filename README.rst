@@ -74,6 +74,7 @@ The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/
 
 - `Linear counter <http://pdsa.readthedocs.io/en/latest/cardinality/linear_counter.html>`_
 - `Probabilistic counter (Flajolet–Martin algorithm) <http://pdsa.readthedocs.io/en/latest/cardinality/probabilistic_counter.html>`_
+- `HyperLogLog <http://pdsa.readthedocs.io/en/latest/cardinality/hyperloglog.html>`_
 
 **Rank problem**
 
@@ -132,7 +133,7 @@ source.
     $ git clone https://github.com/gakhov/pdsa.git
     $ cd pdsa
 
-    $ make build
+    $ make install
 
     $ bin/pip3 install -r requirements-dev.txt
-    $ make tests
+    $ make test
