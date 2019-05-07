@@ -1,4 +1,4 @@
-.PHONY: install clean test
+.PHONY: install build clean test
 
 SHELL = /bin/bash
 PYTHON = $(shell which python3)
@@ -11,11 +11,13 @@ bin/python3:
 	bin/pip3 install -r requirements.txt
 
 build: bin/python3
+	rm -Rf build/
+	find lib/ -type d -name "pdsa" -exec rm -Rf {} +
 	bin/python3 setup.py build_py
-	bin/python3 setup.py build_ext --inplace
+	bin/python3 setup.py build_ext --inplace --force
 
 install: build
-	bin/python3 setup.py install
+	bin/python3 setup.py install --force
 
 clean:
 	# virtualenv
