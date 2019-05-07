@@ -8,7 +8,7 @@ It's a hash-based probabilistic algorithm for counting the number of
 distinct values in the presence of duplicates.
 
 
-This implementation uses the classical algorithm with 32-bit hash function
+This implementation uses the classical algorithm with a 32-bit hash function
 and 4-byte counters.
 
 
@@ -16,7 +16,7 @@ and 4-byte counters.
 
     from pdsa.cardinality.hyperloglog import HyperLogLog
 
-    hll = HyperLogLog(6)
+    hll = HyperLogLog(10)
     hll.add("hello")
     print(hll.count())
 
@@ -27,20 +27,19 @@ Build a counter
 
 To build a counter, specify its precision - the number of bits that should be
 used to randomly choose the counter (stochastic averaging). The rest of the bits
-of the 32-bit hash values will be used to compute the hash value that will be
-indexed into the selected counter.
+of the 32-bit hash value will be used to index into the selected counter.
 
 
 .. code:: python
 
     from pdsa.cardinality.hyperloglog import HyperLogLog
 
-    hll = HyperLogLog(precision=6)
+    hll = HyperLogLog(precision=10)
 
 
 .. note::
 
-    Precision has to be an integer in range 6 ... 10.
+    Precision has to be an integer in range 4 ... 16.
 
 
 .. note::

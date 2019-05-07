@@ -12,3 +12,4 @@ Calculating the exact cardinality of a multiset requires an amount of memory pro
 
    linear_counter
    probabilistic_counter
+   hyperloglog
