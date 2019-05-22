@@ -35,11 +35,18 @@ def test_count():
 
     errors = []
 
+    boundary = 2.5 * (1 << precision)
+
     cardinality = 0
     for i in range(100000):
         cardinality += 1
         element = "element_{}".format(i)
         hll.add(element)
+
+        if cardinality <= boundary:
+            # Ignore small cardinality estimations,
+            # they will be tested in another test.
+            continue
 
         error = abs(cardinality - hll.count()) / float(cardinality)
         errors.append(error)
