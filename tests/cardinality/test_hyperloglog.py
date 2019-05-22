@@ -36,7 +36,7 @@ def test_count():
     errors = []
 
     cardinality = 0
-    for i in range(10000):
+    for i in range(100000):
         cardinality += 1
         element = "element_{}".format(i)
         hll.add(element)
