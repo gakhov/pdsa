@@ -47,10 +47,10 @@ def test_count():
             # that we will test in another case.
             continue
 
-        error = abs(cardinality - pc.count()) / float(cardinality)
+        error = (cardinality - pc.count()) / float(cardinality)
         errors.append(error)
 
-    avg_error = sum(errors) / float(len(errors))
+    avg_error = abs(sum(errors)) / float(len(errors))
 
     assert avg_error >= 0
     assert avg_error <= std
@@ -71,10 +71,10 @@ def test_count_small():
         element = "element_{}".format(i)
         pc.add(element)
 
-        error = abs(cardinality - pc.count()) / float(cardinality)
+        error = (cardinality - pc.count()) / float(cardinality)
         errors.append(error)
 
-    avg_error = sum(errors) / float(len(errors))
+    avg_error = abs(sum(errors)) / float(len(errors))
 
     assert avg_error >= 0
     assert avg_error <= 2 * std  # Even with correction, still not so good

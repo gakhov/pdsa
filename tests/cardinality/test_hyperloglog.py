@@ -48,10 +48,10 @@ def test_count():
             # they will be tested in another test.
             continue
 
-        error = abs(cardinality - hll.count()) / float(cardinality)
+        error = (cardinality - hll.count()) / float(cardinality)
         errors.append(error)
 
-    avg_error = sum(errors) / float(len(errors))
+    avg_error = abs(sum(errors)) / float(len(errors))
 
     assert avg_error >= 0
     assert avg_error <= std
@@ -70,10 +70,10 @@ def test_count_small():
         element = "element_{}".format(i)
         hll.add(element)
 
-        error = abs(cardinality - hll.count()) / float(cardinality)
+        error = (cardinality - hll.count()) / float(cardinality)
         errors.append(error)
 
-    avg_error = sum(errors) / float(len(errors))
+    avg_error = abs(sum(errors)) / float(len(errors))
 
     assert avg_error >= 0
     assert avg_error <= std
