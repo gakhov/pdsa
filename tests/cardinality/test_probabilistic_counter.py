@@ -1,36 +1,7 @@
 import pytest
 
+from math import sqrt
 from pdsa.cardinality.probabilistic_counter import ProbabilisticCounter
-
-
-LOREM_TEXT = {
-    "text": (
-        "Lorem ipsum dolor sit amet consectetur adipiscing elit Donec quis "
-        "felis at velit pharetra dictum Sed vehicula est at mi lobortis "
-        "vitae suscipit mi aliquet Sed ut pharetra nisl  Donec maximus enim "
-        "sit amet erat ullamcorper ut mattis mauris gravida Nulla sagittis "
-        "quam a arcu pretium iaculis Donec vestibulum tellus nec ligula "
-        "mattis vitae aliquam augue dapibus Curabitur pulvinar elit nec "
-        "blandit pharetra ipsum elit ultrices sem et bibendum lorem arcu "
-        "sit amet arcu Nam pulvinar porta molestie Integer posuere ipsum "
-        "venenatis velit euismod accumsan sed quis nibh Suspendisse libero "
-        "odio tempor ultricies lectus non volutpat rutrum diam Nullam et "
-        "sem eu quam sodales vulputate Nulla condimentum blandit mi ac "
-        "varius quam vehicula id Quisque sit amet molestie lacus ac "
-        "efficitur ante Proin orci lacus fringilla nec eleifend non "
-        "maximus vel ipsum Sed luctus enim tortor cursus semper mauris "
-        "ultrices vel Vivamus eros purus sodales sed lectus at accumsan "
-        "dictum massa Integer pulvinar tortor sagittis tincidunt risus "
-        "non ultricies augue Aenean efficitur justo orci at semper ipsum "
-        "efficitur ut Phasellus tincidunt nibh ut eros bibendum eleifend "
-        "Donec porta risus nec placerat viverra leo justo sollicitudin "
-        "metus a lacinia mi justo ut augue Duis dolor lacus sodales ut "
-        "tortor eu rutrum"
-    ),
-    "num_of_words": 200,
-    "num_of_unique_words": 111,
-    "num_of_unique_words_icase": 109
-}
 
 
 def test_init():
@@ -56,34 +27,57 @@ def test_add():
         pc.add(word)
 
 
-def test_count_big():
-    pc = ProbabilisticCounter(256)
+def test_count():
+    num_of_counters = 256
+    pc = ProbabilisticCounter(num_of_counters)
+    std = 0.78 / sqrt(num_of_counters)
 
-    # NOTE: make n/m > 50 to avoid correction for small cardinalities usage
-    boost = 50 * LOREM_TEXT["num_of_unique_words"] // 64 + 1
-    num_of_unique_words = boost * LOREM_TEXT["num_of_unique_words"]
+    errors = []
 
-    for i in range(boost):
-        for word in LOREM_TEXT["text"].split():
-            pc.add("{}_{}".format(word, i))
+    boundary = 20 * num_of_counters
 
-    cardinality = pc.count()
-    assert cardinality >= 0.8 * num_of_unique_words
-    assert cardinality <= 1.2 * num_of_unique_words
+    cardinality = 0
+    for i in range(10000):
+        cardinality += 1
+        element = "element_{}".format(i)
+        pc.add(element)
+
+        if cardinality < boundary:
+            # For small cardinalities we need to use correction,
+            # that we will test in another case.
+            continue
+
+        error = (cardinality - pc.count()) / float(cardinality)
+        errors.append(error)
+
+    avg_error = abs(sum(errors)) / float(len(errors))
+
+    assert avg_error >= 0
+    assert avg_error <= std
 
 
 def test_count_small():
-    pc = ProbabilisticCounter(64, True)
-    assert pc.count() == 0
+    num_of_counters = 256
+    pc = ProbabilisticCounter(
+        num_of_counters, with_small_cardinality_correction=True)
 
-    for word in LOREM_TEXT["text"].split():
-        pc.add(word)
+    std = 0.78 / sqrt(num_of_counters)
 
-    num_of_unique_words = LOREM_TEXT["num_of_unique_words"]
+    errors = []
 
-    cardinality = pc.count()
-    assert cardinality >= 0.5 * num_of_unique_words
-    assert cardinality <= 1.5 * num_of_unique_words
+    cardinality = 0
+    for i in range(1000):
+        cardinality += 1
+        element = "element_{}".format(i)
+        pc.add(element)
+
+        error = (cardinality - pc.count()) / float(cardinality)
+        errors.append(error)
+
+    avg_error = abs(sum(errors)) / float(len(errors))
+
+    assert avg_error >= 0
+    assert avg_error <= 2 * std  # Even with correction, still not so good
 
 
 def test_len():
