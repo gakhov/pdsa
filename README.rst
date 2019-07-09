@@ -56,7 +56,7 @@ Dependencies
 ---------------------
 
 * Python 3.5+ (http://python.org/download/)
-* Cython 0.25+ (http://cython.org/#download)
+* Cython 0.28+ (http://cython.org/#download)
 
 
 Documentation
