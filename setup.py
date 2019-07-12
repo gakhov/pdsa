@@ -162,7 +162,8 @@ def setup_package():
             'Programming Language :: Python :: 3.7',
             'Topic :: Scientific/Engineering'
         ],
-        requires=["cython"]
+        python_requires='>=3.5',
+        install_requires=["cython>=0.28"]
     )
 
 
