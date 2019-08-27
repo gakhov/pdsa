@@ -25,7 +25,8 @@ import cython
 from cpython.array cimport array
 from libc.math cimport ceil, log, M_E
 from libc.stdint cimport uint64_t, uint32_t, uint8_t
-from libc.stdint cimport UINT32_MAX
+from libc.stdint cimport UINT32_MAX, UINT8_MAX
+from libc.stdlib cimport rand, RAND_MAX
 
 from pdsa.helpers.hashing.mmh cimport mmh3_x86_32bit
 
@@ -62,12 +63,13 @@ cdef class CountMinSketch:
     Attributes
     ----------
     num_of_counters : :obj:`int`
-        The number of hash functions.
-    length : :obj:`int`
-        The length of the filter.
+        The number of counter arrays used in the sketch.
+    length_of_counter : :obj:`int`
+        The number of counters in each counter array.
 
     """
 
+    @cython.cdivision(True)
     def __cinit__(self, const uint8_t num_of_counters, const uint32_t length_of_counter):
         """Create sketch from its dimensions.
 
@@ -98,7 +100,10 @@ cdef class CountMinSketch:
         self._length = self.num_of_counters * self.length_of_counter
 
         self._MAX_COUNTER_VALUE = UINT32_MAX
-        self._seeds = array('B', range(self.num_of_counters))
+        self._seeds = array('B', [
+            <uint8_t >((rand()/RAND_MAX) * UINT8_MAX)
+            for r in range(self.num_of_counters)
+        ])
         self._counter = array('I', range(self._length))
 
         cdef uint64_t index
@@ -130,13 +135,13 @@ cdef class CountMinSketch:
         Raises
         ------
         ValueError
-            If `deviation` is 0 or negative.
+            If `deviation` is smaller than 10^{-10}.
         ValueError
-            If `error` not in range (0, 1).
+            If `error` is not in range (0, 1).
 
         """
-        if deviation <= 0:
-            raise ValueError("Deviation can't be 0 or negative")
+        if deviation <= 0.0000000001:
+            raise ValueError("Deviation is too small. Not enough counters")
 
         if error <= 0 or error >= 1:
             raise ValueError("Error rate shell be in (0, 1)")
@@ -152,7 +157,7 @@ cdef class CountMinSketch:
     def __dealloc__(self):
         pass
 
-    cdef bint _increment_counter(self, uint64_t index):
+    cdef bint _increment_counter(self, const uint64_t index):
         """Increment counter if the value doesn't exceed maximal allowed.
 
         Parameters
