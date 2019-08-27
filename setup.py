@@ -136,6 +136,16 @@ def setup_package():
     )
     extensions.append(
         Extension(
+            "pdsa.frequency.count_sketch",
+            language='c++',
+            sources=['pdsa/frequency/count_sketch.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
             "pdsa.rank.qdigest",
             language='c++',
             sources=['pdsa/rank/qdigest.pyx'],
