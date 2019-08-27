@@ -1,5 +1,5 @@
 from libc.stdint cimport uint64_t, uint32_t, uint8_t
-from cpython.array cimport array
+
 
 cdef class CountMinSketch:
     cdef uint32_t _MAX_COUNTER_VALUE
@@ -15,5 +15,5 @@ cdef class CountMinSketch:
     cpdef uint32_t frequency(self, object element) except *
     cpdef size_t sizeof(self)
 
-    cdef bint _increment_counter(self, uint64_t index)
+    cdef bint _increment_counter(self, const uint64_t index)
     cdef uint32_t _hash(self, object element, uint8_t seed)
