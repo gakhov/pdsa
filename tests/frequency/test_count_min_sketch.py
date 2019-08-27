@@ -5,7 +5,6 @@ from pdsa.frequency.count_min_sketch import CountMinSketch
 
 def test_init():
     cms = CountMinSketch(2, 4)
-    print(cms.debug())
     assert cms.sizeof() == 32, 'Unexpected size in bytes'
 
     with pytest.raises(ValueError) as excinfo:
@@ -19,23 +18,23 @@ def test_init():
     )
 
 
-def create_from_expected_error():
-    cms = CountMinSketch.create_from_expected_error(0.0000001, 0.01)
-    assert len(cms) == 13591400, 'Unexpected length'
-    assert cms.sizeof() == 54365600, 'Unexpected size in bytes'
+def test_create_from_expected_error():
+    cms = CountMinSketch.create_from_expected_error(0.000001, 0.01)
+    assert repr(cms) == "<CountMinSketch (5 x 2718282)>"
+    assert len(cms) == 13591410, 'Unexpected length'
+    assert cms.sizeof() == 54365640, 'Unexpected size in bytes'
 
     with pytest.raises(ValueError) as excinfo:
         cms = CountMinSketch.create_from_expected_error(0.001, 2)
     assert str(excinfo.value) == 'Error rate shell be in (0, 1)'
 
     with pytest.raises(ValueError) as excinfo:
-        cms = CountMinSketch.create_from_expected_error(0, 0.02)
-    assert str(excinfo.value) == 'Deviation can\'t be 0 or negative'
+        cs = CountMinSketch.create_from_expected_error(0.0000000000001, 0.02)
+    assert str(excinfo.value) == 'Deviation is too small. Not enough counters'
 
 
 def test_repr():
     cms = CountMinSketch(2, 4)
-
     assert repr(cms) == "<CountMinSketch (2 x 4)>"
 
     cms = CountMinSketch.create_from_expected_error(0.1, 0.01)
