@@ -12,10 +12,11 @@ except ImportError:
 PACKAGES = [
     'pdsa',
     'pdsa.cardinality',
-    'pdsa.membership',
+    'pdsa.frequency',
     'pdsa.helpers',
     'pdsa.helpers.hashing',
     'pdsa.helpers.storage',
+    'pdsa.membership',
     'pdsa.rank',
 ]
 
@@ -120,6 +121,26 @@ def setup_package():
             include_dirs=[
                 get_python_inc(plat_specific=True),
                 os.path.join('pdsa/helpers/storage', 'src')
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
+            "pdsa.frequency.count_min_sketch",
+            language='c++',
+            sources=['pdsa/frequency/count_min_sketch.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
+            "pdsa.frequency.count_sketch",
+            language='c++',
+            sources=['pdsa/frequency/count_sketch.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
             ]
         )
     )

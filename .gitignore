@@ -112,12 +112,14 @@ cythonize.json
 
 
 #PDSA
+pdsa/cardinality/hyperloglog.cpp
+pdsa/cardinality/linear_counter.cpp
+pdsa/cardinality/probabilistic_counter.cpp
 pdsa/helpers/hashing/mmh.cpp
 pdsa/helpers/storage/bitvector.cpp
 pdsa/helpers/storage/bitvector_counter.cpp
-pdsa/cardinality/linear_counter.cpp
-pdsa/cardinality/probabilistic_counter.cpp
-pdsa/cardinality/hyperloglog.cpp
 pdsa/membership/bloom_filter.cpp
 pdsa/membership/counting_bloom_filter.cpp
 pdsa/rank/qdigest.cpp
+pdsa/frequency/count_min_sketch.cpp
+pdsa/frequency/count_sketch.cpp

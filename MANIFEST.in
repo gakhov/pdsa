@@ -11,13 +11,14 @@ global-exclude __pycache__/*
 global-exclude *.so
 global-exclude .DS_Store
 
+global-exclude pdsa/cardinality/hyperloglog.cpp
 global-exclude pdsa/cardinality/linear_counter.cpp
 global-exclude pdsa/cardinality/probabilistic_counter.cpp
-global-exclude pdsa/cardinality/hyperloglog.cpp
-global-exclude pdsa/membership/bloom_filter.cpp
-global-exclude pdsa/membership/counting_bloom_filter.cpp
+global-exclude pdsa/frequency/count_min_sketch.cpp
+global-exclude pdsa/frequency/count_sketch.cpp
 global-exclude pdsa/helpers/hashing/mmh.cpp
 global-exclude pdsa/helpers/storage/bitvector.cpp
 global-exclude pdsa/helpers/storage/bitvector_counter.cpp
+global-exclude pdsa/membership/bloom_filter.cpp
+global-exclude pdsa/membership/counting_bloom_filter.cpp
 global-exclude pdsa/rank/qdigest.cpp
-
