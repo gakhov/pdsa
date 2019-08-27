@@ -39,5 +39,6 @@ GitHub repository: `<https://github.com/gakhov/pdsa>`_
 
    quickstart
    cardinality/index
+   frequency/index
    membership/index
    rank/index

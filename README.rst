@@ -76,6 +76,11 @@ The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/
 - `Probabilistic counter (Flajolet–Martin algorithm) <http://pdsa.readthedocs.io/en/latest/cardinality/probabilistic_counter.html>`_
 - `HyperLogLog <http://pdsa.readthedocs.io/en/latest/cardinality/hyperloglog.html>`_
 
+**Frequency problem**
+
+- `Count Sketch <http://pdsa.readthedocs.io/en/latest/frequency/count_sketch.html>`_
+- `Count-Min Sketch <http://pdsa.readthedocs.io/en/latest/frequency/count_min_sketch.html>`_
+
 **Rank problem**
 
 - `q-digest <http://pdsa.readthedocs.io/en/latest/rank/qdigest.html>`_
