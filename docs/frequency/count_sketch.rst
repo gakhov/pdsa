@@ -8,7 +8,7 @@ address the Heavy hitters problem. It was proposed by Moses Charikar, Kevin Chen
 References
 ----------
 [1] Charikar, M., Chen, K., Farach-Colton, M.
-    Finding Frequent Items in Data Streams
+    "Finding Frequent Items in Data Streams"
     Proceedings of the 29th International Colloquium on Automata, Languages and
     Programming, pp. 693–703, Springer, Heidelberg.
     https://www.cs.rutgers.edu/~farach/pubs/FrequentStream.pdf
