@@ -261,7 +261,7 @@ cdef class CountSketch:
             Number of bytes allocated for the sketch.
 
         """
-        return self._length * sizeof(int32_t)
+        return self._length * self._counter.itemsize
 
     def __repr__(self):
         return "<CountSketch ({} x {})>".format(

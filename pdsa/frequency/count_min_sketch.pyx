@@ -235,7 +235,7 @@ cdef class CountMinSketch:
             Number of bytes allocated for the sketch.
 
         """
-        return self._length * sizeof(uint32_t)
+        return self._length * self._counter.itemsize
 
     def __repr__(self):
         return "<CountMinSketch ({} x {})>".format(
