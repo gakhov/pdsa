@@ -150,8 +150,7 @@ cdef class HyperLogLog:
             Number of bytes allocated for the counter.
 
         """
-        cdef uint8_t bytes_per_counter = 4  # 'L' unsigned long takes 4 bytes
-        return bytes_per_counter * self.num_of_counters
+        return self.num_of_counters * self._counter.itemsize
 
     def __repr__(self):
         return "<HyperLogLog (length: {}, precision: {})>".format(

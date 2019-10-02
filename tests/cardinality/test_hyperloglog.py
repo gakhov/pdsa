@@ -1,3 +1,5 @@
+
+import array
 import pytest
 
 from math import sqrt
@@ -6,12 +8,18 @@ from pdsa.cardinality.hyperloglog import HyperLogLog
 
 def test_init():
     hll = HyperLogLog(10)
-    assert hll.sizeof() == 4096, "Unexpected size in bytes"
 
     with pytest.raises(ValueError) as excinfo:
         hll = HyperLogLog(2)
     assert str(excinfo.value) == (
         "Precision has to be in range 4...16")
+
+
+def test_size():
+    hll = HyperLogLog(10)
+
+    element_size = array.array('L', [1]).itemsize
+    assert hll.sizeof() == element_size * len(hll), "Unexpected size in bytes"
 
 
 def test_repr():

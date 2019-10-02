@@ -1,3 +1,5 @@
+
+import array
 import pytest
 
 from pdsa.frequency.count_min_sketch import CountMinSketch
@@ -5,7 +7,6 @@ from pdsa.frequency.count_min_sketch import CountMinSketch
 
 def test_init():
     cms = CountMinSketch(2, 4)
-    assert cms.sizeof() == 32, 'Unexpected size in bytes'
 
     with pytest.raises(ValueError) as excinfo:
         cms = CountMinSketch(0, 5)
@@ -16,6 +17,13 @@ def test_init():
     assert str(excinfo.value) == (
         'The length of the counter array cannot be less then 1'
     )
+
+
+def test_size():
+    cms = CountMinSketch(2, 4)
+
+    element_size = array.array('I', [1]).itemsize
+    assert cms.sizeof() == element_size * len(cms), "Unexpected size in bytes"
 
 
 def test_create_from_expected_error():
