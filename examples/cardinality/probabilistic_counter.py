@@ -13,7 +13,7 @@ LOREM_IPSUM = (
 )
 
 if __name__ == '__main__':
-    pc = ProbabilisticCounter(256)
+    pc = ProbabilisticCounter(2048, with_small_cardinality_correction=True)
 
     print(pc)
     print("PC counter uses {} bytes in the memory".format(pc.sizeof()))
