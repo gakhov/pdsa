@@ -257,7 +257,7 @@ cdef class ProbabilisticCounter:
         [1] Flajolet, P., Martin, G.N.: Probabilistic Counting Algorithms
             for Data Base Applications. Journal of Computer and System Sciences.
             Vol. 31 (2), 182--209  (1985)
-        [2] Flajolet, P., Martin, G.N.: Near-Optimal Compression of Probabilistic
+        [2] Scheuermann, B., Mauve, M.: Near-Optimal Compression of Probabilistic
             Counting Sketches for Networking Applications
             In Dial M-POMC 2007: Proceedings of the 4th ACM SIGACT-SIGOPS
             International Workshop on Foundation of Mobile Computing, 2007
