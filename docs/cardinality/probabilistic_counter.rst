@@ -60,7 +60,7 @@ To build a counter, specify its length.
         from pdsa.cardinality.probabilistic_counter import ProbabilisticCounter
 
         pc = ProbabilisticCounter(
-            numbder_of_counters=256,
+            number_of_counters=256,
             with_small_cardinality_correction=True)
 
 

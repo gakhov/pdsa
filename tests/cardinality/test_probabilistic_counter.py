@@ -61,12 +61,16 @@ def test_count_small():
     pc = ProbabilisticCounter(
         num_of_counters, with_small_cardinality_correction=True)
 
+    # Actually, for small cardinalities we have no estimate. It is
+    # just seems that the the errors have to be bigger.
     std = 0.78 / sqrt(num_of_counters)
+
+    boundary = 2 * num_of_counters
 
     errors = []
 
     cardinality = 0
-    for i in range(1000):
+    for i in range(boundary):
         cardinality += 1
         element = "element_{}".format(i)
         pc.add(element)
@@ -77,7 +81,36 @@ def test_count_small():
     avg_error = abs(sum(errors)) / float(len(errors))
 
     assert avg_error >= 0
-    assert avg_error <= 2 * std  # Even with correction, still not so good
+    assert avg_error <= 3 * std  # There is no known theoretical expectation.
+
+
+def test_correction():
+    pc_with_corr = ProbabilisticCounter(
+        256, with_small_cardinality_correction=True)
+    pc = ProbabilisticCounter(256)
+
+    errors = []
+    errors_with_corr = []
+
+    cardinality = 0
+    for i in range(100):
+        cardinality += 1
+        element = "element_{}".format(i)
+        pc_with_corr.add(element)
+        pc.add(element)
+
+        error_with_corr = (
+            cardinality - pc_with_corr.count()) / float(cardinality)
+        errors_with_corr.append(error_with_corr)
+
+        error = abs(cardinality - pc.count()) / float(cardinality)
+        errors.append(error)
+
+    avg_error_with_corr = abs(sum(errors_with_corr)) / \
+        float(len(errors_with_corr))
+    avg_error = abs(sum(errors)) / float(len(errors))
+
+    assert avg_error_with_corr < avg_error
 
 
 def test_len():
