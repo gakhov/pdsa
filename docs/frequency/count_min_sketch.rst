@@ -9,13 +9,13 @@ Graham Cormode and Shan Muthukrishnan and published in 2005 [2].
 References
 ----------
 [1] Cormode, G., Muthukrishnan, S.
-    What's hot and what's not: Tracking most frequent items dynamically
+    "What's hot and what's not: Tracking most frequent items dynamically"
     Proceedings of the 22th ACM SIGMOD-SIGACT-SIGART symposium on Principles
     of database systems, San Diego, California - June 09-11, 2003,
     pp. 296–306, ACM New York, NY.
     http://www.cs.princeton.edu/courses/archive/spr04/cos598B/bib/CormodeM-hot.pdf
 [2] Cormode, G., Muthukrishnan, S.
-    An Improved Data Stream Summary: The Count–Min Sketch and its Applications
+    "An Improved Data Stream Summary: The Count–Min Sketch and its Applications"
     Journal of Algorithms, Vol. 55 (1), pp. 58–75.
     http://dimacs.rutgers.edu/~graham/pubs/papers/cm-full.pdf
 
