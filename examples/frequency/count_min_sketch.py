@@ -20,7 +20,7 @@ if __name__ == '__main__':
     for digit in DATASET:
         cms.add(digit)
 
-    # for digit in sorted(set(DATASET)):
-    #     print("Element: {}. Freq.: {}, Est. Freq.: {}".format(
-    #         element,
-    #     ))
+    for digit in sorted(set(DATASET)):
+        print("Element: {}. Freq.: {}, Est. Freq.: {}".format(
+            digit, DATASET.count(digit), cms.frequency(digit)
+        ))
