@@ -36,7 +36,7 @@ from cpython.array cimport array
 from random import sample
 
 from libc.math cimport ceil, floor, log, round
-from libc.stdint cimport uint64_t, uint32_t, uint16_t, uint8_t, UINT32_MAX
+from libc.stdint cimport int8_t, uint64_t, uint32_t, uint16_t, uint8_t
 from libc.stdlib cimport rand
 
 
@@ -96,11 +96,15 @@ cdef class RandomSampling:
         if buffer_capacity < 1:
             raise ValueError("The buffers' capacity is too small")
 
+        if height < 2:
+            raise ValueError("The height is too small")
+
         self.height = height
         self.number_of_buffers = number_of_buffers
         self.buffer_capacity = buffer_capacity
 
         self._number_of_elements = 0
+        self._queue = list()
 
         self._length = self.number_of_buffers * self.buffer_capacity
         self._buffer = array('L', [0] * self._length)
@@ -129,14 +133,14 @@ cdef class RandomSampling:
         if self._number_of_elements < 1:
             return 0
 
-        cdef uint8_t level = <uint8_t> ceil(
+        cdef float level = ceil(
             log(self._number_of_elements) -
             (self.height - 1) -
             log(self.buffer_capacity)
         )
-        return max(0, level)
+        return max(0, <int8_t>level)
 
-    cdef uint16_t _get_next_empty_buffer_id(self, uint8_t active_level):
+    cdef uint16_t _next_buffer_id(self, uint8_t active_level):
         """Find empty buffer at the active level or force collapse."""
         cdef uint16_t index
         for index in xrange(self.number_of_buffers):
@@ -146,21 +150,21 @@ cdef class RandomSampling:
                 return index
 
         self._collapse(active_level)
-        return self._get_next_empty_buffer_id(active_level)
+        return self._next_buffer_id(active_level)
 
     cdef void _collapse(self, uint8_t active_level):
         """Collapse two random non-empty buffers below active level."""
-        cdef uint16_t buffer_id_1, buffer_id_2
+        cdef uint16_t buffer_id, buffer_id_1, buffer_id_2
         cdef uint8_t level
 
         cdef list indices_of_nonempty
         for level in xrange(active_level):
             indices_of_nonempty = []
             for buffer_id in xrange(self.number_of_buffers):
-                if self._buffer_levels[index] != level:
+                if self._buffer_levels[buffer_id] != level:
                     continue
 
-                if self._buffer_emptiness_mask[index]:
+                if self._buffer_emptiness_mask[buffer_id]:
                     continue
 
                 indices_of_nonempty.append(buffer_id)
@@ -171,12 +175,13 @@ cdef class RandomSampling:
         try:
             [buffer_id_1, buffer_id_2] = sample(indices_of_nonempty, k=2)
         except ValueError:
-            # XXX: number of full buffers is less than 2?
+            # XXX: number of non-empty buffers is less than 2?
             return
 
-        cdef list candidates
+        cdef list candidates = []
         cdef uint32_t start_index, end_index, index
 
+        # NOTE: Form candidates list from elements of two buffers
         start_index = self.buffer_capacity * buffer_id_1
         end_index = start_index + self.buffer_capacity
         for index in xrange(start_index, end_index):
@@ -220,41 +225,55 @@ cdef class RandomSampling:
             if self._element_existance_mask[index]:
                 continue
 
-            self._element_existance_mask[index] = 1
             self._buffer[index] = element
+            self._element_existance_mask[index] = 1
             self._buffer_emptiness_mask[buffer_id] = 0
-            break
+            return
 
-    cpdef void consume(self, dataset):
-        """Consume element from potentially unlimited dataset.
+    cpdef void add(self, uint32_t element):
+        """Add element to the data structure.
+
+        Note
+        -----
+
+        We do not add element by element, but instead we accumulate it
+        in the queue and flush once it reaches buffer_capacity.
 
         Parameters
         ----------
-        dataset : obj
-            The data stream wrapped as a generator.
+        element : obj:`int`
+            Element to add into data structure.
 
         """
         cdef uint8_t level = self._active_level()
-        cdef uint32_t chunk = (<uint32_t>1 << level) - 1
+        cdef uint32_t chunk_size = <uint32_t>1 << level
 
-        cdef uint16_t buffer_id = self._get_next_empty_buffer_id(level)
+        self._queue.append(element)
+        if len(self._queue) < chunk_size * self.buffer_capacity:
+            return
 
-        candidates = []
-        try:
-            for index in xrange(chunk):
-                candidates.append(next(dataset))
-                self._number_of_elements += 1
-        except StopIteration:
-            pass
+        cdef uint16_t buffer_id = self._next_buffer_id(level)
 
+        candidates = list(self._queue)
+        self._queue = list()
+
+        self._number_of_elements += len(candidates)
         if self.buffer_capacity < len(candidates):
             candidates = sample(candidates, k=self.buffer_capacity)
 
-        map(lambda element: self._insert(buffer_id, element), candidates)
+        cdef uint32_t candidate
+        for candidate in candidates:
+            self._insert(buffer_id, candidate)
+
 
     def debug(self):
         """Return sample buffers for debug purposes."""
-        return <PyObject*>self._buffers
+        return (
+            self._buffer,
+            self._buffer_levels,
+            self._buffer_emptiness_mask,
+            self._element_existance_mask
+        )
 
     def __repr__(self):
         return (
@@ -278,7 +297,7 @@ cdef class RandomSampling:
             The number of buffers in data structure.
 
         """
-        return self.number_of_buffers
+        return self.number_of_buffers - sum(self._buffer_emptiness_mask)
 
     cpdef size_t sizeof(self):
         """Size of the data structure in bytes.
@@ -292,9 +311,9 @@ cdef class RandomSampling:
         cdef size_t size = 0
 
         size += self._length * self._buffer.itemsize
-        size += self._length * self._element_existance_mask
-        size += self.number_of_buffers * self._buffer_emptiness_mask
-        size += self.number_of_buffers * self._buffer_levels
+        size += self._length * self._element_existance_mask.itemsize
+        size += self.number_of_buffers * self._buffer_emptiness_mask.itemsize
+        size += self.number_of_buffers * self._buffer_levels.itemsize
 
         return size
 
@@ -344,15 +363,26 @@ cdef class RandomSampling:
         if quantile < 0.0 or quantile > 1.0:
             raise ValueError("Quantile has to be in [0, 1] interval")
 
-        if self.count() < 1:
+        if self._number_of_elements < 1:
             raise ValueError("Cannot estimate quantile for the empty structure")
 
-        cdef float boundary_rank = self.count() * quantile
+        cdef float boundary_rank = self._number_of_elements * quantile
         cdef size_t rank = 0
 
+        cdef uint32_t start_index, end_index, index
         cdef set elements = set()
-        for index in xrange(self.number_of_buffers):
-            elements |= set(self._buffers[index].elements())
+        for buffer_id in xrange(self.number_of_buffers):
+            if self._buffer_emptiness_mask[buffer_id]:
+                continue
+
+            start_index = self.buffer_capacity * buffer_id
+            end_index = start_index + self.buffer_capacity
+
+            for index in xrange(start_index, end_index):
+                if not self._element_existance_mask[index]:
+                    continue
+
+                elements.add(self._buffer[index])
 
         cdef uint32_t element
         for element in elements:
@@ -392,18 +422,24 @@ cdef class RandomSampling:
 
         """
         cdef size_t rank = 0
-        cdef uint16_t index
+        cdef uint32_t start_index, end_index, index
         cdef uint8_t level
         cdef uint16_t num_of_smaller_elements = 0
-        for index in xrange(self.number_of_buffers):
-            if not self._buffers[index].is_full():
+        for buffer_id in xrange(self.number_of_buffers):
+            if self._buffer_emptiness_mask[buffer_id]:
                 continue
 
-            level = self._buffers[index].get_level()
-            num_of_smaller_elements = 0
+            level = self._buffer_levels[buffer_id]
 
-            for x in list(<uint32_t*>self._buffers[index].elements()):
-                if x >= element:
+            start_index = self.buffer_capacity * buffer_id
+            end_index = start_index + self.buffer_capacity
+
+            num_of_smaller_elements = 0
+            for index in range(start_index, end_index):
+                if not self._element_existance_mask[index]:
+                    continue
+
+                if self._buffer[index] >= element:
                     continue
 
                 num_of_smaller_elements += 1
