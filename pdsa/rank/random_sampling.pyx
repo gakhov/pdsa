@@ -33,11 +33,133 @@ References
 import cython
 
 from cpython.array cimport array
-from random import sample
+from random import seed, sample
 
-from libc.math cimport ceil, floor, log, round
+from libc.math cimport ceil, floor, log, sqrt
 from libc.stdint cimport int8_t, uint64_t, uint32_t, uint16_t, uint8_t
 from libc.stdlib cimport rand
+
+
+cdef class _MetaBuffer:
+    def __cinit__(self, const uint8_t number_of_buffers,
+                  const uint16_t elements_per_buffer):
+        """MetaBuffer is a flatten array of buffers with required functionality.
+
+        Parameters
+        ----------
+        number_of_buffers : :obj:`int`
+            The number of buffers.
+        elements_per_buffer : :obj:`int`
+            The number of elements that can be stored in a buffer (capacity).
+
+        Raises
+        ------
+        ValueError
+            If `number_of_buffers` is 1 or negative.
+        ValueError
+            If `buffer_capacity` is 0 or negative.
+
+        """
+        if number_of_buffers < 2:
+            raise ValueError("The number of buffers is too small")
+
+        if elements_per_buffer < 1:
+            raise ValueError("The per-buffer capacity is too small")
+
+        self.elements_per_buffer = elements_per_buffer
+        self.number_of_buffers = number_of_buffers
+
+        self.length = number_of_buffers * elements_per_buffer
+
+        self._array = array('L', [0] * self.length)
+        self._mask = array('b', [0] * self.length)
+
+    cdef size_t sizeof(self):
+        """Size of the data structure in bytes.
+
+        Returns
+        -------
+        :obj:`int`
+            The number of bytes allocated for the data structure.
+
+        """
+        cdef size_t size = 0
+        size += self.length * self._array.itemsize
+        size += self.length * self._mask.itemsize
+
+        return size
+
+    cdef tuple location(self, uint8_t buffer_id):
+        """Find location of the the corresponsing buffer in the array."""
+        cdef uint32_t start_index, end_index
+
+        start_index = self.elements_per_buffer * buffer_id
+        end_index = start_index + self.elements_per_buffer
+        return (start_index, end_index)
+
+    cdef uint16_t num_of_elements(self, uint8_t buffer_id):
+        """Return the number of elements in the corresponding buffer."""
+        cdef uint32_t start_index, end_index
+
+        start_index = self.elements_per_buffer * buffer_id
+        end_index = start_index + self.elements_per_buffer
+        return sum(self._mask[start_index:end_index])
+
+    cdef uint16_t capacity(self, uint8_t buffer_id):
+        """Return the available capacity for the corresponding buffer."""
+        return self.elements_per_buffer - self.num_of_elements(buffer_id)
+
+    cdef bint is_empty(self, uint8_t buffer_id):
+        """Check if the corresponsing buffer is empty."""
+        cdef uint32_t start_index, end_index
+
+        start_index = self.elements_per_buffer * buffer_id
+        end_index = start_index + self.elements_per_buffer
+        return not any(self._mask[start_index:end_index])
+
+    cdef list _retrive_elements(self, uint8_t buffer_id, bint pop=False):
+        """Retrive elements from the buffer with/without removal."""
+        cdef uint32_t start_index, end_index, index
+        start_index, end_index = self.location(buffer_id)
+
+        cdef list elements = []
+        for index in xrange(start_index, end_index):
+            if not self._mask[index]:
+                continue
+
+            elements.append(self._array[index])
+            if pop:
+                self._mask[index] = 0
+
+        return elements
+
+    cdef list get_elements(self, uint8_t buffer_id):
+        """Return elements from the corresponding buffer."""
+        return self._retrive_elements(buffer_id, pop=False)
+
+    cdef list pop_elements(self, uint8_t buffer_id):
+        """Return and remove elements from the corresponding buffer."""
+        return self._retrive_elements(buffer_id, pop=True)
+
+    cdef void populate(self, uint8_t buffer_id, list elements):
+        """Add elements into the corresponding buffer."""
+        capacity = self.capacity(buffer_id)
+        if capacity < len(elements):
+            raise ValueError()
+
+        cdef uint32_t start_index, end_index, index
+        start_index, end_index = self.location(buffer_id)
+        for index in range(start_index, end_index):
+            if self._mask[index]:
+                continue
+
+            try:
+                element = elements.pop()
+            except IndexError:
+                break
+
+            self._array[index] = element
+            self._mask[index] = 1
 
 
 cdef class RandomSampling:
@@ -54,10 +176,8 @@ cdef class RandomSampling:
 
     Attributes
     ----------
-    range_in_bits : :obj:`int`
-        The maximal supported input non-negative integer values in bits.
-    compression_factor : :obj:`int`
-        The level of the compression in q-digest.
+        height : :obj:`int`
+            The maximum height of the structure (maximum count of levels).
 
     """
 
@@ -90,29 +210,49 @@ cdef class RandomSampling:
             but bigger values can make it less space-efficient.
 
         """
-        if number_of_buffers < 2:
-            raise ValueError("The number of buffers is too small")
 
-        if buffer_capacity < 1:
-            raise ValueError("The buffers' capacity is too small")
-
-        if height < 2:
-            raise ValueError("The height is too small")
+        if height < 2 or height > 15:
+            raise ValueError("The height is expected in [2, 15]")
 
         self.height = height
-        self.number_of_buffers = number_of_buffers
-        self.buffer_capacity = buffer_capacity
 
         self._number_of_elements = 0
         self._queue = list()
 
-        self._length = self.number_of_buffers * self.buffer_capacity
-        self._buffer = array('L', [0] * self._length)
-        self._element_existance_mask = array('b', [0] * self._length)
+        self._buffer = _MetaBuffer(number_of_buffers, buffer_capacity)
+        self._levels = array('I', [0] * self._buffer.number_of_buffers)
 
-        self._buffer_levels = array('I', [0] * self.number_of_buffers)
-        self._buffer_emptiness_mask = array('b', [1] * self.number_of_buffers)
+        self._seed = <uint32_t>(rand())
+        seed(self._seed)
 
+    @classmethod
+    def create_from_error(cls, const float error):
+        """Create RandomSampling from expected error probability.
+
+        Parameters
+        ----------
+        error : float
+            The false positive probability (0 < error < 1).
+
+        Note
+        ----
+            The required number of buffers, their capacity and data structure's
+            height are calculated to support requested error probability.
+
+        Raises
+        ------
+        ValueError
+            If `error` not in range (0, 1).
+
+        """
+        if error <= 0 or error >= 1:
+            raise ValueError("Error rate shell be in (0, 1)")
+
+        cdef uint8_t height = max(2, min(15, <uint8_t>ceil(log(1.0 / error))))
+        cdef uint8_t number_of_buffers = height + 1
+        cdef uint16_t buffer_capacity = <uint16_t>ceil(sqrt(height) / error)
+
+        return cls(number_of_buffers, buffer_capacity, height)
 
     cdef uint8_t _active_level(self):
         """Calculate the active level.
@@ -136,99 +276,57 @@ cdef class RandomSampling:
         cdef float level = ceil(
             log(self._number_of_elements) -
             (self.height - 1) -
-            log(self.buffer_capacity)
+            log(self._buffer.elements_per_buffer)
         )
         return max(0, <int8_t>level)
 
-    cdef uint16_t _next_buffer_id(self, uint8_t active_level):
+    cdef uint8_t _find_empty_buffer(self, uint8_t active_level):
         """Find empty buffer at the active level or force collapse."""
-        cdef uint16_t index
-        for index in xrange(self.number_of_buffers):
-            if self._buffer_levels[index] != active_level:
-                continue
-            if self._buffer_emptiness_mask[index]:
-                return index
+        cdef list buffer_ids
+        cdef uint8_t buffer_id
+        cdef uint8_t level, buffer_level
+
+        for level in xrange(active_level + 1):
+            for buffer_id, buffer_level in enumerate(self._levels):
+                if buffer_level == level and self._buffer.is_empty(buffer_id):
+                    return buffer_id
 
         self._collapse(active_level)
-        return self._next_buffer_id(active_level)
+        return self._find_empty_buffer(active_level + 1)
 
     cdef void _collapse(self, uint8_t active_level):
         """Collapse two random non-empty buffers below active level."""
-        cdef uint16_t buffer_id, buffer_id_1, buffer_id_2
-        cdef uint8_t level
+        cdef uint8_t buffer_id, buffer_id_1, buffer_id_2
+        cdef uint8_t level, current_level = 0
 
-        cdef list indices_of_nonempty
-        for level in xrange(active_level):
+        cdef list indices_of_nonempty = []
+        for level in xrange(active_level + 1):
             indices_of_nonempty = []
-            for buffer_id in xrange(self.number_of_buffers):
-                if self._buffer_levels[buffer_id] != level:
+            for buffer_id in xrange(self._buffer.number_of_buffers):
+                if self._levels[buffer_id] != level:
                     continue
 
-                if self._buffer_emptiness_mask[buffer_id]:
+                if self._buffer.is_empty(buffer_id):
                     continue
 
                 indices_of_nonempty.append(buffer_id)
 
             if len(indices_of_nonempty) >= 2:
+                current_level = level
                 break
 
-        try:
-            [buffer_id_1, buffer_id_2] = sample(indices_of_nonempty, k=2)
-        except ValueError:
-            # XXX: number of non-empty buffers is less than 2?
-            return
+        [buffer_id_1, buffer_id_2] = sample(indices_of_nonempty, k=2)
 
         cdef list candidates = []
-        cdef uint32_t start_index, end_index, index
+        candidates += self._buffer.pop_elements(buffer_id_1)
+        candidates += self._buffer.pop_elements(buffer_id_2)
 
-        # NOTE: Form candidates list from elements of two buffers
-        start_index = self.buffer_capacity * buffer_id_1
-        end_index = start_index + self.buffer_capacity
-        for index in xrange(start_index, end_index):
-            if not self._element_existance_mask[index]:
-                continue
+        cdef uint16_t capacity = self._buffer.capacity(buffer_id_1)
+        if capacity < len(candidates):
+            candidates = sample(candidates, capacity)
 
-            candidates.append(self._buffer[index])
-            self._element_existance_mask[index] = 0
-
-        start_index = self.buffer_capacity * buffer_id_2
-        end_index = start_index + self.buffer_capacity
-        for index in xrange(start_index, end_index):
-            if not self._element_existance_mask[index]:
-                continue
-
-            candidates.append(self._buffer[index])
-            self._element_existance_mask[index] = 0
-
-        self._buffer_emptiness_mask[buffer_id_1] = 1
-        self._buffer_emptiness_mask[buffer_id_2] = 1
-
-        try:
-            candidates = sample(candidates, self.buffer_capacity)
-        except ValueError:
-            # number of candidates is less than required capacity
-            pass
-
-        cdef uint32_t element
-        for element in candidates:
-            self._insert(buffer_id_1, element)
-
-        self._buffer_levels[buffer_id_1] = level + 1
-
-    cdef void _insert(self, uint16_t buffer_id, uint32_t element):
-        """Insert element in the buffer."""
-        cdef uint32_t start_index, end_index, index
-
-        start_index = self.buffer_capacity * buffer_id
-        end_index = start_index + self.buffer_capacity
-        for index in range(start_index, end_index):
-            if self._element_existance_mask[index]:
-                continue
-
-            self._buffer[index] = element
-            self._element_existance_mask[index] = 1
-            self._buffer_emptiness_mask[buffer_id] = 0
-            return
+        self._buffer.populate(buffer_id_1, candidates)
+        self._levels[buffer_id_1] = current_level + 1
 
     cpdef void add(self, uint32_t element):
         """Add element to the data structure.
@@ -245,35 +343,50 @@ cdef class RandomSampling:
             Element to add into data structure.
 
         """
-        cdef uint8_t level = self._active_level()
-        cdef uint32_t chunk_size = <uint32_t>1 << level
-
         self._queue.append(element)
-        if len(self._queue) < chunk_size * self.buffer_capacity:
+        self._commit(force=False)
+
+    cdef void _commit(self, bint force=False):
+        """Populate queued elements into the data structure.
+
+        Parameters
+        ----------
+        force : obj:`bool`
+            Force to process all queued elements regardless the queue size.
+
+        """
+        cdef uint8_t level = self._active_level()
+        cdef uint16_t chunk_size = <uint16_t>1 << level
+
+        cdef uint32_t autocommit_size = chunk_size * self._buffer.elements_per_buffer
+        cdef uint32_t num_of_candidates = len(self._queue)
+
+        if num_of_candidates < 1:
             return
 
-        cdef uint16_t buffer_id = self._next_buffer_id(level)
+        if num_of_candidates < autocommit_size and not force:
+            return
 
         candidates = list(self._queue)
         self._queue = list()
 
-        self._number_of_elements += len(candidates)
-        if self.buffer_capacity < len(candidates):
-            candidates = sample(candidates, k=self.buffer_capacity)
+        self._number_of_elements += num_of_candidates
 
-        cdef uint32_t candidate
-        for candidate in candidates:
-            self._insert(buffer_id, candidate)
+        cdef uint8_t buffer_id = self._find_empty_buffer(level)
+        cdef uint16_t capacity = self._buffer.capacity(buffer_id)
+
+        if capacity < num_of_candidates:
+            candidates = sample(candidates, k=capacity)
+
+        self._buffer.populate(buffer_id, candidates)
 
 
     def debug(self):
         """Return sample buffers for debug purposes."""
-        return (
-            self._buffer,
-            self._buffer_levels,
-            self._buffer_emptiness_mask,
-            self._element_existance_mask
-        )
+        buffer = []
+        for buffer_id in range(self._buffer.number_of_buffers):
+            buffer.append(self._buffer.get_elements(buffer_id))
+        return list(zip(self._levels, buffer))
 
     def __repr__(self):
         return (
@@ -284,8 +397,8 @@ cdef class RandomSampling:
             ")>"
         ).format(
             self.height,
-            self.number_of_buffers,
-            self.buffer_capacity
+            self._buffer.number_of_buffers,
+            self._buffer.elements_per_buffer
         )
 
     def __len__(self):
@@ -297,7 +410,7 @@ cdef class RandomSampling:
             The number of buffers in data structure.
 
         """
-        return self.number_of_buffers - sum(self._buffer_emptiness_mask)
+        return self._buffer.number_of_buffers
 
     cpdef size_t sizeof(self):
         """Size of the data structure in bytes.
@@ -308,12 +421,8 @@ cdef class RandomSampling:
             The number of bytes allocated for the data structure.
 
         """
-        cdef size_t size = 0
-
-        size += self._length * self._buffer.itemsize
-        size += self._length * self._element_existance_mask.itemsize
-        size += self.number_of_buffers * self._buffer_emptiness_mask.itemsize
-        size += self.number_of_buffers * self._buffer_levels.itemsize
+        cdef size_t size = self._buffer.sizeof()
+        size += self._buffer.number_of_buffers * self._levels.itemsize
 
         return size
 
@@ -344,53 +453,41 @@ cdef class RandomSampling:
             is about to find the value whose rank in sorted sequence
             of the `n` values is `quantile * n`.
 
-            To calculate the quantile, the q-digest has to be compressed
-            so its buckets have to be sorted in increasing their
-            intervals' upper bounds, breaking ties by the putting smaller
-            ranges (thus, smaller bucker IDs) first.
-
-            Afterwards, we scan those sorted list and sum counts of
-            buckets we have seen until we found some buckets on which
-            those counts exceed the rank `quantile * n`. Such bucket
-            is reported as the estimate for the requested quantile.
+            We compute rank for all unique elements in the sample buffers
+            and report the elements with the closest rank to the boundary
+            rank defined as `quantile * n`.
 
         Returns
         -------
         :obj:`int`
-            The estimate of the quantile element from the q-digest.
+            The estimate of the quantile element.
 
         """
         if quantile < 0.0 or quantile > 1.0:
             raise ValueError("Quantile has to be in [0, 1] interval")
 
         if self._number_of_elements < 1:
-            raise ValueError("Cannot estimate quantile for the empty structure")
+            raise ValueError("Cannot estimate quantile from an empty structure")
+
+        self._commit(force=True)
 
         cdef float boundary_rank = self._number_of_elements * quantile
         cdef size_t rank = 0
 
-        cdef uint32_t start_index, end_index, index
-        cdef set elements = set()
-        for buffer_id in xrange(self.number_of_buffers):
-            if self._buffer_emptiness_mask[buffer_id]:
-                continue
+        cdef list elements = list()
+        cdef list ranks = list()
 
-            start_index = self.buffer_capacity * buffer_id
-            end_index = start_index + self.buffer_capacity
+        for buffer_id in xrange(self._buffer.number_of_buffers):
+            elements += self._buffer.get_elements(buffer_id)
 
-            for index in xrange(start_index, end_index):
-                if not self._element_existance_mask[index]:
-                    continue
-
-                elements.add(self._buffer[index])
+        elements = list(set(elements))
 
         cdef uint32_t element
         for element in elements:
             rank = self.inverse_quantile_query(element)
-            if rank > boundary_rank:
-                return element
+            ranks.append(abs(rank - boundary_rank))
 
-        return sorted(list(elements))[-1]
+        return elements[ranks.index(min(ranks))]
 
     @cython.cdivision(True)
     cpdef size_t inverse_quantile_query(self, uint32_t element) except *:
@@ -422,29 +519,25 @@ cdef class RandomSampling:
 
         """
         cdef size_t rank = 0
-        cdef uint32_t start_index, end_index, index
+
+        cdef list elements
+        cdef uint16_t num_of_smaller_elements
+        cdef uint32_t stored_element
         cdef uint8_t level
-        cdef uint16_t num_of_smaller_elements = 0
-        for buffer_id in xrange(self.number_of_buffers):
-            if self._buffer_emptiness_mask[buffer_id]:
-                continue
 
-            level = self._buffer_levels[buffer_id]
+        self._commit(force=True)
 
-            start_index = self.buffer_capacity * buffer_id
-            end_index = start_index + self.buffer_capacity
-
+        for buffer_id in xrange(self._buffer.number_of_buffers):
             num_of_smaller_elements = 0
-            for index in range(start_index, end_index):
-                if not self._element_existance_mask[index]:
-                    continue
+            elements = self._buffer.get_elements(buffer_id)
+            level = self._levels[buffer_id]
 
-                if self._buffer[index] >= element:
+            for stored_element in elements:
+                if stored_element > element:
                     continue
-
                 num_of_smaller_elements += 1
 
-            rank += (<uint32_t>1 << level) * num_of_smaller_elements
+            rank += (<uint16_t>1 << level) * num_of_smaller_elements
 
         return rank
 
@@ -462,10 +555,6 @@ cdef class RandomSampling:
         ------
         ValueError
             If the upper boundary smaller or equal to the lower boundary.
-        ValueError
-            If the upper boundary is out of range.
-        ValueError
-            If the lower boundary is out of range.
 
         Note
         ----
@@ -481,15 +570,13 @@ cdef class RandomSampling:
         Returns
         -------
         :obj:`int`
-            The number of elements in the given interval in the q-digest.
+            The number of elements in the given interval.
 
         """
         if start >= end:
             raise ValueError("Invalid interval")
-        if start < self._min_range or start > self._max_range:
-            raise ValueError("Interval lower boundary out of range")
-        if end < self._min_range or end > self._max_range:
-            raise ValueError("Interval upper boundary out of range")
+
+        self._commit(force=True)
 
         start_rank = self.inverse_quantile_query(start)
         end_rank = self.inverse_quantile_query(end)

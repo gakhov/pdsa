@@ -2,19 +2,36 @@ from cpython.array cimport array
 from libc.stdint cimport uint32_t, uint16_t, uint8_t
 
 
+cdef class _MetaBuffer:
+    cdef uint8_t number_of_buffers
+    cdef uint16_t elements_per_buffer
+    cdef uint32_t length
+
+    cdef array _array
+    cdef array _mask
+
+    cdef size_t sizeof(self)
+    cdef tuple location(self, uint8_t buffer_id)
+    cdef uint16_t num_of_elements(self, uint8_t buffer_id)
+    cdef uint16_t capacity(self, uint8_t buffer_id)
+    cdef bint is_empty(self, uint8_t buffer_id)
+    cdef list get_elements(self, uint8_t buffer_id)
+    cdef list pop_elements(self, uint8_t buffer_id)
+    cdef void populate(self, uint8_t buffer_id, list elements)
+
+    cdef list _retrive_elements(self, uint8_t buffer_id, bint pop=*)
+
+
 cdef class RandomSampling:
-    cdef uint16_t number_of_buffers
-    cdef uint16_t buffer_capacity
     cdef uint8_t height
 
     cdef size_t _number_of_elements
-    cdef uint32_t _length
+
+    cdef uint32_t _seed
 
     cdef list _queue
-    cdef array _buffer
-    cdef array _element_existance_mask
-    cdef array _buffer_levels
-    cdef array _buffer_emptiness_mask
+    cdef _MetaBuffer _buffer
+    cdef array _levels
 
     cpdef uint32_t quantile_query(self, float quantile) except *
     cpdef size_t inverse_quantile_query(self, uint32_t element) except *
@@ -25,6 +42,6 @@ cdef class RandomSampling:
     cpdef void add(self, uint32_t element)
 
     cdef uint8_t _active_level(self)
-    cdef uint16_t _next_buffer_id(self, uint8_t active_level)
+    cdef uint8_t _find_empty_buffer(self, uint8_t active_level)
     cdef void _collapse(self, uint8_t active_level)
-    cdef void _insert(self, uint16_t buffer_id, uint32_t element)
+    cdef void _commit(self, bint force=*)
