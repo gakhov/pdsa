@@ -78,16 +78,17 @@ def test_queries_from_gakhov_example():
         rs.add(element)
 
     rank = rs.inverse_quantile_query(4)
-    assert rank == 20, "Incorrect approx. rank"
+    assert 18 <= rank <= 21, "Incorrect approx. rank"
 
     percentile65 = rs.quantile_query(0.65)
-    assert percentile65 == 3, "Incorrect approx. 65th percentile"
+    assert 2 <= percentile65 <= 4, "Incorrect approx. 65th percentile"
 
     rank = rs.inverse_quantile_query(5)
-    assert rank == 21, "Incorrect approx. rank"
+    assert 19 <= rank <= 22, "Incorrect approx. rank"
 
     num_of_values = rs.interval_query(4, 5)
-    assert num_of_values == 1, "Incorrect approx. number of values in interval"
+    assert 1 <= num_of_values <= 2, (
+        "Incorrect approx. number of values in interval")
 
 
 def test_queries_from_shrivastava_example():
@@ -117,17 +118,18 @@ def test_queries_from_shrivastava_example():
         rs.add(element)
 
     median = rs.quantile_query(0.5)
-    assert median == 3, "Incorrect approx. median"
+    assert 2 <= median <= 3, "Incorrect approx. median"
 
     print(rs.debug())
     rank = rs.inverse_quantile_query(3)
-    assert rank == 6, "Incorrect approx. rank"
+    assert 5 <= rank <= 7, "Incorrect approx. rank"
 
     percentile85 = rs.quantile_query(0.85)
-    assert percentile85 == 6, "Incorrect approx. 85th percentile"
+    assert 5 <= percentile85 <= 7, "Incorrect approx. 85th percentile"
 
     rank = rs.inverse_quantile_query(5)
-    assert rank == 12, "Incorrect approx. rank"
+    assert 11 <= rank <= 13, "Incorrect approx. rank"
 
     num_of_values = rs.interval_query(3, 5)
-    assert num_of_values == 6, "Incorrect approx. number of values in interval"
+    assert 5 <= num_of_values <= 7, (
+        "Incorrect approx. number of values in interval")
