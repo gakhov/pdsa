@@ -368,6 +368,8 @@ cdef class RandomSampling:
             return
 
         candidates = list(self._queue)
+        candidates.reverse()
+
         self._queue = list()
 
         self._number_of_elements += num_of_candidates
