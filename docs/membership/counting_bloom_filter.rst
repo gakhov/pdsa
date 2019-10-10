@@ -53,7 +53,7 @@ with the requested error.
 
    from pdsa.membership.counting_bloom_filter import CountingBloomFilter
 
-   bf = CountingBloomFilter().create_from_capacity(10000, 0.02)
+   bf = CountingBloomFilter.create_from_capacity(10000, 0.02)
 
 
 Add element into the filter

@@ -51,7 +51,7 @@ with the requested error.
 
    from pdsa.membership.bloom_filter import BloomFilter
 
-   bf = BloomFilter().create_from_capacity(10000, 0.02)
+   bf = BloomFilter.create_from_capacity(10000, 0.02)
 
 
 Add element into the filter
