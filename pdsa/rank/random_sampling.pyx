@@ -323,7 +323,7 @@ cdef class RandomSampling:
 
         cdef uint16_t capacity = self._buffer.capacity(buffer_id_1)
         if capacity < len(candidates):
-            start_pos = <bint>randint(0, 1)
+            start_pos = <bint > randint(0, 1)
             candidates = candidates[start_pos::2][:capacity]
 
         self._buffer.populate(buffer_id_1, candidates)
@@ -383,7 +383,6 @@ cdef class RandomSampling:
 
         self._buffer.populate(buffer_id, candidates)
         self._levels[buffer_id] = level
-
 
     def debug(self):
         """Return sample buffers for debug purposes."""
@@ -471,7 +470,8 @@ cdef class RandomSampling:
             raise ValueError("Quantile has to be in [0, 1] interval")
 
         if self._number_of_elements < 1:
-            raise ValueError("Cannot estimate quantile from an empty structure")
+            raise ValueError(
+                "Cannot estimate quantile from an empty structure")
 
         self._commit(force=True)
 
