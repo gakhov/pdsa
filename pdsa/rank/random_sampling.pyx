@@ -33,16 +33,16 @@ References
 import cython
 
 from cpython.array cimport array
-from random import seed, sample
+from random import seed, sample, randint
 
-from libc.math cimport ceil, floor, log, sqrt
-from libc.stdint cimport int8_t, uint64_t, uint32_t, uint16_t, uint8_t
+from libc.math cimport ceil, floor, log2, sqrt
+from libc.stdint cimport uint64_t, uint32_t, uint16_t, uint8_t
 from libc.stdlib cimport rand
 
 
 cdef class _MetaBuffer:
     def __cinit__(self, const uint8_t number_of_buffers,
-                  const uint16_t elements_per_buffer):
+                  const uint32_t elements_per_buffer):
         """MetaBuffer is a flatten array of buffers with required functionality.
 
         Parameters
@@ -97,7 +97,7 @@ cdef class _MetaBuffer:
         end_index = start_index + self.elements_per_buffer
         return (start_index, end_index)
 
-    cdef uint16_t num_of_elements(self, uint8_t buffer_id):
+    cdef uint32_t num_of_elements(self, uint8_t buffer_id):
         """Return the number of elements in the corresponding buffer."""
         cdef uint32_t start_index, end_index
 
@@ -105,7 +105,7 @@ cdef class _MetaBuffer:
         end_index = start_index + self.elements_per_buffer
         return sum(self._mask[start_index:end_index])
 
-    cdef uint16_t capacity(self, uint8_t buffer_id):
+    cdef uint32_t capacity(self, uint8_t buffer_id):
         """Return the available capacity for the corresponding buffer."""
         return self.elements_per_buffer - self.num_of_elements(buffer_id)
 
@@ -150,16 +150,13 @@ cdef class _MetaBuffer:
         cdef uint32_t start_index, end_index, index
         start_index, end_index = self.location(buffer_id)
         for index in range(start_index, end_index):
-            if self._mask[index]:
-                continue
-
             try:
                 element = elements.pop()
             except IndexError:
-                break
-
-            self._array[index] = element
-            self._mask[index] = 1
+                self._mask[index] = 0
+            else:
+                self._array[index] = element
+                self._mask[index] = 1
 
 
 cdef class RandomSampling:
@@ -181,7 +178,7 @@ cdef class RandomSampling:
 
     """
 
-    def __cinit__(self, const uint8_t number_of_buffers, const uint16_t buffer_capacity,
+    def __cinit__(self, const uint8_t number_of_buffers, const uint32_t buffer_capacity,
                   const uint8_t height):
         """Create a number of sample buffer data structures.
 
@@ -192,7 +189,7 @@ cdef class RandomSampling:
         buffer_capacity : :obj:`int`
             The number of elements that can be stored in a buffer (capacity).
         height : :obj:`int`
-            The maximum height of the structure (maximum count of levels).
+            The maximum height of the structure (forces the max count of levels).
 
         Raises
         ------
@@ -211,8 +208,8 @@ cdef class RandomSampling:
 
         """
 
-        if height < 2 or height > 15:
-            raise ValueError("The height is expected in [2, 15]")
+        if height < 1:
+            raise ValueError("The height is expected bigger or equal to 1")
 
         self.height = height
 
@@ -245,20 +242,22 @@ cdef class RandomSampling:
             If `error` not in range (0, 1).
 
         """
-        if error <= 0 or error >= 1:
-            raise ValueError("Error rate shell be in (0, 1)")
+        if error <= 0.0000001 or error >= 1:
+            raise ValueError("Error rate shell be in [0.0000001, 1)")
 
-        cdef uint8_t height = max(2, min(15, <uint8_t>ceil(log(1.0 / error))))
+        cdef uint8_t param = <uint8_t>ceil(log2(1.0 / error))
+
+        cdef uint8_t height = param
         cdef uint8_t number_of_buffers = height + 1
-        cdef uint16_t buffer_capacity = <uint16_t>ceil(sqrt(height) / error)
+        cdef uint32_t buffer_capacity = <uint32_t>ceil(sqrt(param) / error)
 
         return cls(number_of_buffers, buffer_capacity, height)
 
-    cdef uint8_t _active_level(self):
+    cdef uint16_t _active_level(self):
         """Calculate the active level.
 
         The size of the chunk is associated with a level parameter
-        that defines the probability that elements are drawn and
+        defines the probability that elements are drawn and
         depends on the required height and the number of
         processed elements.
 
@@ -274,34 +273,33 @@ cdef class RandomSampling:
             return 0
 
         cdef float level = ceil(
-            log(self._number_of_elements) -
-            (self.height - 1) -
-            log(self._buffer.elements_per_buffer)
+            log2(self._number_of_elements / self._buffer.elements_per_buffer) -
+            self.height + 1
         )
-        return max(0, <int8_t>level)
 
-    cdef uint8_t _find_empty_buffer(self, uint8_t active_level):
-        """Find empty buffer at the active level or force collapse."""
-        cdef list buffer_ids
+        return <uint16_t>max(0, level)
+
+    cdef uint8_t _find_empty_buffer(self):
+        """Find an empty buffer or force the collapse."""
         cdef uint8_t buffer_id
-        cdef uint8_t level, buffer_level
 
-        for level in xrange(active_level + 1):
-            for buffer_id, buffer_level in enumerate(self._levels):
-                if buffer_level == level and self._buffer.is_empty(buffer_id):
-                    return buffer_id
+        for buffer_id in xrange(self._buffer.number_of_buffers):
+            if self._buffer.is_empty(buffer_id):
+                return buffer_id
 
-        self._collapse(active_level)
-        return self._find_empty_buffer(active_level + 1)
+        self._collapse()
+        return self._find_empty_buffer()
 
-    cdef void _collapse(self, uint8_t active_level):
+    cdef void _collapse(self):
         """Collapse two random non-empty buffers below active level."""
         cdef uint8_t buffer_id, buffer_id_1, buffer_id_2
-        cdef uint8_t level, current_level = 0
+        cdef uint16_t level, current_level = 0
+        cdef bint start_pos = 0
 
-        cdef list indices_of_nonempty = []
-        for level in xrange(active_level + 1):
-            indices_of_nonempty = []
+        cdef list nonempty_buffer_ids = []
+        cdef uint16_t max_level = max(self._levels)
+        for level in xrange(max_level + 1):
+            nonempty_buffer_ids = []
             for buffer_id in xrange(self._buffer.number_of_buffers):
                 if self._levels[buffer_id] != level:
                     continue
@@ -309,21 +307,24 @@ cdef class RandomSampling:
                 if self._buffer.is_empty(buffer_id):
                     continue
 
-                indices_of_nonempty.append(buffer_id)
+                nonempty_buffer_ids.append(buffer_id)
 
-            if len(indices_of_nonempty) >= 2:
+            if len(nonempty_buffer_ids) >= 2:
                 current_level = level
                 break
 
-        [buffer_id_1, buffer_id_2] = sample(indices_of_nonempty, k=2)
+        assert len(nonempty_buffer_ids) >= 2
+        [buffer_id_1, buffer_id_2] = sample(nonempty_buffer_ids, k=2)
 
-        cdef list candidates = []
+        cdef list candidates = list()
         candidates += self._buffer.pop_elements(buffer_id_1)
         candidates += self._buffer.pop_elements(buffer_id_2)
+        candidates.sort()
 
         cdef uint16_t capacity = self._buffer.capacity(buffer_id_1)
         if capacity < len(candidates):
-            candidates = sample(candidates, capacity)
+            start_pos = <bint>randint(0, 1)
+            candidates = candidates[start_pos::2][:capacity]
 
         self._buffer.populate(buffer_id_1, candidates)
         self._levels[buffer_id_1] = current_level + 1
@@ -355,11 +356,11 @@ cdef class RandomSampling:
             Force to process all queued elements regardless the queue size.
 
         """
-        cdef uint8_t level = self._active_level()
-        cdef uint16_t chunk_size = <uint16_t>1 << level
+        cdef uint16_t level = self._active_level()
+        cdef uint32_t chunk_size = <uint32_t>1 << level
 
-        cdef uint32_t autocommit_size = chunk_size * self._buffer.elements_per_buffer
-        cdef uint32_t num_of_candidates = len(self._queue)
+        cdef uint64_t autocommit_size = chunk_size * self._buffer.elements_per_buffer
+        cdef uint64_t num_of_candidates = len(self._queue)
 
         if num_of_candidates < 1:
             return
@@ -374,13 +375,14 @@ cdef class RandomSampling:
 
         self._number_of_elements += num_of_candidates
 
-        cdef uint8_t buffer_id = self._find_empty_buffer(level)
-        cdef uint16_t capacity = self._buffer.capacity(buffer_id)
+        cdef uint8_t buffer_id = self._find_empty_buffer()
+        cdef uint32_t capacity = self._buffer.capacity(buffer_id)
 
         if capacity < num_of_candidates:
             candidates = sample(candidates, k=capacity)
 
         self._buffer.populate(buffer_id, candidates)
+        self._levels[buffer_id] = level
 
 
     def debug(self):
@@ -523,13 +525,16 @@ cdef class RandomSampling:
         cdef size_t rank = 0
 
         cdef list elements
-        cdef uint16_t num_of_smaller_elements
+        cdef uint32_t num_of_smaller_elements
         cdef uint32_t stored_element
-        cdef uint8_t level
+        cdef uint16_t level
 
         self._commit(force=True)
 
         for buffer_id in xrange(self._buffer.number_of_buffers):
+            if self._buffer.is_empty(buffer_id):
+                continue
+
             num_of_smaller_elements = 0
             elements = self._buffer.get_elements(buffer_id)
             level = self._levels[buffer_id]

@@ -1,19 +1,19 @@
 from cpython.array cimport array
-from libc.stdint cimport uint32_t, uint16_t, uint8_t
+from libc.stdint cimport uint64_t, uint32_t, uint16_t, uint8_t
 
 
 cdef class _MetaBuffer:
     cdef uint8_t number_of_buffers
-    cdef uint16_t elements_per_buffer
-    cdef uint32_t length
+    cdef uint32_t elements_per_buffer
+    cdef uint64_t length
 
     cdef array _array
     cdef array _mask
 
     cdef size_t sizeof(self)
     cdef tuple location(self, uint8_t buffer_id)
-    cdef uint16_t num_of_elements(self, uint8_t buffer_id)
-    cdef uint16_t capacity(self, uint8_t buffer_id)
+    cdef uint32_t num_of_elements(self, uint8_t buffer_id)
+    cdef uint32_t capacity(self, uint8_t buffer_id)
     cdef bint is_empty(self, uint8_t buffer_id)
     cdef list get_elements(self, uint8_t buffer_id)
     cdef list pop_elements(self, uint8_t buffer_id)
@@ -41,7 +41,7 @@ cdef class RandomSampling:
     cpdef size_t count(self)
     cpdef void add(self, uint32_t element)
 
-    cdef uint8_t _active_level(self)
-    cdef uint8_t _find_empty_buffer(self, uint8_t active_level)
-    cdef void _collapse(self, uint8_t active_level)
+    cdef uint16_t _active_level(self)
+    cdef uint8_t _find_empty_buffer(self)
+    cdef void _collapse(self)
     cdef void _commit(self, bint force=*)
