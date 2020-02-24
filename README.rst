@@ -83,6 +83,7 @@ The latest documentation can be found at `<http://pdsa.readthedocs.io/en/latest/
 
 **Rank problem**
 
+- `Random Sampling <http://pdsa.readthedocs.io/en/latest/rank/random_sampling.html>`_
 - `q-digest <http://pdsa.readthedocs.io/en/latest/rank/qdigest.html>`_
 
 

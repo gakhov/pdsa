@@ -146,6 +146,16 @@ def setup_package():
     )
     extensions.append(
         Extension(
+            "pdsa.rank.random_sampling",
+            language='c++',
+            sources=['pdsa/rank/random_sampling.pyx'],
+            include_dirs=[
+                get_python_inc(plat_specific=True),
+            ]
+        )
+    )
+    extensions.append(
+        Extension(
             "pdsa.rank.qdigest",
             language='c++',
             sources=['pdsa/rank/qdigest.pyx'],

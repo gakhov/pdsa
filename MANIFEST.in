@@ -22,3 +22,4 @@ global-exclude pdsa/helpers/storage/bitvector_counter.cpp
 global-exclude pdsa/membership/bloom_filter.cpp
 global-exclude pdsa/membership/counting_bloom_filter.cpp
 global-exclude pdsa/rank/qdigest.cpp
+global-exclude pdsa/rank/random_sampling.cpp
